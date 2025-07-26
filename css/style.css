@@ -1,22 +1,29 @@
-/* Família de fontes e cores base */
+/* General Body and Font Styles */
 body {
     font-family: 'Inter', sans-serif;
-    background-color: #f0f4f8; /* Azul acinzentado claro */
-    color: #1e293b; /* Azul ardósia escuro */
+    background-color: #f0f4f8; /* Light grayish-blue */
+    color: #1e293b; /* Dark slate blue */
     overscroll-behavior-y: none;
 }
 
-/* Navegação Superior */
+/* Original Header Style (Kept for reference if needed) */
+.app-header-original { 
+    background-color: #0EA5E9; /* Sky blue */
+    color: white;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+/* Top Navigation Styles */
 .top-nav {
     background-color: white;
     border-bottom: 1px solid #e2e8f0;
     box-shadow: 0 2px 5px rgba(0,0,0,0.05);
 }
 .nav-item {
-    color: #475569; /* Cinza ardósia */
+    color: #475569; /* Slate gray */
 }
 .nav-item.active {
-    color: #0EA5E9; /* Azul céu */
+    color: #0EA5E9; /* Sky blue - active icon color */
 }
 .nav-item.active .nav-icon {
     transform: scale(1.1);
@@ -25,7 +32,7 @@ body {
     transition: transform 0.2s ease-in-out;
 }
 
-/* Seções de Página */
+/* Page Section Display and Animation */
 .page-section {
     display: none; 
 }
@@ -38,7 +45,7 @@ body {
     to { opacity: 1; transform: translateY(0); }
 }
 
-/* Estilo de Card Genérico */
+/* Card Styles */
 .card {
     background-color: white;
     border-radius: 0.75rem; 
@@ -50,7 +57,7 @@ body {
      box-shadow: 0 8px 16px rgba(0,0,0,0.1);
 }
 
-/* Componentes "Collapsible" (sanfona) */
+/* Collapsible Section Styles */
 .collapsible-trigger {
     background-color: #f8fafc; 
     border: 1px solid #e2e8f0; 
@@ -78,6 +85,16 @@ body {
     padding-top: 1rem;
     margin-top: 0.5rem;
 }
+#content-roteiro.collapsible-content, 
+#content-dica-documentacao.collapsible-content,
+#content-dica-moeda.collapsible-content,
+#content-dica-tomadas.collapsible-content,
+#content-dica-transporte.collapsible-content,
+#content-dica-mala.collapsible-content {
+    padding-top: 1.25rem; 
+    margin-top: 0.5rem; 
+    border-top: 1px solid #e2e8f0; 
+}
 .collapsible-icon { 
     transition: transform 0.3s ease;
     font-size: 1.125rem; 
@@ -87,7 +104,7 @@ body {
     transform: rotate(180deg);
 }
 
-/* Container de Gráfico */
+/* Chart Container Styles */
 .chart-container {
     position: relative;
     width: 100%;
@@ -104,7 +121,7 @@ body {
     }
 }
 
-/* Linha do Tempo (Timeline) */
+/* Timeline Styles */
 .timeline-item {
     display: flex;
     align-items: flex-start;
@@ -122,7 +139,7 @@ body {
     background-color: #cbd5e1; 
 }
 .timeline-icon-container {
-    background-color: #0EA5E9;
+    background-color: #0EA5E9; 
     color: white;
     border-radius: 50%;
     width: 40px; 
@@ -147,8 +164,8 @@ body {
     color: #475569; 
 }
 
-/* Cards Específicos (Voos, Hotéis, etc.) */
-.flight-card, .hotel-card, .document-card, .food-card, .transport-map-card { 
+/* Logistics Card Styles (Flights, Hotels, etc.) */
+.flight-card, .hotel-card, .document-card, .food-card, .tip-card-content-original, .transport-map-card { 
     border: 1px solid #e2e8f0;
 }
 .flight-card-header, .hotel-card-title, .food-card-title, .insurance-card-title, .transport-map-title { 
@@ -161,28 +178,48 @@ body {
     color: #F97316;
     margin: 0 0.5rem;
 }
-.document-link, .insurance-link, .external-link { 
+.document-link, .insurance-link { 
+    color: #0EA5E9;
+    text-decoration: none;
+    font-size: 0.875rem;
+}
+.document-link:hover, .insurance-link:hover { 
+    text-decoration: underline;
+    color: #0284C7;
+}
+.external-link { 
     color: #0EA5E9;
     text-decoration: none;
     font-size: 0.875rem;
     font-weight: 500;
+    display: inline-block;
+    margin-top: 0.5rem;
 }
-.document-link:hover, .insurance-link:hover, .external-link:hover { 
+.external-link:hover { 
     text-decoration: underline;
-    color: #0284C7;
+    color: #F97316;
 }
 
-/* Status para Card de Comida */
-.food-card-gf-status, .food-card-lf-status { font-weight: 500; }
-.gf-dedicated, .lf-many, .lf-total { color: #10B981; }
-.gf-accredited, .lf-vegan { color: #059669; }
-.gf-protocol, .lf-adapt { color: #F59E0B; }
+/* Food Card Status Styles */
+.food-card-gf-status { font-weight: 500; }
+.gf-dedicated { color: #10B981; }
+.gf-accredited { color: #059669; }
+.gf-protocol { color: #F59E0B; }
 .gf-caution { color: #EF4444; }
+.food-card-lf-status { font-weight: 500; }
+.lf-many { color: #10B981; }
+.lf-adapt { color: #F59E0B; }
+.lf-vegan { color: #059669; }
+.lf-total { color: #10B981; }
 
-/* Player de Áudio */
+/* Audio Player Styles */
 .audio-player-container {
     width: 100%;
     margin-top: 1rem; 
+}
+.audio-player-container audio { 
+    width: 100%;
+    border-radius: 0.5rem; 
 }
 .audio-player-container iframe { 
     border-radius: 0.5rem; 
@@ -190,7 +227,7 @@ body {
     box-shadow: 0 2px 4px rgba(0,0,0,0.05);
 }
 
-/* Contagem Regressiva */
+/* Countdown Timer Styles */
 #countdown-timer-new > div {
     display: flex;
     flex-direction: column;
@@ -211,13 +248,38 @@ body {
     margin-top: 0.25rem;
 }
 
-/* Barra de Rolagem Customizada */
-::-webkit-scrollbar { width: 6px; height: 6px; }
-::-webkit-scrollbar-track { background: #f0f4f8; border-radius: 10px; }
-::-webkit-scrollbar-thumb { background: #94a3b8; border-radius: 10px; }
-::-webkit-scrollbar-thumb:hover { background: #64748b; }
+/* Custom Scrollbar Styles */
+::-webkit-scrollbar {
+    width: 6px; 
+    height: 6px;
+}
+::-webkit-scrollbar-track {
+    background: #f0f4f8; 
+    border-radius: 10px;
+}
+::-webkit-scrollbar-thumb {
+    background: #94a3b8;
+    border-radius: 10px;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: #64748b;
+}
 
-/* Cards de Dicas */
+/* Tooltip Styles */
+#cost-tooltip .tooltip-arrow {
+    content: '';
+    position: absolute;
+    left: 50%;
+    top: -8px; 
+    transform: translateX(-50%);
+    width: 0;
+    height: 0;
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
+    border-bottom: 10px solid #0369A1; 
+}
+
+/* Tip Card Styles */
 .tip-card-content { 
     padding: 1.25rem; 
     border-radius: 0.5rem; 
@@ -231,13 +293,15 @@ body {
     margin-bottom: 0.75rem; 
     line-height: 1.6;
 }
-.tip-card-content strong { font-weight: 600; }
+.tip-card-content strong {
+    font-weight: 600; 
+}
 .tip-bg-passport, .tip-bg-currency, .tip-bg-plugs, .tip-bg-transport, .tip-bg-luggage { 
     background-color: #e0f2fe; 
     border-left: 4px solid #0EA5E9; 
 } 
 
-/* Botões de Alternância (Por Pessoa/Grupo) */
+/* Toggle Button Group Styles */
 .toggle-button-group button {
     padding: 0.5rem 1rem;
     border: 1px solid #0EA5E9;
@@ -247,12 +311,25 @@ body {
     font-size: 0.875rem;
     transition: background-color 0.2s, color 0.2s;
 }
-.toggle-button-group button:first-child { border-top-left-radius: 0.375rem; border-bottom-left-radius: 0.375rem; border-right-width: 0.5px; }
-.toggle-button-group button:last-child { border-top-right-radius: 0.375rem; border-bottom-right-radius: 0.375rem; border-left-width: 0.5px; }
-.toggle-button-group button.active { background-color: #0EA5E9; color: white; }
-.toggle-button-group button:not(.active):hover { background-color: #e0f2fe; }
-        
-/* Card de Resumo de Custo */
+.toggle-button-group button:first-child {
+    border-top-left-radius: 0.375rem;
+    border-bottom-left-radius: 0.375rem;
+    border-right-width: 0.5px;
+}
+.toggle-button-group button:last-child {
+    border-top-right-radius: 0.375rem;
+    border-bottom-right-radius: 0.375rem;
+    border-left-width: 0.5px;
+}
+.toggle-button-group button.active {
+    background-color: #0EA5E9;
+    color: white;
+}
+.toggle-button-group button:not(.active):hover {
+    background-color: #e0f2fe; 
+}
+
+/* Cost Summary Card Styles */
 .cost-summary-card {
     background-color: #f0f9ff; 
     padding: 1rem; 
@@ -261,11 +338,22 @@ body {
     text-align: center;
     margin-bottom: 1rem; 
 }
-.cost-summary-card h3 { font-weight: 600; font-size: 1.125rem; color: #0369a1; margin-bottom: 0.5rem; }
-.cost-summary-card .cost-value { font-weight: 700; margin-bottom: 0.25rem; }
-.cost-summary-card .cost-description { font-size: 0.875rem; color: #475569; }
-        
-/* Grid de Detalhes do Seguro */
+.cost-summary-card h3 {
+    font-weight: 600; 
+    font-size: 1.125rem; 
+    color: #0369a1; 
+    margin-bottom: 0.5rem; 
+}
+.cost-summary-card .cost-value {
+    font-weight: 700; 
+    margin-bottom: 0.25rem; 
+}
+.cost-summary-card .cost-description {
+    font-size: 0.875rem; 
+    color: #475569; 
+}
+
+/* Insurance Details Grid */
 .insurance-details-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -277,18 +365,22 @@ body {
     border-radius: 0.375rem; 
     border: 1px solid #e2e8f0; 
 }
-.insurance-coverage-item strong { color: #0369a1; }
-        
-/* Container do Simulador Wise */
+.insurance-coverage-item strong {
+    color: #0369a1; 
+}
+
+/* Wise Currency Simulator */
 .wise-simulator-container {
     display: flex;
     justify-content: center;
     align-items: center;
     padding-top: 1rem;
 }
-.wise-simulator-container iframe { max-width: 100%; }
-        
-/* Botão de Ação (Recibos) */
+.wise-simulator-container iframe {
+    max-width: 100%;
+}
+
+/* Action Button Styles */
 .action-button { 
     background-color: #0EA5E9; 
     color: white;
@@ -303,23 +395,47 @@ body {
     transition: background-color 0.2s;
     box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
 }
-.action-button:hover { background-color: #0284C7; }
-.action-button i { margin-right: 0.4rem; }
-        
-/* Item de Mapa de Transporte */
+.action-button:hover {
+    background-color: #0284C7;
+}
+.action-button i {
+    margin-right: 0.4rem;
+}
+
+/* Transport Map Styles */
 .transport-map-item {
     background-color: #f8fafc; 
     padding: 1rem; 
     border-radius: 0.5rem; 
     margin-bottom: 1rem; 
 }
-.transport-map-item h5 { font-weight: 600; color: #0ea5e9; font-size: 1rem; margin-bottom: 0.75rem; }
-.transport-map-links a { display: block; color: #0369a1; text-decoration: none; font-size: 0.875rem; margin-bottom: 0.5rem; transition: color 0.2s; }
-.transport-map-links a:hover { color: #F97316; text-decoration: underline; }
-.transport-map-links i { margin-right: 0.5rem; color: #64748b; }
- main { padding-bottom: 1rem; }
-        
-/* Estilos do Podcast */
+.transport-map-item h5 {
+    font-weight: 600; 
+    color: #0ea5e9; 
+    font-size: 1rem; 
+    margin-bottom: 0.75rem; 
+}
+.transport-map-links a {
+    display: block; 
+    color: #0369a1; 
+    text-decoration: none;
+    font-size: 0.875rem; 
+    margin-bottom: 0.5rem; 
+    transition: color 0.2s;
+}
+.transport-map-links a:hover {
+    color: #F97316; 
+    text-decoration: underline;
+}
+.transport-map-links i {
+    margin-right: 0.5rem; 
+    color: #64748b; 
+}
+ main {
+    padding-bottom: 1rem; 
+}
+
+/* Podcast Episode List Styles */
 #episode-list {
     max-height: 250px;
     overflow-y: auto;
@@ -335,24 +451,60 @@ body {
     cursor: pointer;
     transition: background-color 0.2s ease-in-out;
     border-bottom: 1px solid #f1f5f9;
-    position: relative;
-    overflow: hidden;
+    position: relative; 
+    overflow: hidden; 
 }
-.episode-item:last-child { border-bottom: none; }
-.episode-item:hover { background-color: #f8fafc; }
-.episode-item.active { background-color: #e0f2fe; font-weight: 600; color: #0369a1; }
-.episode-item.active .play-icon { color: #0EA5E9; transform: scale(1.1); }
-.play-icon { font-size: 1.1rem; color: #94a3b8; margin-right: 1rem; transition: color 0.2s ease-in-out, transform 0.2s ease-in-out; width: 20px; text-align: center; }
-.episode-details { flex-grow: 1; }
-.episode-title { font-weight: 500; color: #1e293b; font-size: 0.9rem; margin-bottom: 0.1rem; }
-.episode-item.active .episode-title { color: #0369a1; }
-.episode-meta { font-size: 0.75rem; color: #64748b; }
-.episode-duration { font-size: 0.8rem; color: #475569; font-weight: 500; }
+.episode-item:last-child {
+    border-bottom: none;
+}
+.episode-item:hover {
+    background-color: #f8fafc;
+}
+.episode-item.active {
+    background-color: #e0f2fe;
+    font-weight: 600;
+    color: #0369a1;
+}
+.episode-item.active .play-icon {
+    color: #0EA5E9;
+}
+.play-icon {
+    font-size: 1.1rem; 
+    color: #94a3b8;
+    margin-right: 1rem;
+    transition: color 0.2s ease-in-out, transform 0.2s ease-in-out;
+    width: 20px;
+    text-align: center;
+}
+ .episode-item.active .play-icon {
+    transform: scale(1.1);
+}
+.episode-details {
+    flex-grow: 1;
+}
+.episode-title {
+    font-weight: 500;
+    color: #1e293b;
+    font-size: 0.9rem;
+    margin-bottom: 0.1rem;
+}
+.episode-item.active .episode-title {
+    color: #0369a1;
+}
+.episode-meta {
+    font-size: 0.75rem;
+    color: #64748b;
+}
+.episode-duration {
+    font-size: 0.8rem;
+    color: #475569;
+    font-weight: 500;
+}
 .new-badge {
     position: absolute;
     top: -1px;
     left: -1px;
-    background-color: #f97316;
+    background-color: #f97316; /* Orange */
     color: white;
     padding: 0.1rem 0.8rem 0.1rem 0.5rem;
     font-size: 0.6rem;
@@ -364,15 +516,15 @@ body {
     letter-spacing: 0.5px;
 }
 
-/* Estilos da Notificação (Toast) */
+/* New Episode Toast Notification Styles */
 #new-episode-toast {
     position: fixed;
-    top: -100%; 
+    top: -100%; /* Start off-screen at the top */
     left: 50%;
     transform: translateX(-50%);
     width: calc(100% - 2rem);
     max-width: 400px;
-    background-color: #1e293b;
+    background-color: #1e293b; /* Dark slate blue */
     color: #f0f4f8;
     border-radius: 0.75rem;
     padding: 1rem;
@@ -381,9 +533,33 @@ body {
     display: flex;
     align-items: center;
     gap: 1rem;
-    transition: top 0.5s ease-in-out;
+    transition: top 0.5s ease-in-out; /* Transition the 'top' property */
 }
-#new-episode-toast.show { top: 5rem; }
-#close-toast { background: none; border: none; color: #94a3b8; font-size: 1.25rem; cursor: pointer; position: absolute; top: 0.5rem; right: 0.5rem; }
-#toast-icon { color: #f97316; font-size: 1.5rem; }
-#toast-button { background-color: #0ea5e9; color: white; border: none; padding: 0.3rem 0.6rem; border-radius: 0.375rem; font-size: 0.8rem; font-weight: 600; cursor: pointer; white-space: nowrap; }
+#new-episode-toast.show {
+    top: 5rem; /* Slide down below the nav menu */
+}
+#close-toast {
+    background: none;
+    border: none;
+    color: #94a3b8;
+    font-size: 1.25rem;
+    cursor: pointer;
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+}
+#toast-icon {
+    color: #f97316;
+    font-size: 1.5rem;
+}
+#toast-button {
+    background-color: #0ea5e9;
+    color: white;
+    border: none;
+    padding: 0.3rem 0.6rem;
+    border-radius: 0.375rem;
+    font-size: 0.8rem;
+    font-weight: 600;
+    cursor: pointer;
+    white-space: nowrap;
+}

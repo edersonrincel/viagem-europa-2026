@@ -1,0 +1,21 @@
+{
+  "name": "Nossa Viagem Europa 2026",
+  "short_name": "Viagem 2026",
+  "description": "Aplicativo de planejamento para a viagem à Europa em 2026.",
+  "start_url": ".",
+  "display": "standalone",
+  "background_color": "#f0f4f8",
+  "theme_color": "#0EA5E9",
+  "icons": [
+    {
+      "src": "https://placehold.co/192x192/0EA5E9/FFFFFF?text=V",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "https://placehold.co/512x512/0EA5E9/FFFFFF?text=Viagem",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ]
+}

@@ -1,5 +1,9 @@
 // --- GLOBAL CONSTANTS AND VARIABLES ---
 
+// PWA Installation
+let deferredPrompt;
+const installButton = document.getElementById('install-button');
+
 // Financial Data
 const numeroDeViajantes = 4;
 const custoTotalPorPessoaArray = [4468.94, 2771.315, 240.43]; 
@@ -48,6 +52,36 @@ const btnPeloGrupo = document.getElementById('btnPeloGrupo');
 let appCustoTotalChartInstance = null;
 let appCustoCategoriaChartInstance = null;
 let appPagamentoMensalChartInstance = null;
+
+// --- PWA INSTALLATION LOGIC ---
+
+// Listen for the 'beforeinstallprompt' event
+window.addEventListener('beforeinstallprompt', (e) => {
+  // Prevent the default mini-infobar from appearing on mobile
+  e.preventDefault();
+  // Stash the event so it can be triggered later
+  deferredPrompt = e;
+  // Show our custom install button
+  if (installButton) {
+    installButton.classList.remove('hidden');
+    installButton.classList.add('flex'); // Use 'flex' to make it visible
+  }
+});
+
+// Add a click event listener to our custom install button
+if (installButton) {
+  installButton.addEventListener('click', async () => {
+    // Hide the install button
+    installButton.classList.add('hidden');
+    // Show the browser's install prompt
+    deferredPrompt.prompt();
+    // Wait for the user to respond to the prompt
+    const { outcome } = await deferredPrompt.userChoice;
+    console.log(`User response to the install prompt: ${outcome}`);
+    // We've used the prompt, and can't use it again, so clear it
+    deferredPrompt = null;
+  });
+}
 
 // --- CHART CONFIGURATION ---
 
@@ -573,6 +607,17 @@ function updateCustoCategoriaChartVisibility(showPorPessoa) {
 // --- INITIALIZATION ---
 
 document.addEventListener('DOMContentLoaded', () => {
+    // Register Service Worker
+    if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+            navigator.serviceWorker.register('/service-worker.js').then(registration => {
+                console.log('ServiceWorker registration successful with scope: ', registration.scope);
+            }, err => {
+                console.log('ServiceWorker registration failed: ', err);
+            });
+        });
+    }
+
     // Register Chart.js plugins and set up initial state
     Chart.register(ChartDataLabels);
     setupCollapsibleSections();

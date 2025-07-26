@@ -3,8 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>App Viagem Europa 2026 - Organizado</title>
+    <title>App Viagem Europa 2026 - PWA</title>
     
+    <!-- PWA Manifest and Theme Color -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#0EA5E9">
+
     <!-- Tailwind CSS and Chart.js from CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -40,6 +44,11 @@
         <button class="nav-item flex flex-col items-center justify-center p-2" data-page="page-dicas" data-title="Dicas">
             <i class="fas fa-lightbulb nav-icon text-xl mb-1"></i>
             <span class="text-xs">Dicas</span>
+        </button>
+        <!-- PWA Install Button -->
+        <button id="install-button" class="nav-item flex-col items-center justify-center p-2 text-orange-500 hidden">
+            <i class="fas fa-download nav-icon text-xl mb-1"></i>
+            <span class="text-xs">Instalar</span>
         </button>
     </nav>
 

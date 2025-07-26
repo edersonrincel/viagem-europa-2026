@@ -1,0 +1,44 @@
+// Este arquivo centraliza os dados e configurações do aplicativo.
+
+// Número de viajantes para cálculos de custo em grupo.
+export const numeroDeViajantes = 4;
+
+// Dados de custo para o gráfico de "Composição Total".
+// Valores: Voos, Hospedagem, Seguro.
+export const custoTotalPorPessoaArray = [4468.94, 2771.315, 240.43]; 
+
+// Dados de custo para o gráfico de "Custos Específicos".
+// Valores: Voo GOL, Voo TAP, Voo LATAM, Hotel LON, Hotel LIS, Hotel GRU, Seguro.
+export const custoCategoriaPorPessoaArray = [410.48, 3868.94, 189.52, 1633.9375, 918.978, 218.40, 240.43];
+
+// Dados para o gráfico de "Evolução de Pagamentos".
+export const pagamentoMensalValores = [1661.65, 679.71, 679.71, 679.71, 679.71, 559.71, 519.64, 519.64, 519.64, 519.64, 230.94, 230.94];
+export const pagamentoMensalLabels = ['Jun/25', 'Jul/25', 'Ago/25', 'Set/25', 'Out/25', 'Nov/25', 'Dez/25', 'Jan/26', 'Fev/26', 'Mar/26', 'Abr/26', 'Mai/26'];
+
+// Lista de episódios do podcast.
+// O ID e o token são usados para construir a URL do SoundCloud.
+export const podcastEpisodes = [
+    { "Episódio": 1, "Data lançamento": "07/06/2025", "Título": "A Origem da aventura", "Narrador": "Bruna", "Duração": "3:03", "trackId": "2109241797", "token": "I0JucbUhfCc" },
+    { "Episódio": 2, "Data lançamento": "21/06/2025", "Título": "O Mapa da viagem", "Narrador": "Diego", "Duração": "3:50", "trackId": "2109241770", "token": "lPnekm8yTs2" },
+    { "Episódio": 3, "Data lançamento": "08/07/2025", "Título": "Passaportes em dia", "Narrador": "Giovana", "Duração": "4:09", "trackId": "2109241779", "token": "Oxie7YtJM03" },
+    { "Episódio": 4, "Data lançamento": "22/07/2025", "Título": "As siglas da viagem", "Narrador": "Eder", "Duração": "4:01", "trackId": "2109241794", "token": "UDBYOZgZ5tE" },
+    { "Episódio": 5, "Data lançamento": "05/08/2025", "Título": "Nossa rede de segurança", "Narrador": "Bruna", "Duração": "3:52", "trackId": "2109241764", "token": "x0MUpRDm1jO" },
+    { "Episódio": 6, "Data lançamento": "19/08/2025", "Título": "Libras, Euros & Cartões", "Narrador": "Diego", "Duração": "4:22", "trackId": "2109459120", "token": "WntGp7nwrSt" },
+    { "Episódio": 7, "Data lançamento": "02/09/2025", "Título": "Conectados na Europa", "Narrador": "Giovana", "Duração": "4:39", "trackId": "2109241767", "token": "nCEgXnp8PTk" },
+    { "Episódio": 8, "Data lançamento": "16/09/2025", "Título": "Fazendo as malas", "Narrador": "Eder", "Duração": "4:11", "trackId": "2109241806", "token": "xKGzVr2hwuH" },
+    { "Episódio": 9, "Data lançamento": "30/09/2025", "Título": "Finanças do grupo", "Narrador": "Bruna", "Duração": "3:51", "trackId": "2109241830", "token": "YfD4McsMIob" },
+    { "Episódio": 10, "Data lançamento": "14/10/2025", "Título": "London calling!", "Narrador": "Diego", "Duração": "5:00", "trackId": "2109461376", "token": "Q3MpmbtsDb6" },
+    { "Episódio": 11, "Data lançamento": "21/10/2025", "Título": "Dominando o metrô de Londres", "Narrador": "Giovana", "Duração": "4:53", "trackId": "2109241782", "token": "5h9pdyxVgDk" },
+    { "Episódio": 12, "Data lançamento": "28/10/2025", "Título": "Sabores de Londres", "Narrador": "Eder", "Duração": "4:10", "trackId": "2109241773", "token": "WuGoerCStbb" },
+    { "Episódio": 13, "Data lançamento": "04/11/2025", "Título": "Ícones de Londres", "Narrador": "Bruna", "Duração": "3:53", "trackId": "2109241791", "token": "DlqbbPyxUjj" },
+    { "Episódio": 14, "Data lançamento": "11/11/2025", "Título": "Mercados e parques de Londres", "Narrador": "Diego", "Duração": "3:41", "trackId": "2109241788", "token": "fX8LIOXe4CV" },
+    { "Episódio": 15, "Data lançamento": "18/11/2025", "Título": "Um dia em Paris", "Narrador": "Giovana", "Duração": "4:29", "trackId": "2109241815", "token": "JiBmHu4QkMY" },
+    { "Episódio": 16, "Data lançamento": "25/11/2025", "Título": "Chegada em Lisboa", "Narrador": "Eder", "Duração": "3:13", "trackId": "2109241812", "token": "rYejWZbphgs" },
+    { "Episódio": 17, "Data lançamento": "02/12/2025", "Título": "Os elétricos de Lisboa", "Narrador": "Bruna", "Duração": "3:36", "trackId": "2109241818", "token": "8B8MFnnJHUf" },
+    { "Episódio": 18, "Data lançamento": "09/12/2025", "Título": "Roteiro por Lisboa", "Narrador": "Diego", "Duração": "3:27", "trackId": "2109241803", "token": "tyqPhj1KBo6" },
+    { "Episódio": 19, "Data lançamento": "16/12/2025", "Título": "A magia de Sintra", "Narrador": "Giovana", "Duração": "3:51", "trackId": "2109241800", "token": "Ywh2hP5svic" },
+    { "Episódio": 20, "Data lançamento": "30/12/2025", "Título": "Sabores de Portugal", "Narrador": "Eder", "Duração": "3:41", "trackId": "2109241821", "token": "L0zo2ZW2MQc" },
+    { "Episódio": 21, "Data lançamento": "06/01/2026", "Título": "A viagem de volta", "Narrador": "Bruna", "Duração": "3:14", "trackId": "2109241809", "token": "GTgyZ48GE1z" },
+    { "Episódio": 22, "Data lançamento": "13/01/2026", "Título": "As regras das tarifas", "Narrador": "Diego", "Duração": "3:46", "trackId": "2109241827", "token": "PNzCktX4Sbe" },
+    { "Episódio": 23, "Data lançamento": "20/01/2026", "Título": "Checklist final", "Narrador": "Giovana", "Duração": "4:07", "trackId": "2109462783", "token": "LJSbjMeqq7h" }
+].sort((a, b) => b['Episódio'] - a['Episódio']); // Ordena os episódios em ordem decrescente.

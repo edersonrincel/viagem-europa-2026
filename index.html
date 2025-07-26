@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>App Viagem Europa 2026</title>
+    
+    <!-- Dependências Externas -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0/dist/chartjs-plugin-datalabels.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" xintegrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    
+    <!-- Folha de Estilos Local -->
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body class="overscroll-none">
+
+    <!-- Navegação Superior -->
+    <nav class="top-nav sticky top-0 left-0 right-0 h-16 flex justify-around items-center z-40">
+        <button class="nav-item flex flex-col items-center justify-center p-2 active" data-page="page-geral" data-title="Visão Geral">
+            <i class="fas fa-home nav-icon text-xl mb-1"></i>
+            <span class="text-xs">Geral</span>
+        </button>
+        <button class="nav-item flex flex-col items-center justify-center p-2" data-page="page-logistica" data-title="Logística">
+            <i class="fas fa-route nav-icon text-xl mb-1"></i>
+            <span class="text-xs">Logística</span>
+        </button>
+        <button class="nav-item flex flex-col items-center justify-center p-2" data-page="page-custos" data-title="Financeiro">
+            <i class="fas fa-wallet nav-icon text-xl mb-1"></i>
+            <span class="text-xs">Financeiro</span>
+        </button>
+        <button class="nav-item flex flex-col items-center justify-center p-2" data-page="page-sabores" data-title="Sabores">
+            <i class="fas fa-seedling nav-icon text-xl mb-1"></i>
+            <span class="text-xs">Sabores</span>
+        </button>
+        <button class="nav-item flex flex-col items-center justify-center p-2" data-page="page-dicas" data-title="Dicas">
+            <i class="fas fa-lightbulb nav-icon text-xl mb-1"></i>
+            <span class="text-xs">Dicas</span>
+        </button>
+    </nav>
+
+    <!-- Conteúdo Principal -->
+    <main class="container mx-auto px-4 pt-4 pb-20">
+        <!-- Seção: Visão Geral -->
+        <section id="page-geral" class="page-section active">
+            <div class="card p-6">
+                <!-- Contagem Regressiva -->
+                <div id="countdown-container-new" class="mb-8">
+                    <h3 class="text-xl font-semibold text-sky-700 mb-3 text-center">Contagem Regressiva!</h3>
+                    <div id="countdown-timer-new" class="bg-gradient-to-br from-sky-100 to-sky-200 text-sky-800 p-1 rounded-xl shadow-lg flex flex-wrap justify-around items-center text-center font-semibold md:max-w-lg lg:max-w-xl mx-auto">
+                        <div><span class="time-value-new font-bold text-sky-700 block" id="days">0</span><span class="label-new text-sky-600 uppercase tracking-wider">Dias</span></div>
+                        <div><span class="time-value-new font-bold text-sky-700 block" id="hours">0</span><span class="label-new text-sky-600 uppercase tracking-wider">Horas</span></div>
+                        <div><span class="time-value-new font-bold text-sky-700 block" id="minutes">0</span><span class="label-new text-sky-600 uppercase tracking-wider">Min</span></div>
+                        <div><span class="time-value-new font-bold text-sky-700 block" id="seconds">0</span><span class="label-new text-sky-600 uppercase tracking-wider">Seg</span></div>
+                    </div>
+                </div>
+
+                <div class="md:flex md:space-x-6 items-start">
+                    <!-- Informações Gerais -->
+                    <div class="bg-white p-4 rounded-xl shadow-lg mb-8 md:mb-0 space-y-6 border border-sky-100 md:w-1/2">
+                        <div class="flex items-start space-x-4">
+                            <div class="flex-shrink-0 w-12 h-12 bg-sky-500 text-white rounded-lg flex items-center justify-center shadow"><i class="fas fa-globe-europe fa-lg"></i></div>
+                            <div><h4 class="font-semibold text-lg text-sky-700">Destinos Principais</h4><p class="text-slate-600">🇬🇧 Londres & 🇵🇹 Lisboa</p></div>
+                        </div>
+                        <div class="flex items-start space-x-4">
+                             <div class="flex-shrink-0 w-12 h-12 bg-orange-500 text-white rounded-lg flex items-center justify-center shadow"><i class="fas fa-calendar-alt fa-lg"></i></div>
+                            <div><h4 class="font-semibold text-lg text-orange-500">Período da Viagem</h4><p class="text-slate-600">22/Jan a 04/Fev (14 dias)</p></div>
+                        </div>
+                        <div class="flex items-start space-x-4">
+                            <div class="flex-shrink-0 w-12 h-12 bg-emerald-500 text-white rounded-lg flex items-center justify-center shadow"><i class="fas fa-users fa-lg"></i></div>
+                            <div><h4 class="font-semibold text-lg text-emerald-700">Viajantes</h4><p class="text-slate-600">Bruna, Diego, Ederson & Giovana</p></div>
+                        </div>
+                    </div>
+                    <!-- Card do Podcast -->
+                    <div id="podcast-card" class="p-4 bg-white rounded-xl shadow-lg border border-sky-100 md:w-1/2">
+                        <h3 class="text-xl font-bold text-center text-sky-600 mb-2"><i class="fas fa-headphones-alt mr-2 text-orange-500"></i>Ouça nosso Podcast!</h3>
+                        <p class="text-sm text-center text-slate-500 mb-6">Um bate-papo sobre os preparativos e expectativas.</p>
+                        <div class="audio-player-container"><iframe id="podcast-player-iframe" width="100%" height="166" scrolling="no" frameborder="no" allow="autoplay" src=""></iframe></div>
+                        <div id="episode-list-container"><div id="episode-list"><!-- Os episódios serão inseridos aqui pelo JavaScript --></div></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Seção: Logística -->
+        <section id="page-logistica" class="page-section">
+            <!-- Roteiro -->
+            <div class="card">
+                <button class="collapsible-trigger" aria-expanded="false" aria-controls="content-roteiro">
+                    <h3 class="text-lg"><i class="fas fa-map-signs fa-fw mr-3 text-sky-500"></i>Roteiro da Viagem</h3><i class="fas fa-chevron-down collapsible-icon"></i>
+                </button>
+                <div id="content-roteiro" class="collapsible-content hidden">
+                    <div class="space-y-0"> 
+                        <div class="timeline-item mt-3 pt-0"><div class="timeline-icon-container"><i class="fas fa-plane-departure"></i></div><div class="timeline-content"><h4>22/Jan: Chapecó (XAP) <i class="fas fa-arrow-right text-xs text-slate-400 mx-1"></i> Guarulhos (GRU)</h4><p>Início da aventura! Voo doméstico.</p></div></div>
+                        <div class="timeline-item pt-0"><div class="timeline-icon-container"><i class="fas fa-plane-arrival"></i></div><div class="timeline-content"><h4>23/Jan: GRU <i class="fas fa-arrow-right text-xs text-slate-400 mx-1"></i> Lisboa (LIS) <i class="fas fa-arrow-right text-xs text-slate-400 mx-1"></i> Londres (LHR)</h4><p>Conexão em Lisboa. Chegada em Londres!</p></div></div>
+                        <div class="timeline-item pt-0"><div class="timeline-icon-container"><i class="fas fa-bed"></i></div><div class="timeline-content"><h4>23/Jan - 30/Jan: Estadia em Londres (7 noites)</h4><p>Explorando a capital no Central Hotel.</p></div></div>
+                        <div class="timeline-item pt-0"><div class="timeline-icon-container"><i class="fas fa-plane"></i></div><div class="timeline-content"><h4>30/Jan: Londres (LHR) <i class="fas fa-arrow-right text-xs text-slate-400 mx-1"></i> Lisboa (LIS)</h4><p>Voo para a charmosa capital portuguesa.</p></div></div>
+                        <div class="timeline-item pt-0"><div class="timeline-icon-container"><i class="fas fa-bed"></i></div><div class="timeline-content"><h4>30/Jan - 03/Fev: Estadia em Lisboa (4 noites)</h4><p>Descobrindo Lisboa no Hotel Inn Rossio.</p></div></div>
+                        <div class="timeline-item pt-0"><div class="timeline-icon-container"><i class="fas fa-plane-departure"></i></div><div class="timeline-content"><h4>03/Fev: Lisboa (LIS) <i class="fas fa-arrow-right text-xs text-slate-400 mx-1"></i> Guarulhos (GRU)</h4><p>Retorno ao Brasil.</p></div></div>
+                        <div class="timeline-item pt-0"><div class="timeline-icon-container"><i class="fas fa-bed"></i></div><div class="timeline-content"><h4>03/Fev - 04/Fev: Estadia em São Paulo (1 noite)</h4><p>Pernoite em Guarulhos.</p></div></div>
+                        <div class="timeline-item pt-0"><div class="timeline-icon-container"><i class="fas fa-house-chimney"></i></div><div class="timeline-content"><h4>04/Fev: Guarulhos (GRU) <i class="fas fa-arrow-right text-xs text-slate-400 mx-1"></i> Chapecó (XAP)</h4><p>De volta para casa!</p></div></div>
+                    </div>
+                </div>
+            </div>
+            <!-- Voos -->
+            <div class="card">
+                <button class="collapsible-trigger" aria-expanded="false" aria-controls="content-voos"><h3 class="text-lg"><i class="fas fa-plane-departure mr-2 text-sky-500"></i>Programação de Voos</h3><i class="fas fa-chevron-down collapsible-icon"></i></button>
+                <div id="content-voos" class="collapsible-content hidden">
+                    <div class="space-y-4">
+                        <div class="flight-card p-4 rounded-lg border border-slate-200 bg-slate-50"><h4 class="flight-card-header">22 Jan 2026 - G3 1265 (GOL)</h4><p class="flight-card-route text-slate-700">Chapecó (XAP) <i class="fas fa-plane"></i> Guarulhos (GRU, T2)</p><p class="text-sm text-slate-600"><strong>Partida:</strong> 18:55 <span class="mx-1">|</span> <strong>Chegada:</strong> 20:40</p><p class="text-sm text-slate-600"><strong>Reserva:</strong> <a href="https://b2c.voegol.com.br/minhas-viagens/encontrar-viagem" target="_blank" class="external-link">AWHQBX</a></p></div>
+                        <div class="flight-card p-4 rounded-lg border border-slate-200 bg-slate-50"><h4 class="flight-card-header">23 Jan 2026 - TP 84 (TAP)</h4><p class="flight-card-route text-slate-700">Guarulhos (GRU, T3 prov.) <i class="fas fa-plane"></i> Lisboa (LIS)</p><p class="text-sm text-slate-600"><strong>Partida:</strong> 01:30 <span class="mx-1">|</span> <strong>Chegada:</strong> 14:25</p><p class="text-sm text-slate-600"><strong>Reserva:</strong> <a href="https://www.flytap.com/pt-br#special-anchor-my-travels" target="_blank" class="external-link">BDLY8S</a></p></div>
+                        <div class="flight-card p-4 rounded-lg border border-slate-200 bg-slate-50"><h4 class="flight-card-header">23 Jan 2026 - TP 1364 (TAP)</h4><p class="flight-card-route text-slate-700">Lisboa (LIS) <i class="fas fa-plane"></i> Londres (LHR)</p><p class="text-sm text-slate-600"><strong>Partida:</strong> 16:05 <span class="mx-1">|</span> <strong>Chegada:</strong> 18:55</p><p class="text-sm text-slate-600"><strong>Reserva:</strong> <a href="https://www.flytap.com/pt-br#special-anchor-my-travels" target="_blank" class="external-link">BDLY8S</a></p></div>
+                        <div class="flight-card p-4 rounded-lg border border-slate-200 bg-slate-50"><h4 class="flight-card-header">30 Jan 2026 - TP 1357 (TAP)</h4><p class="flight-card-route text-slate-700">Londres (LHR) <i class="fas fa-plane"></i> Lisboa (LIS)</p><p class="text-sm text-slate-600"><strong>Partida:</strong> 18:30 <span class="mx-1">|</span> <strong>Chegada:</strong> 21:15</p><p class="text-sm text-slate-600"><strong>Reserva:</strong> <a href="https://www.flytap.com/pt-br#special-anchor-my-travels" target="_blank" class="external-link">BDLY8S</a></p></div>
+                        <div class="flight-card p-4 rounded-lg border border-slate-200 bg-slate-50"><h4 class="flight-card-header">03 Fev 2026 - TP 89 (TAP)</h4><p class="flight-card-route text-slate-700">Lisboa (LIS) <i class="fas fa-plane"></i> Guarulhos (GRU)</p><p class="text-sm text-slate-600"><strong>Partida:</strong> 12:30 <span class="mx-1">|</span> <strong>Chegada:</strong> 19:55</p><p class="text-sm text-slate-600"><strong>Reserva:</strong> <a href="https://www.flytap.com/pt-br#special-anchor-my-travels" target="_blank" class="external-link">BDLY8S</a></p></div>
+                        <div class="flight-card p-4 rounded-lg border border-slate-200 bg-slate-50"><h4 class="flight-card-header">04 Fev 2026 - LA 3278 (LATAM)</h4><p class="flight-card-route text-slate-700">Guarulhos (GRU) <i class="fas fa-plane"></i> Chapecó (XAP)</p><p class="text-sm text-slate-600"><strong>Partida:</strong> 07:30 <span class="mx-1">|</span> <strong>Chegada:</strong> 09:10</p><p class="text-sm text-slate-600"><strong>Reserva:</strong> <a href="https://www.latamairlines.com/br/pt/minhas-viagens" target="_blank" class="external-link">QHWBNA</a></p></div>
+                    </div>
+                    <p class="text-xs text-slate-500 mt-6 bg-amber-50 p-3 rounded-md border border-amber-200"><strong>Nota:</strong> Todos os voos incluem uma bagagem despachada por pessoa.</p>
+                </div>
+            </div>
+            <!-- Hospedagens -->
+            <div class="card">
+                <button class="collapsible-trigger" aria-expanded="false" aria-controls="content-hospedagens"><h3 class="text-lg"><i class="fas fa-hotel mr-2 text-sky-500"></i>Hospedagens</h3><i class="fas fa-chevron-down collapsible-icon"></i></button>
+                <div id="content-hospedagens" class="collapsible-content hidden">
+                    <div class="space-y-6">
+                        <div class="hotel-card p-4 rounded-lg border border-slate-200 bg-slate-50"><h4 class="hotel-card-title">Central Hotel - Londres 🇬🇧</h4><p class="text-sm text-slate-600 mb-1"><strong>Período:</strong> 23 Jan a 30 Jan 2026 (7 noites)</p><p class="text-sm text-slate-600 mb-1"><strong>Quarto:</strong> Suíte standard (1 casal, 2 solteiro)</p><p class="text-sm text-slate-600 mb-1"><strong>Comodidades:</strong> Café não incluso.</p><p class="text-sm text-slate-600 mb-1"><strong>Endereço:</strong> 16-18 Argyle St, London, WC1H 8EG</p><p class="text-sm text-slate-600 mb-1"><strong>Check-in:</strong> 14h (Recepção 8h-00h)</p><p class="text-sm text-slate-600 mb-2"><strong>Check-out:</strong> 11h.</p><div class="flex space-x-3"><a href="https://www.google.com/maps/search/?api=1&query=16-18+Argyle+St%2C+London%2C+England%2C+WC1H+8EG" target="_blank" class="external-link"><i class="fas fa-map-marker-alt mr-1"></i>Mapa</a><a href="https://www.hoteis.com/ho426948/" target="_blank" class="external-link"><i class="fas fa-globe mr-1"></i>Hoteis.com</a><a href="https://youtu.be/o0XdIkflwpI?si=PewpDmDLC20WGjX_" target="_blank" class="external-link"><i class="fas fa-video mr-1"></i>Vídeo</a></div><p class="text-sm text-slate-500 mt-3 pt-3 border-t border-slate-200"><strong><i class="fas fa-info-circle mr-2 text-sky-600"></i>Vantagens:</strong> Localização central, ideal para explorar as principais atrações de Londres a pé ou com transporte público próximo. Bom para grupos que buscam praticidade.</p><p class="text-sm text-slate-500 mt-1 pt-1"><strong><i class="fas fa-plane-arrival mr-2 text-sky-600"></i>Chegando do Aeroporto (Heathrow):</strong> Opções incluem o trem rápido Heathrow Express (até Paddington) ou a linha de metrô Piccadilly Line (mais econômica), seguida por uma curta viagem de metrô ou táxi até o hotel.</p></div>
+                        <div class="hotel-card p-4 rounded-lg border border-slate-200 bg-slate-50"><h4 class="hotel-card-title">Hotel Inn Rossio - Lisboa 🇵🇹</h4><p class="text-sm text-slate-600 mb-1"><strong>Período:</strong> 30 Jan a 03 Fev 2026 (4 noites)</p><p class="text-sm text-slate-600 mb-1"><strong>Quarto:</strong> Quarto quádruplo (1 casal, 2 solteiro)</p><p class="text-sm text-slate-600 mb-1"><strong>Comodidades:</strong> Café incluído.</p><p class="text-sm text-slate-600 mb-1"><strong>Endereço:</strong> Rua 1 de Dezembro N 73, Lisbon, 1200-358</p><p class="text-sm text-slate-600 mb-1"><strong>Check-in:</strong> 14h (Não após horário comercial)</p><p class="text-sm text-slate-600 mb-2"><strong>Check-out:</strong> 12h.</p><div class="flex space-x-3"><a href="https://www.google.com/maps/search/?api=1&query=Rua+1+de+Dezembro+N+73%2C+Lisbon%2C+1200-358" target="_blank" class="external-link"><i class="fas fa-map-marker-alt mr-1"></i>Mapa</a><a href="https://www.hoteis.com/ho239119/" target="_blank" class="external-link"><i class="fas fa-globe mr-1"></i>Hoteis.com</a><a href="https://youtu.be/Ly4S50ED3bU?si=kwIHM6t5NmuTnXIn" target="_blank" class="external-link"><i class="fas fa-video mr-1"></i>Vídeo</a></div><p class="text-sm text-slate-500 mt-3 pt-3 border-t border-slate-200"><strong><i class="fas fa-info-circle mr-2 text-sky-600"></i>Vantagens:</strong> Situado no coração de Lisboa, na Praça do Rossio, oferece fácil acesso a transportes, restaurantes e pontos turísticos. Ótima base para explorar a cidade.</p><p class="text-sm text-slate-500 mt-1 pt-1"><strong><i class="fas fa-plane-arrival mr-2 text-sky-600"></i>Chegando do Aeroporto (LIS):</strong> A forma mais fácil é o Metrô. Pegue a Linha Vermelha no aeroporto e troque para a Linha Verde na estação Alameda, descendo no Rossio, a poucos passos do hotel. O AeroBus também é uma opção.</p></div>
+                        <div class="hotel-card p-4 rounded-lg border border-slate-200 bg-slate-50"><h4 class="hotel-card-title">Sleep Inn Guarulhos - Guarulhos 🇧🇷</h4><p class="text-sm text-slate-600 mb-1"><strong>Período:</strong> 03 Fev a 04 Fev 2026 (1 noite)</p><p class="text-sm text-slate-600 mb-1"><strong>Quartos:</strong> 2x Standard Twin (2 solteiro cada)</p><p class="text-sm text-slate-600 mb-1"><strong>Comodidades:</strong> Wi-Fi. Café não incluso. Traslado (consultar).</p><p class="text-sm text-slate-600 mb-1"><strong>Endereço:</strong> Av. Natalia Zarif, 2655, Guarulhos</p><p class="text-sm text-slate-600 mb-1"><strong>Check-in:</strong> 14h.</p><p class="text-sm text-slate-600 mb-2"><strong>Check-out:</strong> 12h.</p><div class="flex space-x-3"><a href="https://www.google.com/maps/search/?api=1&query=Avenida+Natalia+Zarif%2C+2655%2C+Guarulhos%2C+Sao+Paulo%2C+07140-040" target="_blank" class="external-link"><i class="fas fa-map-marker-alt mr-1"></i>Mapa</a><a href="https://www.hoteis.com/ho554594976/" target="_blank" class="external-link"><i class="fas fa-globe mr-1"></i>Hoteis.com</a></div><p class="text-sm text-slate-500 mt-3 pt-3 border-t border-slate-200"><strong><i class="fas fa-info-circle mr-2 text-sky-600"></i>Vantagens:</strong> Convenientemente localizado próximo ao Aeroporto de Guarulhos, ideal para pernoite entre voos.</p><p class="text-sm text-slate-500 mt-1 pt-1"><strong><i class="fas fa-plane-arrival mr-2 text-sky-600"></i>Chegando do Aeroporto (GRU):</strong> O hotel oferece serviço gratuito de traslado de ida e volta para o aeroporto. A saída é de hora em hora.</p></div>
+                    </div>
+                </div>
+            </div>
+            <!-- Mapas -->
+            <div class="card">
+                <button class="collapsible-trigger" aria-expanded="false" aria-controls="content-mapas-transporte"><h3 class="text-lg"><i class="fas fa-bus-alt mr-2 text-sky-500"></i>Mapas de Transporte</h3><i class="fas fa-chevron-down collapsible-icon"></i></button>
+                <div id="content-mapas-transporte" class="collapsible-content hidden">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="transport-map-item rounded-lg border border-slate-200 bg-slate-50"><h5 class="transport-map-title"><i class="fas fa-map-marked-alt mr-2"></i>Mapas de Londres ?🇬🇧</h5><div class="transport-map-links"><a href="https://drive.google.com/file/d/16kh-yFsv8PSfK9cGZJBkpWBh8GTO6P7_/view" target="_blank"><i class="fas fa-subway"></i>Mapa do Metrô (Tube)</a><a href="https://drive.google.com/file/d/1rmWJFFmUi8KuyAcA8SP60LgQ8y_UnyoZ/view" target="_blank"><i class="fas fa-bus"></i>Mapa de Ônibus</a><a class="text-sm text-slate-500 mt-3 pt-3 border-t border-slate-200" href="https://tfl.gov.uk/maps" target="_blank"><i class="fas fa-globe"></i>Site Oficial TFL</a></div></div>
+                        <div class="transport-map-item rounded-lg border border-slate-200 bg-slate-50"><h5 class="transport-map-title"><i class="fas fa-map-marked-alt mr-2"></i>Mapas de Lisboa 🇵🇹</h5><div class="transport-map-links"><a href="https://drive.google.com/file/d/1tGzXfDZVZS9EP8YqOq9Ue6KnbmpSOjpX/view" target="_blank"><i class="fas fa-subway"></i>Mapa do Metrô</a><a href="https://drive.google.com/file/d/1mAKtxYqpuJ0r8KQlhiV5tojNWYi5H-Zx/view" target="_blank"><i class="fas fa-bus"></i>Mapa de Ônibus e Bonde</a><a class="text-sm text-slate-500 mt-3 pt-3 border-t border-slate-200" href="https://www.metrolisboa.pt/viajar/mapas-e-diagramas/" target="_blank"><i class="fas fa-globe"></i>Site Oficial Metrô Lisboa</a><a href="https://www.carris.pt/viaje/mapas/" target="_blank"><i class="fas fa-globe"></i>Site Oficial Carris</a></div></div>
+                    </div>
+                </div>
+            </div>
+            <!-- Seguro -->
+            <div class="card">
+                <button class="collapsible-trigger" aria-expanded="false" aria-controls="content-seguro-viagem"><h3 class="text-lg"><i class="fas fa-shield-alt mr-2 text-sky-500"></i>Seguro Viagem</h3><i class="fas fa-chevron-down collapsible-icon"></i></button>
+                <div id="content-seguro-viagem" class="collapsible-content hidden">
+                    <div class="insurance-card-content p-4"><div class="mb-4"><h4 class="insurance-card-title text-base">Allianz Seguros - Plano PRIME INTERNACIONAL</h4><p class="text-sm text-slate-600 mb-1"><strong>Vigência:</strong> 23/01/2026 a 03/02/2026</p><p class="text-sm text-slate-600 mb-3">Coberturas válidas para todos os viajantes do grupo.</p></div><h5 class="font-semibold text-slate-700 text-md mb-3">Principais Coberturas (por pessoa):</h5><div class="insurance-details-grid mb-4"><div class="insurance-coverage-item"><strong>Despesas Médicas e Hospitalares (DMH):</strong><br>R$ 500.000,00 <span class="text-xs text-slate-500">(incluso COVID-19)</span></div><div class="insurance-coverage-item"><strong>Morte Acidental:</strong><br>R$ 200.000,00</div><div class="insurance-coverage-item"><strong>Invalidez Permanente por Acidente:</strong><br>R$ 150.000,00</div><div class="insurance-coverage-item"><strong>Regresso Sanitário:</strong><br>R$ 250.000,00</div><div class="insurance-coverage-item"><strong>Traslado do Corpo:</strong><br>R$ 100.000,00</div><div class="insurance-coverage-item"><strong>Traslado Médico:</strong><br>R$ 42.000,00</div><div class="insurance-coverage-item"><strong>Extravio Definitivo de Bagagem:</strong><br>R$ 5.000,00</div><div class="insurance-coverage-item"><strong>Cancelamento/Interrupção de Viagem:</strong><br>R$ 4.000,00</div><div class="insurance-coverage-item"><strong>Despesas Odontológicas:</strong><br>R$ 5.000,00</div><div class="insurance-coverage-item"><strong>Despesas Farmacêuticas:</strong><br>R$ 1.700,00</div></div><div class="mt-4 pt-4 border-t border-slate-200"><div class="text-center mb-3"><a href="https://drive.google.com/drive/folders/1on7kiHE0RcVhQj6sRSfMvuyC3C_-aWB5" target="_blank" class="inline-block bg-sky-500 hover:bg-sky-600 text-white font-semibold py-2 px-4 rounded-lg shadow-md transition-colors duration-150 text-sm"><i class="fas fa-file-pdf fa-fw mr-2"></i>Acessar Apólices Completas</a></div><p class="text-xs text-slate-600 mt-6"><strong>Contato Assistência 24h (Allianz):</strong><br><i class="fab fa-whatsapp text-green-500"></i> WhatsApp: <a href="https://wa.me/551143315445" target="_blank" class="text-sky-600 hover:underline">55 11 4331-5445</a><br><i class="fas fa-phone"></i> Telefones: 55 11 4331-5442 (Grande SP) / 0800 770 8020 (Outras Localidades)</p><p class="text-xs text-slate-500 mt-3 bg-amber-50 p-3 rounded-md border border-amber-200"><i class="fas fa-exclamation-triangle text-amber-500 mr-2"></i><strong>Importante:</strong> Em caso de emergência, contate a seguradora.</p></div></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Seção: Custos -->
+        <section id="page-custos" class="page-section">
+            <div class="card">
+                <button class="collapsible-trigger" aria-expanded="false" aria-controls="content-financeiro-graficos"><h3 class="text-lg"><i class="fas fa-chart-pie mr-2 text-sky-500"></i>Detalhes dos Custos</h3><i class="fas fa-chevron-down collapsible-icon"></i></button>
+                <div id="content-financeiro-graficos" class="collapsible-content hidden">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                        <div class="cost-summary-card"><h3>Custo Total por Pessoa</h3><p class="cost-value text-3xl text-orange-500">R$ 7.480,69</p></div>
+                        <div class="cost-summary-card"><h3>Custo Total para o Grupo</h3><p class="cost-value text-3xl text-emerald-500">R$ 29.922,74</p></div>
+                    </div>
+                    <div class="flex justify-center mb-6 toggle-button-group"><button id="btnPorPessoa" class="active">Por Pessoa</button><button id="btnPeloGrupo">Pelo Grupo</button></div>
+                    <div class="space-y-8">
+                        <div><h4 id="custoTotalTitulo" class="text-md font-semibold text-slate-700 mb-3 text-center"></h4><div class="chart-container"><canvas id="appCustoTotalChart"></canvas></div></div>
+                        <div><h4 id="custoCategoriaTitulo" class="text-md font-semibold text-slate-700 mb-3 text-center"></h4><div class="chart-container"><canvas id="appCustoCategoriaChart"></canvas></div></div>
+                    </div>
+                </div>
+            </div>
+            <div class="card">
+                <button class="collapsible-trigger" aria-expanded="false" aria-controls="content-financeiro-parcelas"><h3 class="text-lg"><i class="fas fa-calendar-alt mr-2 text-sky-500"></i>Parcelas</h3><i class="fas fa-chevron-down collapsible-icon"></i></button>
+                <div id="content-financeiro-parcelas" class="collapsible-content hidden">
+                    <p class="mb-6 text-slate-600 text-center">Evolução das parcelas mensais por pessoa.</p>
+                    <div class="chart-container mb-6"><canvas id="appPagamentoMensalChart"></canvas></div>
+                    <div class="text-center mt-6 mb-6"><a href="https://docs.google.com/spreadsheets/d/1WvovG6hS5oRsqegaDDO3nUo3BK6T-vovcN3wphNnq0M/edit?usp=sharing" target="_blank" class="inline-block bg-emerald-500 hover:bg-emerald-600 text-white font-semibold py-2 px-4 rounded-lg shadow-md transition-colors duration-150 text-sm"><i class="fas fa-file-excel mr-2"></i>Planilha de Valores</a></div>
+                    <div class="mt-8 bg-slate-50 p-4 rounded-lg border border-slate-200"><h4 class="font-semibold text-slate-700 text-sm mb-2">Observações:</h4><ul class="list-disc list-inside text-xs text-slate-600 space-y-1"><li>Parcelas vencem dia 10 (início 10/06/2025).</li><li>Gráfico mostra o valor mensal por pessoa.</li><li>PIX: edersonrincel@gmail.com</li></ul></div>
+                </div>
+            </div>
+            <div class="card">
+                <button class="collapsible-trigger" aria-expanded="false" aria-controls="content-recibos-reservas"><h3 class="text-lg"><i class="fas fa-receipt mr-2 text-sky-500"></i>Recibos e Reservas</h3><i class="fas fa-chevron-down collapsible-icon"></i></button>
+                <div id="content-recibos-reservas" class="collapsible-content hidden"><div class="grid grid-cols-1 sm:grid-cols-2 gap-4"><div class="document-card p-3 rounded-md border bg-slate-50"><h5 class="font-semibold text-slate-700 text-sm mb-2">Voo GOL (XAP-GRU)</h5><div class="flex space-x-2"><a href="https://drive.google.com/drive/folders/16srkSf015a1QFBafP4C3G2LKUeM33Gx4?usp=sharing" target="_blank" class="action-button"><i class="fas fa-file-invoice-dollar"></i>Comprovante</a><a href="https://drive.google.com/file/d/1kycB-unwBUuHrYIToWeIaqPrZRN4Mfxu/view?usp=sharing" target="_blank" class="action-button"><i class="fas fa-calendar-check"></i>Reserva</a></div></div><div class="document-card p-3 rounded-md border bg-slate-50"><h5 class="font-semibold text-slate-700 text-sm mb-2">Voo TAP (Internacional)</h5><div class="flex space-x-2"><a href="https://drive.google.com/file/d/1Wi9wyxJpVIz0C3YRl3xYxPC-ekpvVmsl/view?usp=sharing" target="_blank" class="action-button"><i class="fas fa-file-invoice-dollar"></i>Comprovante</a><a href="https://drive.google.com/file/d/16KeeGwJcRwJMMBkLK_GZfjgopcqx2Cv_/view?usp=sharing" target="_blank" class="action-button"><i class="fas fa-calendar-check"></i>Reserva</a></div></div><div class="document-card p-3 rounded-md border bg-slate-50"><h5 class="font-semibold text-slate-700 text-sm mb-2">Voo LATAM (GRU-XAP)</h5><div class="flex space-x-2"><a href="https://drive.google.com/file/d/1XUdEiz-h9pjmocIcfgXB0cH5XIaD76Xi/view?usp=sharing" target="_blank" class="action-button"><i class="fas fa-file-invoice-dollar"></i>Comprovante</a><a href="https://drive.google.com/file/d/1TmL7J-IYcsUUzRqxsuZ_xGOEmGsZyHhF/view?usp=sharing" target="_blank" class="action-button"><i class="fas fa-calendar-check"></i>Reserva</a></div></div><div class="document-card p-3 rounded-md border bg-slate-50"><h5 class="font-semibold text-slate-700 text-sm mb-2">Hotel Londres</h5><div class="flex space-x-2"><a href="https://drive.google.com/file/d/1ub8Uw2uCZrZYgvAVThTIs5xyzRu9LHnq/view?usp=sharing" target="_blank" class="action-button"><i class="fas fa-file-invoice-dollar"></i>Comprovante</a><a href="https://drive.google.com/file/d/1V0A3Gze8xLYNK0wQcuL1vS16-jS-Comk/view?usp=sharing" target="_blank" class="action-button"><i class="fas fa-calendar-check"></i>Reserva</a></div></div><div class="document-card p-3 rounded-md border bg-slate-50"><h5 class="font-semibold text-slate-700 text-sm mb-2">Hotel Lisboa</h5><div class="flex space-x-2"><a href="https://drive.google.com/file/d/1rFGipGh5DyhPZaqqMIW6u7jlTynbzODb/view?usp=sharing" target="_blank" class="action-button"><i class="fas fa-file-invoice-dollar"></i>Comprovante</a><a href="https://drive.google.com/file/d/1iSeFzScNI0JObKzNsEzn2jpIELbUdgBR/view?usp=sharing" target="_blank" class="action-button"><i class="fas fa-calendar-check"></i>Reserva</a></div></div><div class="document-card p-3 rounded-md border bg-slate-50"><h5 class="font-semibold text-slate-700 text-sm mb-2">Hotel Guarulhos</h5><div class="flex space-x-2"><a href="https://drive.google.com/file/d/1sEKUezfjdIux3UQrj8zd8MUsdb7YnSjL/view?usp=sharing" target="_blank" class="action-button"><i class="fas fa-file-invoice-dollar"></i>Comprovante</a><a href="https://drive.google.com/file/d/1TpJaUdpmqEuqClUgsXWBMjrG_nI3BghQ/view?usp=sharing" target="_blank" class="action-button"><i class="fas fa-calendar-check"></i>Reserva</a></div></div></div><p class="text-xs text-slate-500 mt-4 text-center">Links para Google Drive.</p></div>
+            </div>
+            <div class="card">
+                <button class="collapsible-trigger" aria-expanded="false" aria-controls="content-conversor-moeda"><h3 class="text-lg"><i class="fas fa-calculator mr-2 text-sky-500"></i>Conversor de Moedas</h3><i class="fas fa-chevron-down collapsible-icon"></i></button>
+                <div id="content-conversor-moeda" class="collapsible-content hidden"><p class="mb-4 text-slate-600 text-sm text-center">Simule conversões de moeda pela Wise.</p><div class="wise-simulator-container"><iframe title="fx" src="https://wise.com/br/currency-converter/fx-widget/converter?sourceCurrency=GBP&targetCurrency=BRL&amount=350" height="400" width="340" frameBorder="0" allowtransparency="true"></iframe></div><p class="text-xs text-slate-500 mt-6 bg-amber-50 p-3 rounded-md border border-amber-200"><strong>Legenda:</strong> BRL: Real | EUR: Euro | GBP: Libra</p><p class="text-xs text-slate-500 mt-4 text-center">Este é um widget fornecido pela Wise. As taxas são atualizadas em tempo real.</p></div>
+            </div>
+        </section>
+
+        <!-- Seção: Sabores -->
+        <section id="page-sabores" class="page-section">
+            <p class="text-center text-sm text-slate-600 mb-6 pt-1">Opções sem glúten (GF) e sem lactose (LF) em Londres e Lisboa.</p>
+            <div class="card">
+                <button class="collapsible-trigger" aria-expanded="false" aria-controls="content-food-londres"><h3 class="text-lg"><i class="fas fa-utensils mr-2 text-sky-500"></i>Londres 🇬🇧</h3><i class="fas fa-chevron-down collapsible-icon"></i></button>
+                <div id="content-food-londres" class="collapsible-content hidden"><div class="grid grid-cols-1 md:grid-cols-2 gap-4"><div class="food-card p-4 rounded-lg border bg-slate-50"><h4 class="food-card-title">Niche</h4><p class="text-xs text-slate-500"><strong>Local:</strong> Angel</p><p class="text-xs text-slate-500"><strong>Cozinha:</strong> Britânica/Europeia</p><p class="text-xs"><strong class="food-card-gf-status gf-dedicated">GF:</strong> Dedicado 100% (Coeliac UK)</p><p class="text-xs"><strong class="food-card-lf-status lf-many">LF/DF:</strong> Muitas opções</p><p class="text-xs text-slate-500 mt-1"><strong>Preço:</strong> ££</p></div><div class="food-card p-4 rounded-lg border bg-slate-50"><h4 class="food-card-title">Honest Burgers (King's Cross)</h4><p class="text-xs text-slate-500"><strong>Local:</strong> King's Cross</p><p class="text-xs text-slate-500"><strong>Cozinha:</strong> Hambúrgueres</p><p class="text-xs"><strong class="food-card-gf-status gf-accredited">GF:</strong> Acreditado Coeliac UK</p><p class="text-xs"><strong class="food-card-lf-status lf-vegan">LF/DF:</strong> Opções Vegan/DF</p><p class="text-xs text-slate-500 mt-1"><strong>Preço:</strong> ££</p></div><div class="food-card p-4 rounded-lg border bg-slate-50"><h4 class="food-card-title">Honest Burgers (Holborn)</h4><p class="text-xs text-slate-500"><strong>Local:</strong> Holborn</p><p class="text-xs text-slate-500"><strong>Cozinha:</strong> Hambúrgueres</p><p class="text-xs"><strong class="food-card-gf-status gf-accredited">GF:</strong> Acreditado Coeliac UK</p><p class="text-xs"><strong class="food-card-lf-status lf-vegan">LF/DF:</strong> Opções Vegan/DF</p><p class="text-xs text-slate-500 mt-1"><strong>Preço:</strong> ££</p></div><div class="food-card p-4 rounded-lg border bg-slate-50"><h4 class="food-card-title">Honest Burgers (Covent Garden)</h4><p class="text-xs text-slate-500"><strong>Local:</strong> Covent Garden</p><p class="text-xs text-slate-500"><strong>Cozinha:</strong> Hambúrgueres</p><p class="text-xs"><strong class="food-card-gf-status gf-accredited">GF:</strong> Acreditado Coeliac UK</p><p class="text-xs"><strong class="food-card-lf-status lf-vegan">LF/DF:</strong> Opções Vegan/DF</p><p class="text-xs text-slate-500 mt-1"><strong>Preço:</strong> ££</p></div><div class="food-card p-4 rounded-lg border bg-slate-50"><h4 class="food-card-title">Pho</h4><p class="text-xs text-slate-500"><strong>Local:</strong> Várias (e.g., Soho)</p><p class="text-xs text-slate-500"><strong>Cozinha:</strong> Vietnamita</p><p class="text-xs"><strong class="food-card-gf-status gf-accredited">GF:</strong> Acreditado Coeliac UK</p><p class="text-xs"><strong class="food-card-lf-status lf-many">LF/DF:</strong> Muitas opções</p><p class="text-xs text-slate-500 mt-1"><strong>Preço:</strong> ££</p></div><div class="food-card p-4 rounded-lg border bg-slate-50"><h4 class="food-card-title">Mildreds (King's Cross)</h4><p class="text-xs text-slate-500"><strong>Local:</strong> King's Cross</p><p class="text-xs text-slate-500"><strong>Cozinha:</strong> Vegan Internacional</p><p class="text-xs"><strong class="food-card-gf-status gf-caution">GF:</strong> Cautela (Verificar)</p><p class="text-xs"><strong class="food-card-lf-status lf-vegan">LF/DF:</strong> Totalmente Vegan</p><p class="text-xs text-slate-500 mt-1"><strong>Preço:</strong> ££</p></div><div class="food-card p-4 rounded-lg border bg-slate-50"><h4 class="food-card-title">Leon (King's Cross)</h4><p class="text-xs text-slate-500"><strong>Local:</strong> King's Cross / Várias</p><p class="text-xs text-slate-500"><strong>Cozinha:</strong> Fast Food Saudável</p><p class="text-xs"><strong class="food-card-gf-status gf-protocol">GF:</strong> Bons Protocolos</p><p class="text-xs"><strong class="food-card-lf-status lf-vegan">LF/DF:</strong> Opções Vegan/DF</p><p class="text-xs text-slate-500 mt-1"><strong>Preço:</strong> £</p></div><div class="food-card p-4 rounded-lg border bg-slate-50"><h4 class="food-card-title">Carluccio's (St Pancras)</h4><p class="text-xs text-slate-500"><strong>Local:</strong> St Pancras Int.</p><p class="text-xs text-slate-500"><strong>Cozinha:</strong> Italiana</p><p class="text-xs"><strong class="food-card-gf-status gf-accredited">GF:</strong> Acreditado Coeliac UK</p><p class="text-xs"><strong class="food-card-lf-status lf-adapt">LF/DF:</strong> Podem adaptar</p><p class="text-xs text-slate-500 mt-1"><strong>Preço:</strong> ££</p></div><div class="food-card p-4 rounded-lg border bg-slate-50"><h4 class="food-card-title">German Gymnasium</h4><p class="text-xs text-slate-500"><strong>Local:</strong> King's Cross</p><p class="text-xs text-slate-500"><strong>Cozinha:</strong> Alemã/Europeia</p><p class="text-xs"><strong class="food-card-gf-status gf-caution">GF:</strong> Cautela (Comunicar)</p><p class="text-xs"><strong class="food-card-lf-status lf-adapt">LF/DF:</strong> Podem adaptar</p><p class="text-xs text-slate-500 mt-1"><strong>Preço:</strong> £££</p></div><div class="food-card p-4 rounded-lg border bg-slate-50"><h4 class="food-card-title">Granary Square Brasserie</h4><p class="text-xs text-slate-500"><strong>Local:</strong> King's Cross</p><p class="text-xs text-slate-500"><strong>Cozinha:</strong> Britânica Contemp.</p><p class="text-xs"><strong class="food-card-gf-status gf-caution">GF:</strong> Cautela (Comunicar)</p><p class="text-xs"><strong class="food-card-lf-status lf-adapt">LF/DF:</strong> Podem adaptar</p><p class="text-xs text-slate-500 mt-1"><strong>Preço:</strong> £££</p></div><div class="food-card p-4 rounded-lg border bg-slate-50"><h4 class="food-card-title">Wicked Fish</h4><p class="text-xs text-slate-500"><strong>Local:</strong> Spitalfields Market</p><p class="text-xs text-slate-500"><strong>Cozinha:</strong> Fish & Chips</p><p class="text-xs"><strong class="food-card-gf-status gf-dedicated">GF:</strong> Dedicado 100%</p><p class="text-xs"><strong class="food-card-lf-status lf-many">LF/DF:</strong> Sim (natural)</p><p class="text-xs text-slate-500 mt-1"><strong>Preço:</strong> ££</p></div><div class="food-card p-4 rounded-lg border bg-slate-50"><h4 class="food-card-title">Free From Bakehouse</h4><p class="text-xs text-slate-500"><strong>Local:</strong> Borough Market</p><p class="text-xs text-slate-500"><strong>Cozinha:</strong> Padaria/Pastelaria</p><p class="text-xs"><strong class="food-card-gf-status gf-dedicated">GF:</strong> Dedicado 100%</p><p class="text-xs"><strong class="food-card-lf-status lf-many">LF/DF:</strong> Muitas opções</p><p class="text-xs text-slate-500 mt-1"><strong>Preço:</strong> £</p></div><div class="food-card p-4 rounded-lg border bg-slate-50"><h4 class="food-card-title">GROM Gelato</h4><p class="text-xs text-slate-500"><strong>Local:</strong> Piccadilly / Covent Garden</p><p class="text-xs text-slate-500"><strong>Cozinha:</strong> Gelados</p><p class="text-xs"><strong class="food-card-gf-status gf-dedicated">GF:</strong> Dedicado 100%</p><p class="text-xs"><strong class="food-card-lf-status lf-many">LF/DF:</strong> Opções Sorbet</p><p class="text-xs text-slate-500 mt-1"><strong>Preço:</strong> £</p></div></div></div>
+            </div>
+            <div class="card mt-6">
+                <button class="collapsible-trigger" aria-expanded="false" aria-controls="content-food-lisboa"><h3 class="text-lg"><i class="fas fa-utensils mr-2 text-sky-500"></i>Lisboa 🇵🇹</h3><i class="fas fa-chevron-down collapsible-icon"></i></button>
+                <div id="content-food-lisboa" class="collapsible-content hidden"><div class="grid grid-cols-1 md:grid-cols-2 gap-4"><div class="food-card p-4 rounded-lg border bg-slate-50"><h4 class="food-card-title">Rice Me</h4><p class="text-xs text-slate-500"><strong>Local:</strong> Avenidas Novas</p><p class="text-xs text-slate-500"><strong>Cozinha:</strong> Portuguesa/Internacional</p><p class="text-xs"><strong class="food-card-gf-status gf-dedicated">GF:</strong> Dedicado 100% & LF (APC)</p><p class="text-xs"><strong class="food-card-lf-status lf-total">LF/DF:</strong> Totalmente Sem Lactose</p><p class="text-xs text-slate-500 mt-1"><strong>Preço:</strong> €€</p></div><div class="food-card p-4 rounded-lg border bg-slate-50"><h4 class="food-card-title">Despensa N'6</h4><p class="text-xs text-slate-500"><strong>Local:</strong> Avenidas Novas</p><p class="text-xs text-slate-500"><strong>Cozinha:</strong> Padaria/Café</p><p class="text-xs"><strong class="food-card-gf-status gf-dedicated">GF:</strong> Dedicado 100%</p><p class="text-xs"><strong class="food-card-lf-status lf-many">LF/DF:</strong> Muitas opções</p><p class="text-xs text-slate-500 mt-1"><strong>Preço:</strong> €€</p></div><div class="food-card p-4 rounded-lg border bg-slate-50"><h4 class="food-card-title">La Trattoria</h4><p class="text-xs text-slate-500"><strong>Local:</strong> Perto Pq Eduardo VII</p><p class="text-xs text-slate-500"><strong>Cozinha:</strong> Italiana</p><p class="text-xs"><strong class="food-card-gf-status gf-dedicated">GF:</strong> Dedicado 100%</p><p class="text-xs"><strong class="food-card-lf-status lf-vegan">LF/DF:</strong> Opções DF/Vegan</p><p class="text-xs text-slate-500 mt-1"><strong>Preço:</strong> €€€</p></div><div class="food-card p-4 rounded-lg border bg-slate-50"><h4 class="food-card-title">GROM Gelato</h4><p class="text-xs text-slate-500"><strong>Local:</strong> Baixa (Rua Garrett)</p><p class="text-xs text-slate-500"><strong>Cozinha:</strong> Gelados</p><p class="text-xs"><strong class="food-card-gf-status gf-dedicated">GF:</strong> Dedicado 100%</p><p class="text-xs"><strong class="food-card-lf-status lf-many">LF/DF:</strong> Opções Sorbet</p><p class="text-xs text-slate-500 mt-1"><strong>Preço:</strong> €</p></div><div class="food-card p-4 rounded-lg border bg-slate-50"><h4 class="food-card-title">Kong</h4><p class="text-xs text-slate-500"><strong>Local:</strong> Cais do Sodré / Chiado</p><p class="text-xs text-slate-500"><strong>Cozinha:</strong> Vegan Portuguesa/Inter.</p><p class="text-xs"><strong class="food-card-gf-status gf-caution">GF:</strong> Cautela (Verificar)</p><p class="text-xs"><strong class="food-card-lf-status lf-vegan">LF/DF:</strong> Totalmente Vegan</p><p class="text-xs text-slate-500 mt-1"><strong>Preço:</strong> €€</p></div><div class="food-card p-4 rounded-lg border bg-slate-50"><h4 class="food-card-title">Honest Greens</h4><p class="text-xs text-slate-500"><strong>Local:</strong> Cais do Sodré / Amoreiras</p><p class="text-xs text-slate-500"><strong>Cozinha:</strong> Saudável/Bowls</p><p class="text-xs"><strong class="food-card-gf-status gf-protocol">GF:</strong> Bons Protocolos</p><p class="text-xs"><strong class="food-card-lf-status lf-many">LF/DF:</strong> Muitas opções</p><p class="text-xs text-slate-500 mt-1"><strong>Preço:</strong> €€</p></div><div class="food-card p-4 rounded-lg border bg-slate-50"><h4 class="food-card-title">Celeiro</h4><p class="text-xs text-slate-500"><strong>Local:</strong> Baixa (Rua 1º Dezembro)</p<p class="text-xs text-slate-500"><strong>Cozinha:</strong> Loja/Café Saudável</p<p class="text-xs"><strong class="food-card-gf-status gf-protocol">GF:</strong> Produtos Embalados</p><p class="text-xs"><strong class="food-card-lf-status lf-many">LF/DF:</strong> Vasta gama</p><p class="text-xs text-slate-500 mt-1"><strong>Preço:</strong> €</p></div><div class="food-card p-4 rounded-lg border bg-slate-50"><h4 class="food-card-title">Cervejaria Ramiro</h4><p class="text-xs text-slate-500"><strong>Local:</strong> Intendente</p><p class="text-xs text-slate-500"><strong>Cozinha:</strong> Marisqueira</p><p class="text-xs"><strong class="food-card-gf-status gf-caution">GF:</strong> Cautela (Grelhados ok)</p><p class="text-xs"><strong class="food-card-lf-status lf-many">LF/DF:</strong> Muitas opções (natural)</p><p class="text-xs text-slate-500 mt-1"><strong>Preço:</strong> €€€</p></div><div class="food-card p-4 rounded-lg border bg-slate-50"><h4 class="food-card-title">A Cevicheria</h4><p class="text-xs text-slate-500"><strong>Local:</strong> Príncipe Real</p><p class="text-xs text-slate-500"><strong>Cozinha:</strong> Peruana/Portuguesa</p><p class="text-xs"><strong class="food-card-gf-status gf-protocol">GF:</strong> Bons Protocolos (Confirmar)</p><p class="text-xs"><strong class="food-card-lf-status lf-many">LF/DF:</strong> Muitas opções (natural)</p><p class="text-xs text-slate-500 mt-1"><strong>Preço:</strong> €€€</p></div><div class="food-card p-4 rounded-lg border bg-slate-50"><h4 class="food-card-title">Taberna Rua Flores</h4><p class="text-xs text-slate-500"><strong>Local:</strong> Chiado</p><p class="text-xs text-slate-500"><strong>Cozinha:</strong> Petiscos Portugueses</p><p class="text-xs"><strong class="food-card-gf-status gf-caution">GF:</strong> Cautela (Comunicar)</p><p class="text-xs"><strong class="food-card-lf-status lf-adapt">LF/DF:</strong> Podem adaptar</p><p class="text-xs text-slate-500 mt-1"><strong>Preço:</strong> €€</p></div><div class="food-card p-4 rounded-lg border bg-slate-50"><h4 class="food-card-title">Organi Chiado</h4><p class="text-xs text-slate-500"><strong>Local:</strong> Chiado</p><p class="text-xs text-slate-500"><strong>Cozinha:</strong> Vegan</p><p class="text-xs"><strong class="food-card-gf-status gf-caution">GF:</strong> Cautela (Verificar)</p><p class="text-xs"><strong class="food-card-lf-status lf-vegan">LF/DF:</strong> Totalmente Vegan</p><p class="text-xs text-slate-500 mt-1"><strong>Preço:</strong> €€</p></div><div class="food-card p-4 rounded-lg border bg-slate-50"><h4 class="food-card-title">Maria Catita</h4><p class="text-xs text-slate-500"><strong>Local:</strong> Baixa</p><p class="text-xs text-slate-500"><strong>Cozinha:</strong> Portuguesa Tradicional</p<p class="text-xs"><strong class="food-card-gf-status gf-protocol">GF:</strong> Bons Protocolos (Menu c/ Alergénios)</p><p class="text-xs"><strong class="food-card-lf-status lf-adapt">LF/DF:</strong> Podem adaptar</p><p class="text-xs text-slate-500 mt-1"><strong>Preço:</strong> €€</p></div></div></div>
+            </div>
+            <p class="text-xs text-slate-500 mt-6 text-center bg-amber-50 p-3 rounded-md border border-amber-200"><strong>Importante:</strong> Sempre confirme as opções e procedimentos diretamente com os estabelecimentos.</p>
+        </section>
+
+        <!-- Seção: Dicas -->
+        <section id="page-dicas" class="page-section pt-1">
+             <div class="card">
+                <button class="collapsible-trigger" aria-expanded="false" aria-controls="content-dica-documentacao"><h3 class="text-lg"><i class="fas fa-passport fa-fw mr-3 text-sky-500"></i>Documentação</h3><i class="fas fa-chevron-down collapsible-icon"></i></button>
+                <div id="content-dica-documentacao" class="collapsible-content hidden">
+                    <div class="tip-card-content tip-bg-passport">
+                        <ul class="list-disc text-slate-700">
+                            <li>🛂 <strong>Passaporte Válido:</strong> Mínimo de 6 meses de validade além da data de retorno. Verifique os requisitos específicos para cada país.</li>
+                            <li>🇬🇧 <strong>Reino Unido (ETA):</strong> A partir de 2024 (verificar data exata), brasileiros precisarão de uma ETA (Autorização Eletrônica de Viagem). Custo estimado: £16. Solicitação online (app UK ETA ou GOV.UK).</li>
+                            <li>🇵🇹 <strong>Portugal (Espaço Schengen):</strong> Isenção de visto para turismo (até 90 dias). Leve comprovantes: passagem de volta, seguro viagem (€30.000 min. cobertura médica), comprovante financeiro, reserva de hospedagem.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+             <div class="card">
+                <button class="collapsible-trigger" aria-expanded="false" aria-controls="content-dica-moeda"><h3 class="text-lg"><i class="fas fa-coins fa-fw mr-3 text-sky-500"></i>Moeda e Pagamentos</h3><i class="fas fa-chevron-down collapsible-icon"></i></button>
+                <div id="content-dica-moeda" class="collapsible-content hidden">
+                    <div class="tip-card-content tip-bg-currency">
+                        <ul class="list-disc text-slate-700">
+                            <li>🇬🇧 <strong>Reino Unido:</strong> Libra Esterlina (GBP - £).</li>
+                            <li>🇵🇹 <strong>Portugal:</strong> Euro (EUR - €).</li>
+                            <li>💳 <strong>Recomendação:</strong> Leve alguma quantia em espécie. Cartões de crédito/débito internacionais são amplamente aceitos (verifique taxas e habilite para uso no exterior). Considere cartões pré-pagos multimoeda.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+             <div class="card">
+                <button class="collapsible-trigger" aria-expanded="false" aria-controls="content-dica-tomadas"><h3 class="text-lg"><i class="fas fa-plug fa-fw mr-3 text-sky-500"></i>Tomadas e Voltagem</h3><i class="fas fa-chevron-down collapsible-icon"></i></button>
+                <div id="content-dica-tomadas" class="collapsible-content hidden">
+                    <div class="tip-card-content tip-bg-plugs">
+                        <ul class="list-disc text-slate-700">
+                           <li>🇬🇧 <strong>Reino Unido:</strong> Tomada Tipo G (3 pinos retangulares). Voltagem: 230V.</li>
+                           <li>🇵🇹 <strong>Portugal:</strong> Tomada Tipo C e F (2 pinos redondos). Voltagem: 230V.</li>
+                           <li>💡 <strong>Adaptador Universal:</strong> Essencial! Verifique se seus aparelhos são bivolt (100-240V) ou se precisam de conversor de voltagem.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+             <div class="card">
+                <button class="collapsible-trigger" aria-expanded="false" aria-controls="content-dica-transporte"><h3 class="text-lg"><i class="fas fa-subway fa-fw mr-3 text-sky-500"></i>Transporte Público</h3><i class="fas fa-chevron-down collapsible-icon"></i></button>
+                <div id="content-dica-transporte" class="collapsible-content hidden">
+                    <div class="tip-card-content tip-bg-transport">
+                        <ul class="list-disc text-slate-700">
+                            <li>🇬🇧 <strong>Londres:</strong> Oyster Card ou pagamento por aproximação (contactless) para metrô (Tube), ônibus, DLR.</li>
+                            <li>🇵🇹 <strong>Lisboa:</strong> Cartão Viva Viagem (modo "Zapping") ou Lisboa Card para metrô, ônibus, elétricos.</li>
+                            <li>🚶‍♀️ <strong>Caminhar:</strong> Ambas as cidades são ótimas para explorar a pé. Use calçados confortáveis!</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+             <div class="card">
+                <button class="collapsible-trigger" aria-expanded="false" aria-controls="content-dica-mala"><h3 class="text-lg"><i class="fas fa-suitcase-rolling fa-fw mr-3 text-sky-500"></i>Mala de Inverno</h3><i class="fas fa-chevron-down collapsible-icon"></i></button>
+                <div id="content-dica-mala" class="collapsible-content hidden">
+                    <div class="tip-card-content tip-bg-luggage">
+                        <ul class="list-disc text-slate-700">
+                            <li>🧥 <strong>Camadas são Chave:</strong> Segunda pele térmica, fleece/suéter, casaco pesado impermeável e corta-vento.</li>
+                            <li>👢 <strong>Calçados:</strong> Confortáveis e impermeáveis (chuva/neve).</li>
+                            <li>🧣 <strong>Acessórios:</strong> Gorro, cachecol, luvas.</li>
+                            <li>🧴 <strong>Proteção Solar e Labial:</strong> Mesmo no inverno, o sol pode ser forte, especialmente se houver neve.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="card">
+                <button class="collapsible-trigger" aria-expanded="false" aria-controls="content-dica-seguranca">
+                    <h3 class="text-lg"><i class="fas fa-eye fa-fw mr-3 text-sky-500"></i>Segurança e Cuidados</h3>
+                    <i class="fas fa-chevron-down collapsible-icon"></i>
+                </button>
+                <div id="content-dica-seguranca" class="collapsible-content hidden">
+                    <div class="tip-card-content tip-bg-passport">
+                        <ul class="list-disc text-slate-700 space-y-3">
+                            <li>👀 <strong>Fique Atento:</strong> Em áreas turísticas e transportes públicos, cuidado com batedores de carteira. Guarde a carteira em bolsos frontais ou bolsas seguras.</li>
+                            <li>💎 <strong>Seja Discreto:</strong> Evite ostentar objetos de valor como joias, relógios caros ou grandes quantias de dinheiro.</li>
+                            <li>🤔 <strong>Desconfie de Abordagens:</strong> Cuidado com golpes comuns, como pessoas pedindo para assinar petições falsas ou jogos de rua. Geralmente são distrações para furto.</li>
+                            <li>🔒 <strong>Use o Cofre:</strong> Guarde passaportes, dinheiro extra e outros valores no cofre do hotel. Ande com uma cópia (física ou digital) do seu passaporte.</li>
+                            <li>🤝 <strong>Cuidem-se:</strong> Viajar em grupo é mais seguro. Mantenham-se juntos em locais movimentados e comuniquem-se caso alguém se separe do grupo.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Notificação de Novo Episódio -->
+    <div id="new-episode-toast">
+        <button id="close-toast" aria-label="Fechar">&times;</button>
+        <div id="toast-icon"><i class="fas fa-podcast"></i></div>
+        <div>
+            <p class="font-bold text-sm">Novo episódio no ar!</p>
+            <p class="text-xs mb-2">Um novo bate-papo já está disponível.</p>
+            <button id="toast-button">Ouvir agora</button>
+        </div>
+    </div>
+    
+    <!-- Scripts Locais -->
+    <script type="module" src="js/main.js"></script>
+
+</body>
+</html>

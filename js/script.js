@@ -2,7 +2,10 @@
 
 // PWA Installation
 let deferredPrompt;
+const installBanner = document.getElementById('install-banner');
 const installButton = document.getElementById('install-button');
+const closeInstallBannerButton = document.getElementById('close-install-banner');
+
 
 // Financial Data
 const numeroDeViajantes = 4;
@@ -61,27 +64,40 @@ window.addEventListener('beforeinstallprompt', (e) => {
   e.preventDefault();
   // Stash the event so it can be triggered later
   deferredPrompt = e;
-  // Show our custom install button
-  if (installButton) {
-    installButton.classList.remove('hidden');
-    installButton.classList.add('flex'); // Use 'flex' to make it visible
+  // Show our custom install banner
+  if (installBanner) {
+    installBanner.classList.add('show');
   }
 });
 
 // Add a click event listener to our custom install button
 if (installButton) {
   installButton.addEventListener('click', async () => {
-    // Hide the install button
-    installButton.classList.add('hidden');
+    // Hide the install banner
+    if (installBanner) {
+      installBanner.classList.remove('show');
+    }
     // Show the browser's install prompt
-    deferredPrompt.prompt();
-    // Wait for the user to respond to the prompt
-    const { outcome } = await deferredPrompt.userChoice;
-    console.log(`User response to the install prompt: ${outcome}`);
-    // We've used the prompt, and can't use it again, so clear it
-    deferredPrompt = null;
+    if (deferredPrompt) {
+        deferredPrompt.prompt();
+        // Wait for the user to respond to the prompt
+        const { outcome } = await deferredPrompt.userChoice;
+        console.log(`User response to the install prompt: ${outcome}`);
+        // We've used the prompt, and can't use it again, so clear it
+        deferredPrompt = null;
+    }
   });
 }
+
+// Add a click event listener to the close button on the banner
+if (closeInstallBannerButton) {
+    closeInstallBannerButton.addEventListener('click', () => {
+        if (installBanner) {
+            installBanner.classList.remove('show');
+        }
+    });
+}
+
 
 // --- CHART CONFIGURATION ---
 

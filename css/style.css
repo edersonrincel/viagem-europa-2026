@@ -6,13 +6,6 @@ body {
     overscroll-behavior-y: none;
 }
 
-/* Original Header Style (Kept for reference if needed) */
-.app-header-original { 
-    background-color: #0EA5E9; /* Sky blue */
-    color: white;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-}
-
 /* Top Navigation Styles */
 .top-nav {
     background-color: white;
@@ -562,4 +555,15 @@ body {
     font-weight: 600;
     cursor: pointer;
     white-space: nowrap;
+}
+
+/* PWA Installation Banner Styles */
+#install-banner {
+    transform: translateY(-150%);
+    transition: transform 0.4s ease-in-out;
+    z-index: 1001; /* Ensure it's above other fixed elements */
+}
+
+#install-banner.show {
+    transform: translateY(0);
 }

@@ -71,7 +71,8 @@ window.addEventListener('beforeinstallprompt', (e) => {
   deferredPrompt = e;
   // Show our custom install banner
   if (installBanner) {
-    installBanner.style.display = 'flex';
+    // Use the 'show' class to trigger the CSS animation
+    installBanner.classList.add('show');
   }
 });
 
@@ -80,7 +81,7 @@ if (installButton) {
   installButton.addEventListener('click', async () => {
     // Hide the install banner
     if (installBanner) {
-      installBanner.style.display = 'none';
+      installBanner.classList.remove('show');
     }
     // Show the browser's install prompt
     if (deferredPrompt) {
@@ -98,7 +99,7 @@ if (installButton) {
 if (closeInstallBannerButton) {
     closeInstallBannerButton.addEventListener('click', () => {
         if (installBanner) {
-            installBanner.style.display = 'none';
+            installBanner.classList.remove('show');
         }
     });
 }
@@ -106,23 +107,35 @@ if (closeInstallBannerButton) {
 // --- NOTIFICATION LOGIC ---
 
 /**
+ * Checks if the app is installed (standalone mode).
+ * @returns {boolean} True if the app is running in standalone mode.
+ */
+function isRunningStandalone() {
+    return window.matchMedia('(display-mode: standalone)').matches;
+}
+
+/**
  * Checks notification permission and shows a banner if needed.
  */
 function initializeNotificationUI() {
     if ('Notification' in window && 'serviceWorker' in navigator) {
-        if (Notification.permission === 'default') {
-            // Show the banner if permission has not been asked yet
-            notificationBanner.style.display = 'flex';
+        // Only show the banner if the app is installed AND permission is 'default'
+        if (isRunningStandalone() && Notification.permission === 'default') {
+            if (notificationBanner) notificationBanner.style.display = 'flex';
         }
 
-        enableNotificationsButton.addEventListener('click', () => {
-            requestNotificationPermission();
-            notificationBanner.style.display = 'none';
-        });
+        if (enableNotificationsButton) {
+            enableNotificationsButton.addEventListener('click', () => {
+                requestNotificationPermission();
+                if (notificationBanner) notificationBanner.style.display = 'none';
+            });
+        }
 
-        closeNotificationBannerButton.addEventListener('click', () => {
-            notificationBanner.style.display = 'none';
-        });
+        if (closeNotificationBannerButton) {
+            closeNotificationBannerButton.addEventListener('click', () => {
+                if (notificationBanner) notificationBanner.style.display = 'none';
+            });
+        }
     }
 }
 
@@ -141,6 +154,7 @@ async function requestNotificationPermission() {
 
 /**
  * Schedules notifications for all upcoming podcast episodes.
+ * NOTE: This is a client-side simulation. For robust scheduling, a server with Push API is needed.
  */
 function schedulePodcastNotifications() {
     if ('serviceWorker' in navigator && 'PushManager' in window && Notification.permission === 'granted') {
@@ -159,18 +173,13 @@ function schedulePodcastNotifications() {
                         body: `Episódio ${episode['Episódio']} com ${episode.Narrador} já está no ar!`,
                         icon: '/images/icons/icon-192x192.png',
                         badge: '/images/icons/icon-grupo-40x40.png',
-                        timestamp: releaseDate.getTime()
+                        timestamp: releaseDate.getTime(),
+                        tag: `podcast-${episode['Episódio']}`
                     };
                     
-                    // Send the payload to the service worker to schedule the notification
-                    registration.showNotification('Podcast Agendado (Teste)', {
-                       body: `Agendado para ${releaseDate.toLocaleString()}: ${payload.title}`,
-                       tag: `podcast-${episode['Episódio']}`
-                    });
-                    
                     console.log(`Scheduling notification for episode ${episode['Episódio']} at ${releaseDate}`);
-                    // This is a simplified approach. A real implementation would require a backend
-                    // to send push messages at the correct time. The code below simulates this.
+                    
+                    // This simulates scheduling via setTimeout. This only works if the browser is open.
                     const delay = releaseDate.getTime() - Date.now();
                     if (delay > 0) {
                        setTimeout(() => {
@@ -178,7 +187,7 @@ function schedulePodcastNotifications() {
                                body: payload.body,
                                icon: payload.icon,
                                badge: payload.badge,
-                               tag: `podcast-${episode['Episódio']}`
+                               tag: payload.tag
                            });
                        }, delay);
                     }
@@ -190,7 +199,7 @@ function schedulePodcastNotifications() {
 
 
 /**
- * Displays a notification directly.
+ * Displays a notification directly via the service worker.
  * @param {string} title The title of the notification.
  * @param {object} options The notification options object.
  */

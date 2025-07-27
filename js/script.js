@@ -146,41 +146,39 @@ async function requestNotificationPermission() {
     const permission = await Notification.requestPermission();
     if (permission === 'granted') {
         console.log('Notification permission granted.');
-        schedulePodcastNotifications();
+        scheduleAllNotifications();
     } else {
         console.log('Notification permission denied.');
     }
 }
 
 /**
- * Schedules notifications for all upcoming podcast episodes.
+ * Schedules all automated notifications (podcasts and special reminders).
  * NOTE: This is a client-side simulation. For robust scheduling, a server with Push API is needed.
  */
-function schedulePodcastNotifications() {
+function scheduleAllNotifications() {
     if ('serviceWorker' in navigator && 'PushManager' in window && Notification.permission === 'granted') {
         navigator.serviceWorker.ready.then(registration => {
-            const today = new Date();
-            today.setHours(0, 0, 0, 0);
-
+            const now = Date.now();
+            
+            // 1. Schedule Podcast Notifications
             podcastEpisodes.forEach(episode => {
                 const [day, month, year] = episode['Data lançamento'].split('/');
                 const releaseDate = new Date(`${year}-${month}-${day}T12:00:00`);
 
                 // Only schedule for future episodes
-                if (releaseDate > today) {
+                if (releaseDate.getTime() > now) {
                     const payload = {
                         title: `Novo Episódio: ${episode['Título']}`,
                         body: `Episódio ${episode['Episódio']} com ${episode.Narrador} já está no ar!`,
                         icon: '/images/icons/icon-192x192.png',
                         badge: '/images/icons/icon-grupo-40x40.png',
-                        timestamp: releaseDate.getTime(),
                         tag: `podcast-${episode['Episódio']}`
                     };
                     
-                    console.log(`Scheduling notification for episode ${episode['Episódio']} at ${releaseDate}`);
+                    console.log(`Scheduling podcast notification for episode ${episode['Episódio']} at ${releaseDate}`);
                     
-                    // This simulates scheduling via setTimeout. This only works if the browser is open.
-                    const delay = releaseDate.getTime() - Date.now();
+                    const delay = releaseDate.getTime() - now;
                     if (delay > 0) {
                        setTimeout(() => {
                            displayNotification(payload.title, {
@@ -193,6 +191,32 @@ function schedulePodcastNotifications() {
                     }
                 }
             });
+
+            // 2. Schedule the special 6-month reminder notification
+            const specialDate = new Date('2025-07-27T16:35:00');
+            if (specialDate.getTime() > now) {
+                const payload = {
+                    title: 'Contagem regressiva!',
+                    body: 'Faltam 6 meses para a viagem! Já checou os passaportes?',
+                    icon: '/images/icons/icon-192x192.png',
+                    badge: '/images/icons/icon-grupo-40x40.png',
+                    tag: 'special-reminder-6-months'
+                };
+
+                console.log(`Scheduling special notification for ${specialDate}`);
+                
+                const delay = specialDate.getTime() - now;
+                if (delay > 0) {
+                   setTimeout(() => {
+                       displayNotification(payload.title, {
+                           body: payload.body,
+                           icon: payload.icon,
+                           badge: payload.badge,
+                           tag: payload.tag
+                       });
+                   }, delay);
+                }
+            }
         });
     }
 }
@@ -212,28 +236,6 @@ function displayNotification(title, options) {
         });
     }
 }
-
-/**
- * A function to send a custom, on-demand notification.
- * This can be called from the browser console for testing, e.g.:
- * sendCustomNotification('Alerta de Viagem', 'Não se esqueça de fazer o check-in do voo!');
- * @param {string} title The title of the notification.
- * @param {string} body The body text of the notification.
- */
-function sendCustomNotification(title, body) {
-    if (!title || !body) {
-        console.error('Title and body are required for custom notifications.');
-        return;
-    }
-    const options = {
-        body: body,
-        icon: '/images/icons/icon-192x192.png',
-        badge: '/images/icons/icon-grupo-40x40.png',
-        tag: 'custom-notification-' + Date.now() // Unique tag
-    };
-    displayNotification(title, options);
-}
-
 
 // --- CHART CONFIGURATION ---
 
@@ -767,7 +769,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 // Initialize notification features after SW is ready
                 initializeNotificationUI();
                 if (Notification.permission === 'granted') {
-                    schedulePodcastNotifications();
+                    scheduleAllNotifications();
                 }
             }, err => {
                 console.log('ServiceWorker registration failed: ', err);

@@ -142,9 +142,28 @@ function isRunningStandalone() {
 }
 
 function initializeNotificationUI() {
+    console.log("Verificando status para UI de notificação...");
     if ('Notification' in window && 'serviceWorker' in navigator) {
-        if (isRunningStandalone() && Notification.permission === 'default') {
+        const standalone = isRunningStandalone();
+        const permission = Notification.permission;
+
+        // Logs de diagnóstico
+        console.log(`- App está em modo standalone? ${standalone}`);
+        console.log(`- Permissão de notificação atual: ${permission}`);
+
+        // Mostra o banner se o app estiver instalado E a permissão for 'default' (ainda não perguntado)
+        if (standalone && permission === 'default') {
+            console.log("Condições atendidas. Mostrando o banner de notificação.");
             if (notificationBanner) notificationBanner.style.display = 'flex';
+        } 
+        // Se a permissão já foi dada, tenta pegar o token silenciosamente
+        else if (standalone && permission === 'granted') {
+            console.log("Permissão já concedida. Não é necessário mostrar o banner. Tentando obter o token...");
+            requestNotificationPermission();
+        } 
+        // Outros casos (negado, ou não está em modo standalone)
+        else {
+            console.log("Não mostrando o banner. Motivo: App não está em modo standalone ou a permissão não é 'default'.");
         }
 
         if (enableNotificationsButton) {
@@ -159,33 +178,49 @@ function initializeNotificationUI() {
                 if (notificationBanner) notificationBanner.style.display = 'none';
             });
         }
+    } else {
+        console.log("Navegador não suporta notificações ou service workers.");
     }
 }
 
-function requestNotificationPermission() {
-    console.log('Requesting notification permission...');
-    Notification.requestPermission().then((permission) => {
-        if (permission === 'granted') {
-            console.log('Notification permission granted.');
-            
-            const VAPID_KEY = 'BHrRmsDe1Y9ZiUXp9C7Nb2TwpGFl-HBVEO4ngpWwuK3rg2xZWvbvFzGixkL-JV_6nhuu8Ywn81Wqg8xr9hqjh98';
 
-            messaging.getToken({ vapidKey: VAPID_KEY }).then((currentToken) => {
-                if (currentToken) {
-                    console.log('FCM Token:', currentToken);
-                    // Envia o token para o seu servidor backend
-                    sendTokenToServer(currentToken);
-                } else {
-                    console.log('No registration token available. Request permission to generate one.');
-                }
-            }).catch((err) => {
-                console.log('An error occurred while retrieving token. ', err);
-            });
+function requestNotificationPermission() {
+    console.log('Função requestNotificationPermission foi chamada.');
+    
+    // Se a permissão não for 'granted', pede ao usuário.
+    if (Notification.permission !== 'granted') {
+        console.log('Pedindo permissão ao usuário...');
+        Notification.requestPermission().then((permission) => {
+            if (permission === 'granted') {
+                console.log('Permissão concedida pelo usuário. Obtendo token...');
+                getFCMToken();
+            } else {
+                console.log('Permissão negada pelo usuário.');
+            }
+        });
+    } 
+    // Se a permissão JÁ é 'granted', apenas pega o token.
+    else {
+        console.log('Permissão já era "granted". Obtendo token...');
+        getFCMToken();
+    }
+}
+
+function getFCMToken() {
+    const VAPID_KEY = 'BHrRmsDe1Y9ZiUXp9C7Nb2TwpGFl-HBVEO4ngpWwuK3rg2xZWvbvFzGixkL-JV_6nhuu8Ywn81Wqg8xr9hqjh98';
+
+    messaging.getToken({ vapidKey: VAPID_KEY }).then((currentToken) => {
+        if (currentToken) {
+            console.log('FCM Token:', currentToken);
+            sendTokenToServer(currentToken);
         } else {
-            console.log('Unable to get permission to notify.');
+            console.log('Não foi possível gerar o token. A permissão foi concedida, mas o token não foi gerado.');
         }
+    }).catch((err) => {
+        console.error('Um erro ocorreu ao tentar obter o token.', err);
     });
 }
+
 
 messaging.onMessage((payload) => {
     console.log('Message received while app is in foreground. ', payload);
@@ -680,12 +715,10 @@ document.addEventListener('DOMContentLoaded', () => {
             navigator.serviceWorker.register('/service-worker.js')
               .then(registration => {
                 console.log('Main ServiceWorker registration successful with scope: ', registration.scope);
-                // **CORREÇÃO:** Espera o Service Worker estar ativo antes de continuar.
                 return navigator.serviceWorker.ready;
               })
               .then(readyRegistration => {
                 console.log('Service Worker is active and ready.');
-                // Agora é seguro inicializar a UI que depende de um SW ativo.
                 initializeNotificationUI();
               })
               .catch(err => {

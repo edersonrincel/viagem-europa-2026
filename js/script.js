@@ -1,7 +1,5 @@
 // --- INICIALIZAÇÃO E CONFIGURAÇÃO DO FIREBASE ---
 
-// --- COLE AQUI O SEU OBJETO firebaseConfig ---
-// Este objeto é fornecido pelo console do Firebase ao criar seu app da web.
 const firebaseConfig = {
     apiKey: "AIzaSyDRf55_pNkz3FqMMm93jFwqEwVfx7AtH_c",
     authDomain: "viagem-europa-2026.firebaseapp.com",
@@ -11,7 +9,6 @@ const firebaseConfig = {
     appId: "1:731813444174:web:389dc8d7dd58df5deca11f"
   };
 
-// Inicializa o Firebase
 const app = firebase.initializeApp(firebaseConfig);
 const messaging = firebase.messaging();
 
@@ -81,7 +78,6 @@ let appPagamentoMensalChartInstance = null;
 
 // --- PWA INSTALLATION LOGIC ---
 
-// Listen for the 'beforeinstallprompt' event
 window.addEventListener('beforeinstallprompt', (e) => {
   e.preventDefault();
   deferredPrompt = e;
@@ -115,26 +111,45 @@ if (closeInstallBannerButton) {
 // --- NOTIFICATION LOGIC (FIREBASE) ---
 
 /**
- * Checks if the app is installed (standalone mode).
- * @returns {boolean} True if the app is running in standalone mode.
+ * Envia o token FCM para o servidor backend.
+ * @param {string} token O token FCM do dispositivo.
  */
+async function sendTokenToServer(token) {
+  // ATENÇÃO: Substitua pela URL do seu servidor real quando fizer o deploy.
+  const serverUrl = 'http://localhost:3000/register-token'; 
+  
+  try {
+    const response = await fetch(serverUrl, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ token: token }),
+    });
+
+    if (response.ok) {
+      console.log('Token enviado para o servidor com sucesso.');
+    } else {
+      console.error('Falha ao enviar token para o servidor.');
+    }
+  } catch (error) {
+    console.error('Erro de rede ao enviar token:', error);
+  }
+}
+
 function isRunningStandalone() {
     return window.matchMedia('(display-mode: standalone)').matches;
 }
 
-/**
- * Checks notification permission and shows a banner if needed.
- */
 function initializeNotificationUI() {
     if ('Notification' in window && 'serviceWorker' in navigator) {
-        // Mostra o banner se o app estiver instalado E a permissão for 'default' (ainda não perguntado)
         if (isRunningStandalone() && Notification.permission === 'default') {
             if (notificationBanner) notificationBanner.style.display = 'flex';
         }
 
         if (enableNotificationsButton) {
             enableNotificationsButton.addEventListener('click', () => {
-                requestNotificationPermission(); // Chama a nova função do Firebase
+                requestNotificationPermission();
                 if (notificationBanner) notificationBanner.style.display = 'none';
             });
         }
@@ -147,24 +162,19 @@ function initializeNotificationUI() {
     }
 }
 
-/**
- * Requests permission and retrieves the FCM token.
- */
 function requestNotificationPermission() {
     console.log('Requesting notification permission...');
     Notification.requestPermission().then((permission) => {
         if (permission === 'granted') {
             console.log('Notification permission granted.');
             
-            // --- COLE AQUI A SUA VAPID KEY (Chave do Web Push) ---
             const VAPID_KEY = 'BHrRmsDe1Y9ZiUXp9C7Nb2TwpGFl-HBVEO4ngpWwuK3rg2xZWvbvFzGixkL-JV_6nhuu8Ywn81Wqg8xr9hqjh98';
 
-            // Pega o token do FCM
             messaging.getToken({ vapidKey: VAPID_KEY }).then((currentToken) => {
                 if (currentToken) {
                     console.log('FCM Token:', currentToken);
-                    // IMPORTANTE: Envie este token para o seu servidor!
-                    // Ex: sendTokenToServer(currentToken);
+                    // Envia o token para o seu servidor backend
+                    sendTokenToServer(currentToken);
                 } else {
                     console.log('No registration token available. Request permission to generate one.');
                 }
@@ -177,20 +187,22 @@ function requestNotificationPermission() {
     });
 }
 
-/**
- * Handles messages received while the app is in the foreground.
- */
 messaging.onMessage((payload) => {
-    console.log('Message received. ', payload);
-    // Aqui você pode exibir uma notificação customizada dentro do app
-    // Por exemplo, usando o "toast" que você já tem.
+    console.log('Message received while app is in foreground. ', payload);
     const toast = document.getElementById('new-episode-toast');
     if (toast) {
         toast.querySelector('.font-bold').textContent = payload.notification.title;
         toast.querySelector('.text-xs').textContent = payload.notification.body;
-        toast.querySelector('#toast-button').onclick = () => {
-            window.open(payload.fcmOptions.link, '_blank');
+        
+        const toastButton = toast.querySelector('#toast-button');
+        toastButton.textContent = 'Ver agora'; // Muda o texto do botão
+        toastButton.onclick = () => {
+            if (payload.fcmOptions && payload.fcmOptions.link) {
+                window.open(payload.fcmOptions.link, '_blank');
+            }
+            toast.classList.remove('show');
         };
+        
         toast.classList.add('show');
     }
 });
@@ -663,17 +675,22 @@ function updateCustoCategoriaChartVisibility(showPorPessoa) {
 // --- INITIALIZATION ---
 
 document.addEventListener('DOMContentLoaded', () => {
-    // Register Service Worker
     if ('serviceWorker' in navigator) {
         window.addEventListener('load', () => {
-            // Registra o service worker principal para caching
-            navigator.serviceWorker.register('/service-worker.js').then(registration => {
+            navigator.serviceWorker.register('/service-worker.js')
+              .then(registration => {
                 console.log('Main ServiceWorker registration successful with scope: ', registration.scope);
-                // Inicializa a UI de notificação após o SW principal estar pronto
+                // **CORREÇÃO:** Espera o Service Worker estar ativo antes de continuar.
+                return navigator.serviceWorker.ready;
+              })
+              .then(readyRegistration => {
+                console.log('Service Worker is active and ready.');
+                // Agora é seguro inicializar a UI que depende de um SW ativo.
                 initializeNotificationUI();
-            }, err => {
-                console.log('Main ServiceWorker registration failed: ', err);
-            });
+              })
+              .catch(err => {
+                console.log('ServiceWorker registration or ready failed: ', err);
+              });
         });
     }
 

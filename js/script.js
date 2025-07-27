@@ -6,6 +6,11 @@ const installBanner = document.getElementById('install-banner');
 const installButton = document.getElementById('install-button');
 const closeInstallBannerButton = document.getElementById('close-install-banner');
 
+// Notification Elements
+const notificationBanner = document.getElementById('notification-banner');
+const enableNotificationsButton = document.getElementById('enable-notifications-button');
+const closeNotificationBannerButton = document.getElementById('close-notification-banner');
+
 
 // Financial Data
 const numeroDeViajantes = 4;
@@ -66,7 +71,7 @@ window.addEventListener('beforeinstallprompt', (e) => {
   deferredPrompt = e;
   // Show our custom install banner
   if (installBanner) {
-    installBanner.classList.add('show');
+    installBanner.style.display = 'flex';
   }
 });
 
@@ -75,7 +80,7 @@ if (installButton) {
   installButton.addEventListener('click', async () => {
     // Hide the install banner
     if (installBanner) {
-      installBanner.classList.remove('show');
+      installBanner.style.display = 'none';
     }
     // Show the browser's install prompt
     if (deferredPrompt) {
@@ -93,9 +98,131 @@ if (installButton) {
 if (closeInstallBannerButton) {
     closeInstallBannerButton.addEventListener('click', () => {
         if (installBanner) {
-            installBanner.classList.remove('show');
+            installBanner.style.display = 'none';
         }
     });
+}
+
+// --- NOTIFICATION LOGIC ---
+
+/**
+ * Checks notification permission and shows a banner if needed.
+ */
+function initializeNotificationUI() {
+    if ('Notification' in window && 'serviceWorker' in navigator) {
+        if (Notification.permission === 'default') {
+            // Show the banner if permission has not been asked yet
+            notificationBanner.style.display = 'flex';
+        }
+
+        enableNotificationsButton.addEventListener('click', () => {
+            requestNotificationPermission();
+            notificationBanner.style.display = 'none';
+        });
+
+        closeNotificationBannerButton.addEventListener('click', () => {
+            notificationBanner.style.display = 'none';
+        });
+    }
+}
+
+/**
+ * Requests permission from the user to show notifications.
+ */
+async function requestNotificationPermission() {
+    const permission = await Notification.requestPermission();
+    if (permission === 'granted') {
+        console.log('Notification permission granted.');
+        schedulePodcastNotifications();
+    } else {
+        console.log('Notification permission denied.');
+    }
+}
+
+/**
+ * Schedules notifications for all upcoming podcast episodes.
+ */
+function schedulePodcastNotifications() {
+    if ('serviceWorker' in navigator && 'PushManager' in window && Notification.permission === 'granted') {
+        navigator.serviceWorker.ready.then(registration => {
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+
+            podcastEpisodes.forEach(episode => {
+                const [day, month, year] = episode['Data lançamento'].split('/');
+                const releaseDate = new Date(`${year}-${month}-${day}T12:00:00`);
+
+                // Only schedule for future episodes
+                if (releaseDate > today) {
+                    const payload = {
+                        title: `Novo Episódio: ${episode['Título']}`,
+                        body: `Episódio ${episode['Episódio']} com ${episode.Narrador} já está no ar!`,
+                        icon: '/images/icons/icon-192x192.png',
+                        badge: '/images/icons/icon-grupo-40x40.png',
+                        timestamp: releaseDate.getTime()
+                    };
+                    
+                    // Send the payload to the service worker to schedule the notification
+                    registration.showNotification('Podcast Agendado (Teste)', {
+                       body: `Agendado para ${releaseDate.toLocaleString()}: ${payload.title}`,
+                       tag: `podcast-${episode['Episódio']}`
+                    });
+                    
+                    console.log(`Scheduling notification for episode ${episode['Episódio']} at ${releaseDate}`);
+                    // This is a simplified approach. A real implementation would require a backend
+                    // to send push messages at the correct time. The code below simulates this.
+                    const delay = releaseDate.getTime() - Date.now();
+                    if (delay > 0) {
+                       setTimeout(() => {
+                           displayNotification(payload.title, {
+                               body: payload.body,
+                               icon: payload.icon,
+                               badge: payload.badge,
+                               tag: `podcast-${episode['Episódio']}`
+                           });
+                       }, delay);
+                    }
+                }
+            });
+        });
+    }
+}
+
+
+/**
+ * Displays a notification directly.
+ * @param {string} title The title of the notification.
+ * @param {object} options The notification options object.
+ */
+function displayNotification(title, options) {
+    if (Notification.permission === 'granted') {
+        navigator.serviceWorker.getRegistration().then(reg => {
+            if (reg) {
+                reg.showNotification(title, options);
+            }
+        });
+    }
+}
+
+/**
+ * A function to send a custom, on-demand notification.
+ * This can be called from the browser console for testing, e.g.:
+ * sendCustomNotification('Alerta de Viagem', 'Não se esqueça de fazer o check-in do voo!');
+ * @param {string} title The title of the notification.
+ * @param {string} body The body text of the notification.
+ */
+function sendCustomNotification(title, body) {
+    if (!title || !body) {
+        console.error('Title and body are required for custom notifications.');
+        return;
+    }
+    const options = {
+        body: body,
+        icon: '/images/icons/icon-192x192.png',
+        badge: '/images/icons/icon-grupo-40x40.png',
+        tag: 'custom-notification-' + Date.now() // Unique tag
+    };
+    displayNotification(title, options);
 }
 
 
@@ -628,6 +755,11 @@ document.addEventListener('DOMContentLoaded', () => {
         window.addEventListener('load', () => {
             navigator.serviceWorker.register('/service-worker.js').then(registration => {
                 console.log('ServiceWorker registration successful with scope: ', registration.scope);
+                // Initialize notification features after SW is ready
+                initializeNotificationUI();
+                if (Notification.permission === 'granted') {
+                    schedulePodcastNotifications();
+                }
             }, err => {
                 console.log('ServiceWorker registration failed: ', err);
             });

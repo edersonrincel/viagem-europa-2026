@@ -21,7 +21,6 @@ const URLS_TO_CACHE = [
 ];
 
 // Event listener for the 'install' event
-// This is where we download and cache the app shell
 self.addEventListener('install', (event) => {
   console.log('Service Worker: Installing...');
   event.waitUntil(
@@ -31,14 +30,14 @@ self.addEventListener('install', (event) => {
         return cache.addAll(URLS_TO_CACHE);
       })
       .then(() => {
-        console.log('Service Worker: Installation complete');
-        return self.skipWaiting();
+        console.log('Service Worker: Installation complete, forcing activation.');
+        // **NOVA LINHA:** Força o novo Service Worker a se tornar ativo.
+        return self.skipWaiting(); 
       })
   );
 });
 
 // Event listener for the 'activate' event
-// This is where we clean up old caches
 self.addEventListener('activate', (event) => {
   console.log('Service Worker: Activating...');
   event.waitUntil(
@@ -52,7 +51,8 @@ self.addEventListener('activate', (event) => {
         })
       );
     }).then(() => {
-        console.log('Service Worker: Activation complete');
+        console.log('Service Worker: Activation complete, claiming clients.');
+        // **NOVA LINHA:** Garante que o SW controle a página imediatamente.
         return self.clients.claim();
     })
   );
@@ -60,9 +60,7 @@ self.addEventListener('activate', (event) => {
 
 
 // Event listener for the 'fetch' event
-// This is where we intercept network requests and serve from cache if available
 self.addEventListener('fetch', (event) => {
-  // We only handle GET requests for caching
   if (event.request.method !== 'GET') {
     return;
   }
@@ -70,28 +68,20 @@ self.addEventListener('fetch', (event) => {
   event.respondWith(
     caches.match(event.request)
       .then((response) => {
-        // If the request is in the cache, return it
         if (response) {
           return response;
         }
         
-        // For external resources (CDNs), fetch from network without caching
         if (event.request.url.startsWith('http')) {
             return fetch(event.request);
         }
 
-        // For local assets, fetch and cache
         return fetch(event.request).then(
             (networkResponse) => {
-                // Check if we received a valid response
                 if(!networkResponse || networkResponse.status !== 200 || networkResponse.type !== 'basic') {
                     return networkResponse;
                 }
 
-                // IMPORTANT: Clone the response. A response is a stream
-                // and because we want the browser to consume the response
-                // as well as the cache consuming the response, we need
-                // to clone it so we have two streams.
                 var responseToCache = networkResponse.clone();
 
                 caches.open(CACHE_NAME)
@@ -106,16 +96,11 @@ self.addEventListener('fetch', (event) => {
   );
 });
 
-// O listener de 'push' foi movido para o firebase-messaging-sw.js
-// para uma melhor organização e para seguir as práticas recomendadas do Firebase.
-// O código antigo foi removido para evitar conflitos.
-
 // Event listener for 'notificationclick' event
 self.addEventListener('notificationclick', (event) => {
   console.log('On notification click: ', event.notification);
   event.notification.close();
 
-  // O dado 'url' será definido no payload da notificação push
   const urlToOpen = event.notification.data.url || '/';
 
   event.waitUntil(
@@ -123,14 +108,11 @@ self.addEventListener('notificationclick', (event) => {
       type: 'window',
       includeUncontrolled: true
     }).then((clientList) => {
-      // Se uma janela do app já estiver aberta, foca nela
       for (const client of clientList) {
-        // Verifica se o cliente pode ser focado e se a URL é a mesma
         if (client.url === urlToOpen && 'focus' in client) {
           return client.focus();
         }
       }
-      // Se não houver uma janela aberta ou a URL for diferente, abre uma nova
       if (clients.openWindow) {
         return clients.openWindow(urlToOpen);
       }

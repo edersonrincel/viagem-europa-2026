@@ -1,7 +1,44 @@
-// Define a unique name for the cache
-const CACHE_NAME = 'viagem-app-cache-v1';
+// Importa os scripts do Firebase PRIMEIRO
+importScripts('https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js');
+importScripts('https://www.gstatic.com/firebasejs/9.22.1/firebase-messaging-compat.js');
 
-// List all the files that make up the "app shell"
+// --- Configuração do Firebase ---
+// COLE AQUI O SEU OBJETO firebaseConfig
+const firebaseConfig = {
+    apiKey: "AIzaSyDRf55_pNkz3FqMMm93jFwqEwVfx7AtH_c",
+    authDomain: "viagem-europa-2026.firebaseapp.com",
+    projectId: "viagem-europa-2026",
+    storageBucket: "viagem-europa-2026.firebasestorage.app",
+    messagingSenderId: "731813444174",
+    appId: "1:731813444174:web:389dc8d7dd58df5deca11f"
+};
+
+// Inicializa o Firebase
+firebase.initializeApp(firebaseConfig);
+const messaging = firebase.messaging();
+
+// --- Lógica de Notificações em Segundo Plano ---
+// Este código lida com notificações push quando o app está fechado ou em segundo plano.
+messaging.onBackgroundMessage((payload) => {
+  console.log('[Service Worker] Received background message ', payload);
+  
+  const notificationTitle = payload.notification.title;
+  const notificationOptions = {
+    body: payload.notification.body,
+    icon: payload.notification.icon || '/images/icons/icon-192x192.png',
+    badge: '/images/icons/icon-grupo-40x40.png',
+    data: {
+        url: payload.fcmOptions.link || '/' // URL para abrir ao clicar
+    }
+  };
+
+  self.registration.showNotification(notificationTitle, notificationOptions);
+});
+
+
+// --- Lógica de Caching e Ciclo de Vida ---
+// ATENÇÃO: Mudei o nome do cache para 'v2' para forçar a atualização.
+const CACHE_NAME = 'viagem-app-cache-v2';
 const URLS_TO_CACHE = [
   '/',
   'index.html',
@@ -20,7 +57,6 @@ const URLS_TO_CACHE = [
   'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css'
 ];
 
-// Event listener for the 'install' event
 self.addEventListener('install', (event) => {
   console.log('Service Worker: Installing...');
   event.waitUntil(
@@ -31,13 +67,11 @@ self.addEventListener('install', (event) => {
       })
       .then(() => {
         console.log('Service Worker: Installation complete, forcing activation.');
-        // **NOVA LINHA:** Força o novo Service Worker a se tornar ativo.
         return self.skipWaiting(); 
       })
   );
 });
 
-// Event listener for the 'activate' event
 self.addEventListener('activate', (event) => {
   console.log('Service Worker: Activating...');
   event.waitUntil(
@@ -52,14 +86,11 @@ self.addEventListener('activate', (event) => {
       );
     }).then(() => {
         console.log('Service Worker: Activation complete, claiming clients.');
-        // **NOVA LINHA:** Garante que o SW controle a página imediatamente.
         return self.clients.claim();
     })
   );
 });
 
-
-// Event listener for the 'fetch' event
 self.addEventListener('fetch', (event) => {
   if (event.request.method !== 'GET') {
     return;
@@ -96,7 +127,6 @@ self.addEventListener('fetch', (event) => {
   );
 });
 
-// Event listener for 'notificationclick' event
 self.addEventListener('notificationclick', (event) => {
   console.log('On notification click: ', event.notification);
   event.notification.close();

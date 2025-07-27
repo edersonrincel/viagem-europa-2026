@@ -1,5 +1,6 @@
 // --- INICIALIZAÇÃO E CONFIGURAÇÃO DO FIREBASE ---
-
+// As credenciais aqui são apenas para o app em primeiro plano.
+// O Service Worker tem sua própria cópia.
 const firebaseConfig = {
     apiKey: "AIzaSyDRf55_pNkz3FqMMm93jFwqEwVfx7AtH_c",
     authDomain: "viagem-europa-2026.firebaseapp.com",
@@ -7,34 +8,25 @@ const firebaseConfig = {
     storageBucket: "viagem-europa-2026.firebasestorage.app",
     messagingSenderId: "731813444174",
     appId: "1:731813444174:web:389dc8d7dd58df5deca11f"
-  };
+};
 
 const app = firebase.initializeApp(firebaseConfig);
 const messaging = firebase.messaging();
 
 
 // --- GLOBAL CONSTANTS AND VARIABLES ---
-
-// PWA Installation
 let deferredPrompt;
 const installBanner = document.getElementById('install-banner');
 const installButton = document.getElementById('install-button');
 const closeInstallBannerButton = document.getElementById('close-install-banner');
-
-// Notification Elements
 const notificationBanner = document.getElementById('notification-banner');
 const enableNotificationsButton = document.getElementById('enable-notifications-button');
 const closeNotificationBannerButton = document.getElementById('close-notification-banner');
-
-
-// Financial Data
 const numeroDeViajantes = 4;
 const custoTotalPorPessoaArray = [4468.94, 2771.315, 240.43]; 
 const custoCategoriaPorPessoaArray = [410.48, 3868.94, 189.52, 1633.9375, 918.978, 218.40, 240.43];
 const pagamentoMensalValores = [1661.65, 679.71, 679.71, 679.71, 679.71, 559.71, 519.64, 519.64, 519.64, 519.64, 230.94, 230.94];
 const pagamentoMensalLabels = ['Jun/25', 'Jul/25', 'Ago/25', 'Set/25', 'Out/25', 'Nov/25', 'Dez/25', 'Jan/26', 'Fev/26', 'Mar/26', 'Abr/26', 'Mai/26'];
-
-// Podcast Data (Sorted descending by episode number)
 const podcastEpisodes = [
     { "Episódio": 1, "Data lançamento": "07/06/2025", "Título": "A Origem da aventura", "Narrador": "Bruna", "Duração": "3:03", "trackId": "2109241797", "token": "I0JucbUhfCc" },
     { "Episódio": 2, "Data lançamento": "21/06/2025", "Título": "O Mapa da viagem", "Narrador": "Diego", "Duração": "3:50", "trackId": "2109241770", "token": "lPnekm8yTs2" },
@@ -61,8 +53,10 @@ const podcastEpisodes = [
     { "Episódio": 23, "Data lançamento": "17/01/2026", "Título": "Checklist final", "Narrador": "Giovana", "Duração": "4:07", "trackId": "2109462783", "token": "LJSbjMeqq7h" }
 ].sort((a, b) => b['Episódio'] - a['Episódio']);
 
+let appCustoTotalChartInstance = null;
+let appCustoCategoriaChartInstance = null;
+let appPagamentoMensalChartInstance = null;
 
-// DOM Element Selectors
 const navItems = document.querySelectorAll('.nav-item');
 const pageSections = document.querySelectorAll('.page-section');
 const appTitle = document.getElementById('appTitle'); 
@@ -70,11 +64,6 @@ const custoTotalTituloEl = document.getElementById('custoTotalTitulo');
 const custoCategoriaTituloEl = document.getElementById('custoCategoriaTitulo');
 const btnPorPessoa = document.getElementById('btnPorPessoa');
 const btnPeloGrupo = document.getElementById('btnPeloGrupo');
-
-// Chart Instances
-let appCustoTotalChartInstance = null;
-let appCustoCategoriaChartInstance = null;
-let appPagamentoMensalChartInstance = null;
 
 // --- PWA INSTALLATION LOGIC ---
 
@@ -108,32 +97,47 @@ if (closeInstallBannerButton) {
     });
 }
 
-// --- NOTIFICATION LOGIC (FIREBASE) ---
+// --- NOTIFICATION LOGIC ---
 
-/**
- * Envia o token FCM para o servidor backend.
- * @param {string} token O token FCM do dispositivo.
- */
 async function sendTokenToServer(token) {
-  // ATENÇÃO: Substitua pela URL do seu servidor real quando fizer o deploy.
-  const serverUrl = 'http://localhost:3000/register-token'; 
-  
+  const serverUrl = 'http://localhost:3000/register-token';
   try {
-    const response = await fetch(serverUrl, {
+    await fetch(serverUrl, {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ token: token }),
     });
-
-    if (response.ok) {
-      console.log('Token enviado para o servidor com sucesso.');
-    } else {
-      console.error('Falha ao enviar token para o servidor.');
-    }
+    console.log('Token sent to server.');
   } catch (error) {
-    console.error('Erro de rede ao enviar token:', error);
+    console.error('Error sending token to server:', error);
+  }
+}
+
+function getFCMToken(registration) {
+  const VAPID_KEY = 'BHrRmsDe1Y9ZiUXp9C7Nb2TwpGFl-HBVEO4ngpWwuK3rg2xZWvbvFzGixkL-JV_6nhuu8Ywn81Wqg8xr9hqjh98';
+  
+  messaging.getToken({ vapidKey: VAPID_KEY, serviceWorkerRegistration: registration })
+    .then((currentToken) => {
+      if (currentToken) {
+        console.log('FCM Token:', currentToken);
+        sendTokenToServer(currentToken);
+      } else {
+        console.log('Could not get token.');
+      }
+    }).catch((err) => {
+      console.error('Error getting token.', err);
+    });
+}
+
+function requestNotificationPermission(registration) {
+  if (Notification.permission === 'granted') {
+    getFCMToken(registration);
+  } else if (Notification.permission === 'default') {
+    Notification.requestPermission().then((permission) => {
+      if (permission === 'granted') {
+        getFCMToken(registration);
+      }
+    });
   }
 }
 
@@ -141,109 +145,27 @@ function isRunningStandalone() {
     return window.matchMedia('(display-mode: standalone)').matches;
 }
 
-function initializeNotificationUI() {
-    console.log("Verificando status para UI de notificação...");
-    if ('Notification' in window && 'serviceWorker' in navigator) {
-        const standalone = isRunningStandalone();
-        const permission = Notification.permission;
-
-        // Logs de diagnóstico
-        console.log(`- App está em modo standalone? ${standalone}`);
-        console.log(`- Permissão de notificação atual: ${permission}`);
-
-        // Mostra o banner se o app estiver instalado E a permissão for 'default' (ainda não perguntado)
-        if (standalone && permission === 'default') {
-            console.log("Condições atendidas. Mostrando o banner de notificação.");
-            if (notificationBanner) notificationBanner.style.display = 'flex';
-        } 
-        // Se a permissão já foi dada, tenta pegar o token silenciosamente
-        else if (standalone && permission === 'granted') {
-            console.log("Permissão já concedida. Não é necessário mostrar o banner. Tentando obter o token...");
-            requestNotificationPermission();
-        } 
-        // Outros casos (negado, ou não está em modo standalone)
-        else {
-            console.log("Não mostrando o banner. Motivo: App não está em modo standalone ou a permissão não é 'default'.");
-        }
-
-        if (enableNotificationsButton) {
-            enableNotificationsButton.addEventListener('click', () => {
-                requestNotificationPermission();
-                if (notificationBanner) notificationBanner.style.display = 'none';
-            });
-        }
-
-        if (closeNotificationBannerButton) {
-            closeNotificationBannerButton.addEventListener('click', () => {
-                if (notificationBanner) notificationBanner.style.display = 'none';
-            });
-        }
-    } else {
-        console.log("Navegador não suporta notificações ou service workers.");
-    }
-}
-
-
-function requestNotificationPermission() {
-    console.log('Função requestNotificationPermission foi chamada.');
-    
-    // Se a permissão não for 'granted', pede ao usuário.
-    if (Notification.permission !== 'granted') {
-        console.log('Pedindo permissão ao usuário...');
-        Notification.requestPermission().then((permission) => {
-            if (permission === 'granted') {
-                console.log('Permissão concedida pelo usuário. Obtendo token...');
-                getFCMToken();
-            } else {
-                console.log('Permissão negada pelo usuário.');
-            }
-        });
-    } 
-    // Se a permissão JÁ é 'granted', apenas pega o token.
-    else {
-        console.log('Permissão já era "granted". Obtendo token...');
-        getFCMToken();
-    }
-}
-
-function getFCMToken() {
-    const VAPID_KEY = 'BHrRmsDe1Y9ZiUXp9C7Nb2TwpGFl-HBVEO4ngpWwuK3rg2xZWvbvFzGixkL-JV_6nhuu8Ywn81Wqg8xr9hqjh98';
-
-    messaging.getToken({ vapidKey: VAPID_KEY }).then((currentToken) => {
-        if (currentToken) {
-            console.log('FCM Token:', currentToken);
-            sendTokenToServer(currentToken);
-        } else {
-            console.log('Não foi possível gerar o token. A permissão foi concedida, mas o token não foi gerado.');
-        }
-    }).catch((err) => {
-        console.error('Um erro ocorreu ao tentar obter o token.', err);
+function initializeNotificationUI(registration) {
+  if (isRunningStandalone() && Notification.permission === 'default') {
+    if (notificationBanner) notificationBanner.style.display = 'flex';
+  }
+  
+  if (enableNotificationsButton) {
+    enableNotificationsButton.addEventListener('click', () => {
+      requestNotificationPermission(registration);
+      if (notificationBanner) notificationBanner.style.display = 'none';
     });
+  }
+  
+  if (closeNotificationBannerButton) {
+    closeNotificationBannerButton.addEventListener('click', () => {
+      if (notificationBanner) notificationBanner.style.display = 'none';
+    });
+  }
 }
 
 
-messaging.onMessage((payload) => {
-    console.log('Message received while app is in foreground. ', payload);
-    const toast = document.getElementById('new-episode-toast');
-    if (toast) {
-        toast.querySelector('.font-bold').textContent = payload.notification.title;
-        toast.querySelector('.text-xs').textContent = payload.notification.body;
-        
-        const toastButton = toast.querySelector('#toast-button');
-        toastButton.textContent = 'Ver agora'; // Muda o texto do botão
-        toastButton.onclick = () => {
-            if (payload.fcmOptions && payload.fcmOptions.link) {
-                window.open(payload.fcmOptions.link, '_blank');
-            }
-            toast.classList.remove('show');
-        };
-        
-        toast.classList.add('show');
-    }
-});
-
-
-// --- CHART CONFIGURATION ---
+// --- CHART CONFIGURATION & OTHER FUNCTIONS ---
 
 function wrapLabel(str, maxWidth) {
     if (!str) return '';
@@ -459,8 +381,6 @@ const pagamentoMensalChartOptions = {
     }
 };
 
-// --- PAGE NAVIGATION AND INTERACTIVITY ---
-
 function switchPage(pageId, title) {
     pageSections.forEach(section => {
         section.classList.remove('active');
@@ -586,8 +506,6 @@ function startCountdown() {
     }, 1000);
 }
 
-// --- PODCAST LOGIC ---
-
 function playTrack(trackId, token, clickedElement, autoplay = true) {
     const playerFrame = document.getElementById('podcast-player-iframe');
     if (!playerFrame) return;
@@ -687,8 +605,6 @@ function checkAndShowNewEpisodeToast() {
     }
 }
 
-// --- CHART VISIBILITY LOGIC ---
-
 function updateCustoTotalChartVisibility(showPorPessoa) {
     if (appCustoTotalChartInstance && custoTotalTituloEl) {
         appCustoTotalChartInstance.data.datasets[0].hidden = !showPorPessoa;
@@ -714,15 +630,16 @@ document.addEventListener('DOMContentLoaded', () => {
         window.addEventListener('load', () => {
             navigator.serviceWorker.register('/service-worker.js')
               .then(registration => {
-                console.log('Main ServiceWorker registration successful with scope: ', registration.scope);
-                return navigator.serviceWorker.ready;
-              })
-              .then(readyRegistration => {
-                console.log('Service Worker is active and ready.');
-                initializeNotificationUI();
+                console.log('Service Worker registered successfully. Scope:', registration.scope);
+                initializeNotificationUI(registration);
+                
+                messaging.onMessage((payload) => {
+                    console.log('Foreground message received.', payload);
+                });
+
               })
               .catch(err => {
-                console.log('ServiceWorker registration or ready failed: ', err);
+                console.error('Service Worker registration failed:', err);
               });
         });
     }

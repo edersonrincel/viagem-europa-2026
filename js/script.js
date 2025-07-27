@@ -193,7 +193,7 @@ function scheduleAllNotifications() {
             });
 
             // 2. Schedule the special 6-month reminder notification
-            const specialDate = new Date('2025-07-27T16:35:00');
+            const specialDate = new Date('2025-07-27T16:42:00');
             if (specialDate.getTime() > now) {
                 const payload = {
                     title: 'Contagem regressiva!',

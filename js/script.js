@@ -130,12 +130,17 @@ function getFCMToken(registration) {
 }
 
 function requestNotificationPermission(registration) {
+  console.log('Requesting notification permission...');
   if (Notification.permission === 'granted') {
+    console.log('Permission already granted.');
     getFCMToken(registration);
   } else if (Notification.permission === 'default') {
     Notification.requestPermission().then((permission) => {
       if (permission === 'granted') {
+        console.log('Permission was granted.');
         getFCMToken(registration);
+      } else {
+        console.log('Permission was denied.');
       }
     });
   }
@@ -146,8 +151,12 @@ function isRunningStandalone() {
 }
 
 function initializeNotificationUI(registration) {
+  console.log('Initializing Notification UI...');
   if (isRunningStandalone() && Notification.permission === 'default') {
+    console.log('Showing notification banner.');
     if (notificationBanner) notificationBanner.style.display = 'flex';
+  } else {
+    console.log('Not showing notification banner. Standalone:', isRunningStandalone(), 'Permission:', Notification.permission);
   }
   
   if (enableNotificationsButton) {
@@ -626,24 +635,7 @@ function updateCustoCategoriaChartVisibility(showPorPessoa) {
 // --- INITIALIZATION ---
 
 document.addEventListener('DOMContentLoaded', () => {
-    if ('serviceWorker' in navigator) {
-        window.addEventListener('load', () => {
-            navigator.serviceWorker.register('/service-worker.js')
-              .then(registration => {
-                console.log('Service Worker registered successfully. Scope:', registration.scope);
-                initializeNotificationUI(registration);
-                
-                messaging.onMessage((payload) => {
-                    console.log('Foreground message received.', payload);
-                });
-
-              })
-              .catch(err => {
-                console.error('Service Worker registration failed:', err);
-              });
-        });
-    }
-
+    // O resto da sua inicialização (gráficos, etc.) vai aqui...
     Chart.register(ChartDataLabels);
     setupCollapsibleSections();
     startCountdown();
@@ -709,3 +701,23 @@ document.addEventListener('DOMContentLoaded', () => {
         console.warn(`Initial navigation item for page "${initialPageId}" not found. Using default title.`);
     }
 });
+
+// **NOVA ABORDAGEM DE INICIALIZAÇÃO DO SERVICE WORKER**
+// Isso é executado assim que o script é carregado, não esperando pelo DOMContentLoaded
+if ('serviceWorker' in navigator) {
+    // Usamos navigator.serviceWorker.ready para garantir que o SW esteja ativo
+    navigator.serviceWorker.ready.then(registration => {
+        console.log('Service Worker is active and ready.');
+        
+        // Agora que temos certeza que o SW está pronto, inicializamos a UI de notificação
+        initializeNotificationUI(registration);
+        
+        // E configuramos o listener para mensagens em primeiro plano
+        messaging.onMessage((payload) => {
+            console.log('Foreground message received.', payload);
+            // Lógica para mostrar o toast...
+        });
+    }).catch(err => {
+        console.error('Service Worker not ready:', err);
+    });
+}

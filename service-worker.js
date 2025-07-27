@@ -106,53 +106,33 @@ self.addEventListener('fetch', (event) => {
   );
 });
 
-// Event listener for 'push' events
-self.addEventListener('push', (event) => {
-  let data = {};
-  if (event.data) {
-    try {
-        data = event.data.json();
-    } catch (e) {
-        data = {
-            title: 'Nova Notificação',
-            body: event.data.text(),
-            icon: '/images/icons/icon-192x192.png'
-        };
-    }
-  }
-
-  const title = data.title || 'Título Padrão';
-  const options = {
-    body: data.body || 'Corpo da notificação padrão.',
-    icon: data.icon || '/images/icons/icon-192x192.png',
-    badge: data.badge || '/images/icons/icon-grupo-40x40.png',
-    tag: data.tag || 'default-tag',
-    vibrate: [100, 50, 100],
-    data: {
-      url: data.url || '/'
-    }
-  };
-
-  event.waitUntil(self.registration.showNotification(title, options));
-});
+// O listener de 'push' foi movido para o firebase-messaging-sw.js
+// para uma melhor organização e para seguir as práticas recomendadas do Firebase.
+// O código antigo foi removido para evitar conflitos.
 
 // Event listener for 'notificationclick' event
 self.addEventListener('notificationclick', (event) => {
-  event.notification.close(); // Close the notification
+  console.log('On notification click: ', event.notification);
+  event.notification.close();
 
-  // Open the app or a specific URL
+  // O dado 'url' será definido no payload da notificação push
+  const urlToOpen = event.notification.data.url || '/';
+
   event.waitUntil(
-    clients.matchAll({ type: 'window', includeUncontrolled: true }).then((clientList) => {
-      // If a window for the app is already open, focus it
+    clients.matchAll({
+      type: 'window',
+      includeUncontrolled: true
+    }).then((clientList) => {
+      // Se uma janela do app já estiver aberta, foca nela
       for (const client of clientList) {
-        const url = new URL(client.url);
-        if (url.origin === self.location.origin) {
+        // Verifica se o cliente pode ser focado e se a URL é a mesma
+        if (client.url === urlToOpen && 'focus' in client) {
           return client.focus();
         }
       }
-      // Otherwise, open a new window
+      // Se não houver uma janela aberta ou a URL for diferente, abre uma nova
       if (clients.openWindow) {
-        return clients.openWindow(event.notification.data.url || '/');
+        return clients.openWindow(urlToOpen);
       }
     })
   );

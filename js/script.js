@@ -1,3 +1,21 @@
+// --- INICIALIZAÇÃO E CONFIGURAÇÃO DO FIREBASE ---
+
+// --- COLE AQUI O SEU OBJETO firebaseConfig ---
+// Este objeto é fornecido pelo console do Firebase ao criar seu app da web.
+const firebaseConfig = {
+    apiKey: "AIzaSyDRf55_pNkz3FqMMm93jFwqEwVfx7AtH_c",
+    authDomain: "viagem-europa-2026.firebaseapp.com",
+    projectId: "viagem-europa-2026",
+    storageBucket: "viagem-europa-2026.firebasestorage.app",
+    messagingSenderId: "731813444174",
+    appId: "1:731813444174:web:389dc8d7dd58df5deca11f"
+  };
+
+// Inicializa o Firebase
+const app = firebase.initializeApp(firebaseConfig);
+const messaging = firebase.messaging();
+
+
 // --- GLOBAL CONSTANTS AND VARIABLES ---
 
 // PWA Installation
@@ -65,37 +83,27 @@ let appPagamentoMensalChartInstance = null;
 
 // Listen for the 'beforeinstallprompt' event
 window.addEventListener('beforeinstallprompt', (e) => {
-  // Prevent the default mini-infobar from appearing on mobile
   e.preventDefault();
-  // Stash the event so it can be triggered later
   deferredPrompt = e;
-  // Show our custom install banner
   if (installBanner) {
-    // Use the 'show' class to trigger the CSS animation
     installBanner.classList.add('show');
   }
 });
 
-// Add a click event listener to our custom install button
 if (installButton) {
   installButton.addEventListener('click', async () => {
-    // Hide the install banner
     if (installBanner) {
       installBanner.classList.remove('show');
     }
-    // Show the browser's install prompt
     if (deferredPrompt) {
         deferredPrompt.prompt();
-        // Wait for the user to respond to the prompt
         const { outcome } = await deferredPrompt.userChoice;
         console.log(`User response to the install prompt: ${outcome}`);
-        // We've used the prompt, and can't use it again, so clear it
         deferredPrompt = null;
     }
   });
 }
 
-// Add a click event listener to the close button on the banner
 if (closeInstallBannerButton) {
     closeInstallBannerButton.addEventListener('click', () => {
         if (installBanner) {
@@ -104,7 +112,7 @@ if (closeInstallBannerButton) {
     });
 }
 
-// --- NOTIFICATION LOGIC ---
+// --- NOTIFICATION LOGIC (FIREBASE) ---
 
 /**
  * Checks if the app is installed (standalone mode).
@@ -119,14 +127,14 @@ function isRunningStandalone() {
  */
 function initializeNotificationUI() {
     if ('Notification' in window && 'serviceWorker' in navigator) {
-        // Only show the banner if the app is installed AND permission is 'default'
+        // Mostra o banner se o app estiver instalado E a permissão for 'default' (ainda não perguntado)
         if (isRunningStandalone() && Notification.permission === 'default') {
             if (notificationBanner) notificationBanner.style.display = 'flex';
         }
 
         if (enableNotificationsButton) {
             enableNotificationsButton.addEventListener('click', () => {
-                requestNotificationPermission();
+                requestNotificationPermission(); // Chama a nova função do Firebase
                 if (notificationBanner) notificationBanner.style.display = 'none';
             });
         }
@@ -140,111 +148,56 @@ function initializeNotificationUI() {
 }
 
 /**
- * Requests permission from the user to show notifications.
+ * Requests permission and retrieves the FCM token.
  */
-async function requestNotificationPermission() {
-    const permission = await Notification.requestPermission();
-    if (permission === 'granted') {
-        console.log('Notification permission granted.');
-        scheduleAllNotifications();
-    } else {
-        console.log('Notification permission denied.');
-    }
-}
-
-/**
- * Schedules all automated notifications (podcasts and special reminders).
- * NOTE: This is a client-side simulation. For robust scheduling, a server with Push API is needed.
- */
-function scheduleAllNotifications() {
-    if ('serviceWorker' in navigator && 'PushManager' in window && Notification.permission === 'granted') {
-        navigator.serviceWorker.ready.then(registration => {
-            const now = Date.now();
+function requestNotificationPermission() {
+    console.log('Requesting notification permission...');
+    Notification.requestPermission().then((permission) => {
+        if (permission === 'granted') {
+            console.log('Notification permission granted.');
             
-            // 1. Schedule Podcast Notifications
-            podcastEpisodes.forEach(episode => {
-                const [day, month, year] = episode['Data lançamento'].split('/');
-                const releaseDate = new Date(`${year}-${month}-${day}T12:00:00`);
+            // --- COLE AQUI A SUA VAPID KEY (Chave do Web Push) ---
+            const VAPID_KEY = 'BHrRmsDe1Y9ZiUXp9C7Nb2TwpGFl-HBVEO4ngpWwuK3rg2xZWvbvFzGixkL-JV_6nhuu8Ywn81Wqg8xr9hqjh98';
 
-                // Only schedule for future episodes
-                if (releaseDate.getTime() > now) {
-                    const payload = {
-                        title: `Novo Episódio: ${episode['Título']}`,
-                        body: `Episódio ${episode['Episódio']} com ${episode.Narrador} já está no ar!`,
-                        icon: '/images/icons/icon-192x192.png',
-                        badge: '/images/icons/icon-grupo-40x40.png',
-                        tag: `podcast-${episode['Episódio']}`
-                    };
-                    
-                    console.log(`Scheduling podcast notification for episode ${episode['Episódio']} at ${releaseDate}`);
-                    
-                    const delay = releaseDate.getTime() - now;
-                    if (delay > 0) {
-                       setTimeout(() => {
-                           displayNotification(payload.title, {
-                               body: payload.body,
-                               icon: payload.icon,
-                               badge: payload.badge,
-                               tag: payload.tag
-                           });
-                       }, delay);
-                    }
+            // Pega o token do FCM
+            messaging.getToken({ vapidKey: VAPID_KEY }).then((currentToken) => {
+                if (currentToken) {
+                    console.log('FCM Token:', currentToken);
+                    // IMPORTANTE: Envie este token para o seu servidor!
+                    // Ex: sendTokenToServer(currentToken);
+                } else {
+                    console.log('No registration token available. Request permission to generate one.');
                 }
+            }).catch((err) => {
+                console.log('An error occurred while retrieving token. ', err);
             });
-
-            // 2. Schedule the special 6-month reminder notification
-            const specialDate = new Date('2025-07-27T16:42:00');
-            if (specialDate.getTime() > now) {
-                const payload = {
-                    title: 'Contagem regressiva!',
-                    body: 'Faltam 6 meses para a viagem! Já checou os passaportes?',
-                    icon: '/images/icons/icon-192x192.png',
-                    badge: '/images/icons/icon-grupo-40x40.png',
-                    tag: 'special-reminder-6-months'
-                };
-
-                console.log(`Scheduling special notification for ${specialDate}`);
-                
-                const delay = specialDate.getTime() - now;
-                if (delay > 0) {
-                   setTimeout(() => {
-                       displayNotification(payload.title, {
-                           body: payload.body,
-                           icon: payload.icon,
-                           badge: payload.badge,
-                           tag: payload.tag
-                       });
-                   }, delay);
-                }
-            }
-        });
-    }
+        } else {
+            console.log('Unable to get permission to notify.');
+        }
+    });
 }
-
 
 /**
- * Displays a notification directly via the service worker.
- * @param {string} title The title of the notification.
- * @param {object} options The notification options object.
+ * Handles messages received while the app is in the foreground.
  */
-function displayNotification(title, options) {
-    if (Notification.permission === 'granted') {
-        navigator.serviceWorker.getRegistration().then(reg => {
-            if (reg) {
-                reg.showNotification(title, options);
-            }
-        });
+messaging.onMessage((payload) => {
+    console.log('Message received. ', payload);
+    // Aqui você pode exibir uma notificação customizada dentro do app
+    // Por exemplo, usando o "toast" que você já tem.
+    const toast = document.getElementById('new-episode-toast');
+    if (toast) {
+        toast.querySelector('.font-bold').textContent = payload.notification.title;
+        toast.querySelector('.text-xs').textContent = payload.notification.body;
+        toast.querySelector('#toast-button').onclick = () => {
+            window.open(payload.fcmOptions.link, '_blank');
+        };
+        toast.classList.add('show');
     }
-}
+});
+
 
 // --- CHART CONFIGURATION ---
 
-/**
- * Wraps a string into multiple lines if it exceeds a max width.
- * @param {string} str The string to wrap.
- * @param {number} maxWidth The maximum width of a line.
- * @returns {string|string[]} The wrapped string as an array of lines.
- */
 function wrapLabel(str, maxWidth) {
     if (!str) return '';
     if (str.length <= maxWidth) return str;
@@ -262,7 +215,6 @@ function wrapLabel(str, maxWidth) {
     return lines;
 }
 
-// Data for the total cost chart
 const custoTotalData = {
     labels: ['Voos', 'Hospedagem', 'Seguro'],
     datasets: [
@@ -285,7 +237,6 @@ const custoTotalData = {
     ]
 };
 
-// Data for the cost by category chart
 const custoCategoriaData = { 
     labels: [
         wrapLabel('Voo GOL', 10), wrapLabel('Voo TAP', 10), wrapLabel('Voo LATAM', 10),
@@ -312,7 +263,6 @@ const custoCategoriaData = {
     ]
 };
 
-// Data for the monthly payment chart
 const pagamentoMensalData = { 
     labels: pagamentoMensalLabels,
     datasets: [{
@@ -329,7 +279,6 @@ const pagamentoMensalData = {
     }]
 };
 
-// Callback to format tooltip titles correctly for wrapped labels.
 const tooltipTitleCallback = (tooltipItems) => {
     const item = tooltipItems[0];
     if (!item || !item.chart || !item.chart.data || !item.chart.data.labels || typeof item.dataIndex === 'undefined') {
@@ -339,7 +288,6 @@ const tooltipTitleCallback = (tooltipItems) => {
     return Array.isArray(label) ? label.join(' ') : label;
 };
 
-// Common options for all charts
 const commonChartOptions = (type) => ({ 
     responsive: true,
     maintainAspectRatio: false,
@@ -380,7 +328,6 @@ const commonChartOptions = (type) => ({
     }
 });
 
-// Specific options for the total cost doughnut chart
 const custoTotalChartOptions = { 
     ...commonChartOptions('doughnut'),
     plugins: {
@@ -411,7 +358,6 @@ const custoTotalChartOptions = {
     }
 };
 
-// Specific options for the cost by category bar chart
 const custoCategoriaChartOptions = { 
     ...commonChartOptions('bar'),
     indexAxis: 'y', 
@@ -446,7 +392,6 @@ const custoCategoriaChartOptions = {
     }
 };
 
-// Specific options for the monthly payment line chart
 const pagamentoMensalChartOptions = { 
     ...commonChartOptions('line'),
     plugins: {
@@ -469,13 +414,7 @@ const pagamentoMensalChartOptions = {
 
 // --- PAGE NAVIGATION AND INTERACTIVITY ---
 
-/**
- * Switches the visible page section.
- * @param {string} pageId The ID of the page section to show.
- * @param {string} title The title to display for the new page.
- */
 function switchPage(pageId, title) {
-    // Hide all sections and show the target one
     pageSections.forEach(section => {
         section.classList.remove('active');
         if (section.id === pageId) {
@@ -485,7 +424,6 @@ function switchPage(pageId, title) {
         }
     });
 
-    // Update active state on navigation items
     navItems.forEach(item => {
         item.classList.remove('active');
         if (item.dataset.page === pageId) {
@@ -493,16 +431,13 @@ function switchPage(pageId, title) {
         }
     });
 
-    // Update the header title if it exists
     if(appTitle) appTitle.textContent = title; 
 
-    // Initialize charts only when the 'custos' page is active and visible
     if (pageId === 'page-custos') {
         const graficosContent = document.getElementById('content-financeiro-graficos');
         const parcelasContent = document.getElementById('content-financeiro-parcelas');
         const isPorPessoaActive = btnPorPessoa && btnPorPessoa.classList.contains('active');
 
-        // Delay chart creation slightly to ensure canvas is rendered
         if (graficosContent && !graficosContent.classList.contains('hidden')) {
             setTimeout(() => { 
                 if (!appCustoTotalChartInstance) {
@@ -526,9 +461,6 @@ function switchPage(pageId, title) {
     }
 }
 
-/**
- * Sets up event listeners for all collapsible sections.
- */
 function setupCollapsibleSections() {
     const triggers = document.querySelectorAll('.collapsible-trigger');
     triggers.forEach(trigger => {
@@ -547,7 +479,6 @@ function setupCollapsibleSections() {
             content.classList.toggle('hidden');
             if (icon) icon.classList.toggle('rotate-180');
 
-            // If expanding a financial section, initialize its charts
             if (!isCurrentlyExpanded) { 
                 setTimeout(() => {
                     if (contentId === 'content-financeiro-graficos') {
@@ -570,9 +501,6 @@ function setupCollapsibleSections() {
     });
 }
 
-/**
- * Starts the countdown timer.
- */
 function startCountdown() {
     const countDownDate = new Date("Jan 22, 2026 00:00:00").getTime();
     const countdownContainerNew = document.getElementById("countdown-container-new");
@@ -613,13 +541,6 @@ function startCountdown() {
 
 // --- PODCAST LOGIC ---
 
-/**
- * Plays a selected podcast track in the iframe player.
- * @param {string} trackId The SoundCloud track ID.
- * @param {string} token The secret token for the track.
- * @param {HTMLElement} clickedElement The episode item element that was clicked.
- * @param {boolean} [autoplay=true] Whether the track should autoplay.
- */
 function playTrack(trackId, token, clickedElement, autoplay = true) {
     const playerFrame = document.getElementById('podcast-player-iframe');
     if (!playerFrame) return;
@@ -629,7 +550,6 @@ function playTrack(trackId, token, clickedElement, autoplay = true) {
     
     playerFrame.src = soundcloudUrl + params;
 
-    // Update active state on episode list
     document.querySelectorAll('.episode-item').forEach(item => {
         item.classList.remove('active');
     });
@@ -638,9 +558,6 @@ function playTrack(trackId, token, clickedElement, autoplay = true) {
     }
 }
 
-/**
- * Generates the list of podcast episodes and populates the container.
- */
 function generateEpisodeList() {
     const listContainer = document.getElementById('episode-list');
     if (!listContainer) return;
@@ -648,7 +565,6 @@ function generateEpisodeList() {
     const today = new Date();
     today.setHours(0, 0, 0, 0);
 
-    // Filter for episodes that have been released
     const releasedEpisodes = podcastEpisodes.filter(ep => {
         const [day, month, year] = ep['Data lançamento'].split('/');
         const releaseDate = new Date(year, month - 1, day);
@@ -662,7 +578,6 @@ function generateEpisodeList() {
          return;
     }
 
-    // Create and append an element for each released episode
     releasedEpisodes.forEach((ep, index) => {
         const item = document.createElement('div');
         item.className = 'episode-item';
@@ -689,7 +604,6 @@ function generateEpisodeList() {
         listContainer.appendChild(item);
     });
     
-    // Pre-load the latest episode without autoplaying
     const firstEpisodeData = releasedEpisodes[0];
     if (firstEpisodeData) {
         const firstEpisodeElement = listContainer.querySelector(`.episode-item[data-episode-number='${firstEpisodeData['Episódio']}']`);
@@ -697,9 +611,6 @@ function generateEpisodeList() {
     }
 }
 
-/**
- * Checks if a new episode was released recently and shows a toast notification.
- */
 function checkAndShowNewEpisodeToast() {
     const toast = document.getElementById('new-episode-toast');
     if (!toast) return;
@@ -722,20 +633,15 @@ function checkAndShowNewEpisodeToast() {
     const diffTime = today - releaseDate;
     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
 
-    // Show toast if the latest episode was released in the last 5 days
     if (diffDays >= 0 && diffDays <= 5) {
         setTimeout(() => {
             toast.classList.add('show');
-        }, 1000); // Delay for 1 second
+        }, 1000); 
     }
 }
 
 // --- CHART VISIBILITY LOGIC ---
 
-/**
- * Toggles the visibility of datasets in the total cost chart.
- * @param {boolean} showPorPessoa True to show 'per person' data, false for 'group' data.
- */
 function updateCustoTotalChartVisibility(showPorPessoa) {
     if (appCustoTotalChartInstance && custoTotalTituloEl) {
         appCustoTotalChartInstance.data.datasets[0].hidden = !showPorPessoa;
@@ -745,10 +651,6 @@ function updateCustoTotalChartVisibility(showPorPessoa) {
     }
 }
 
-/**
- * Toggles the visibility of datasets in the category cost chart.
- * @param {boolean} showPorPessoa True to show 'per person' data, false for 'group' data.
- */
 function updateCustoCategoriaChartVisibility(showPorPessoa) {
     if (appCustoCategoriaChartInstance && custoCategoriaTituloEl) {
         appCustoCategoriaChartInstance.data.datasets[0].hidden = !showPorPessoa;
@@ -764,34 +666,29 @@ document.addEventListener('DOMContentLoaded', () => {
     // Register Service Worker
     if ('serviceWorker' in navigator) {
         window.addEventListener('load', () => {
+            // Registra o service worker principal para caching
             navigator.serviceWorker.register('/service-worker.js').then(registration => {
-                console.log('ServiceWorker registration successful with scope: ', registration.scope);
-                // Initialize notification features after SW is ready
+                console.log('Main ServiceWorker registration successful with scope: ', registration.scope);
+                // Inicializa a UI de notificação após o SW principal estar pronto
                 initializeNotificationUI();
-                if (Notification.permission === 'granted') {
-                    scheduleAllNotifications();
-                }
             }, err => {
-                console.log('ServiceWorker registration failed: ', err);
+                console.log('Main ServiceWorker registration failed: ', err);
             });
         });
     }
 
-    // Register Chart.js plugins and set up initial state
     Chart.register(ChartDataLabels);
     setupCollapsibleSections();
     startCountdown();
     generateEpisodeList(); 
     checkAndShowNewEpisodeToast();
 
-    // Event listener for the main navigation
     navItems.forEach(item => {
         item.addEventListener('click', () => {
             switchPage(item.dataset.page, item.dataset.title);
         });
     });
 
-    // Event listeners for the toast notification
     const toast = document.getElementById('new-episode-toast');
     const closeToastBtn = document.getElementById('close-toast');
     const toastButton = document.getElementById('toast-button');
@@ -800,13 +697,11 @@ document.addEventListener('DOMContentLoaded', () => {
         closeToastBtn.addEventListener('click', () => toast.classList.remove('show'));
 
         toastButton.addEventListener('click', () => {
-            // Switch to the 'Geral' page
             const geralNavItem = document.querySelector('.nav-item[data-page="page-geral"]');
             if (geralNavItem) {
                 switchPage(geralNavItem.dataset.page, geralNavItem.dataset.title);
             }
             
-            // Scroll to the podcast card
             setTimeout(() => {
                 const podcastCard = document.getElementById('podcast-card');
                 const navMenu = document.querySelector('.top-nav');
@@ -822,7 +717,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Event listeners for the cost toggle buttons
     if (btnPorPessoa && btnPeloGrupo) {
         btnPorPessoa.addEventListener('click', () => {
             btnPorPessoa.classList.add('active');
@@ -839,7 +733,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Set the initial page on load
     const initialPageId = 'page-geral';
     const initialTitleElement = document.querySelector(`.nav-item[data-page="${initialPageId}"]`);
     if (initialTitleElement && initialTitleElement.dataset.title) {

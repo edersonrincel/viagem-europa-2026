@@ -1,6 +1,4 @@
 // --- INICIALIZAÇÃO E CONFIGURAÇÃO DO FIREBASE ---
-// As credenciais aqui são apenas para o app em primeiro plano.
-// O Service Worker tem sua própria cópia.
 const firebaseConfig = {
     apiKey: "AIzaSyDRf55_pNkz3FqMMm93jFwqEwVfx7AtH_c",
     authDomain: "viagem-europa-2026.firebaseapp.com",
@@ -23,7 +21,7 @@ const notificationBanner = document.getElementById('notification-banner');
 const enableNotificationsButton = document.getElementById('enable-notifications-button');
 const closeNotificationBannerButton = document.getElementById('close-notification-banner');
 const numeroDeViajantes = 4;
-const custoTotalPorPessoaArray = [4468.94, 2771.315, 240.43]; 
+const custoTotalPorPessoaArray = [4468.94, 2771.315, 240.43];
 const custoCategoriaPorPessoaArray = [410.48, 3868.94, 189.52, 1633.9375, 918.978, 218.40, 240.43];
 const pagamentoMensalValores = [1661.65, 679.71, 679.71, 679.71, 679.71, 559.71, 519.64, 519.64, 519.64, 519.64, 230.94, 230.94];
 const pagamentoMensalLabels = ['Jun/25', 'Jul/25', 'Ago/25', 'Set/25', 'Out/25', 'Nov/25', 'Dez/25', 'Jan/26', 'Fev/26', 'Mar/26', 'Abr/26', 'Mai/26'];
@@ -59,7 +57,7 @@ let appPagamentoMensalChartInstance = null;
 
 const navItems = document.querySelectorAll('.nav-item');
 const pageSections = document.querySelectorAll('.page-section');
-const appTitle = document.getElementById('appTitle'); 
+const appTitle = document.getElementById('appTitle');
 const custoTotalTituloEl = document.getElementById('custoTotalTitulo');
 const custoCategoriaTituloEl = document.getElementById('custoCategoriaTitulo');
 const btnPorPessoa = document.getElementById('btnPorPessoa');
@@ -68,25 +66,25 @@ const btnPeloGrupo = document.getElementById('btnPeloGrupo');
 // --- PWA INSTALLATION LOGIC ---
 
 window.addEventListener('beforeinstallprompt', (e) => {
-  e.preventDefault();
-  deferredPrompt = e;
-  if (installBanner) {
-    installBanner.classList.add('show');
-  }
+    e.preventDefault();
+    deferredPrompt = e;
+    if (installBanner) {
+        installBanner.classList.add('show');
+    }
 });
 
 if (installButton) {
-  installButton.addEventListener('click', async () => {
-    if (installBanner) {
-      installBanner.classList.remove('show');
-    }
-    if (deferredPrompt) {
-        deferredPrompt.prompt();
-        const { outcome } = await deferredPrompt.userChoice;
-        console.log(`User response to the install prompt: ${outcome}`);
-        deferredPrompt = null;
-    }
-  });
+    installButton.addEventListener('click', async () => {
+        if (installBanner) {
+            installBanner.classList.remove('show');
+        }
+        if (deferredPrompt) {
+            deferredPrompt.prompt();
+            const { outcome } = await deferredPrompt.userChoice;
+            console.log(`User response to the install prompt: ${outcome}`);
+            deferredPrompt = null;
+        }
+    });
 }
 
 if (closeInstallBannerButton) {
@@ -100,50 +98,50 @@ if (closeInstallBannerButton) {
 // --- NOTIFICATION LOGIC ---
 
 async function sendTokenToServer(token) {
-  const serverUrl = 'http://localhost:3000/register-token';
-  try {
-    await fetch(serverUrl, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ token: token }),
-    });
-    console.log('Token sent to server.');
-  } catch (error) {
-    console.error('Error sending token to server:', error);
-  }
+    const serverUrl = 'http://localhost:3000/register-token';
+    try {
+        await fetch(serverUrl, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ token: token }),
+        });
+        console.log('Token sent to server.');
+    } catch (error) {
+        console.error('Error sending token to server:', error);
+    }
 }
 
 function getFCMToken(registration) {
-  const VAPID_KEY = 'BHrRmsDe1Y9ZiUXp9C7Nb2TwpGFl-HBVEO4ngpWwuK3rg2xZWvbvFzGixkL-JV_6nhuu8Ywn81Wqg8xr9hqjh98';
-  
-  messaging.getToken({ vapidKey: VAPID_KEY, serviceWorkerRegistration: registration })
-    .then((currentToken) => {
-      if (currentToken) {
-        console.log('FCM Token:', currentToken);
-        sendTokenToServer(currentToken);
-      } else {
-        console.log('Could not get token.');
-      }
-    }).catch((err) => {
-      console.error('Error getting token.', err);
-    });
+    const VAPID_KEY = 'BHrRmsDe1Y9ZiUXp9C7Nb2TwpGFl-HBVEO4ngpWwuK3rg2xZWvbvFzGixkL-JV_6nhuu8Ywn81Wqg8xr9hqjh98';
+
+    messaging.getToken({ vapidKey: VAPID_KEY, serviceWorkerRegistration: registration })
+        .then((currentToken) => {
+            if (currentToken) {
+                console.log('FCM Token:', currentToken);
+                sendTokenToServer(currentToken);
+            } else {
+                console.log('Could not get token.');
+            }
+        }).catch((err) => {
+            console.error('Error getting token.', err);
+        });
 }
 
 function requestNotificationPermission(registration) {
-  console.log('Requesting notification permission...');
-  if (Notification.permission === 'granted') {
-    console.log('Permission already granted.');
-    getFCMToken(registration);
-  } else if (Notification.permission === 'default') {
-    Notification.requestPermission().then((permission) => {
-      if (permission === 'granted') {
-        console.log('Permission was granted.');
+    console.log('Requesting notification permission...');
+    if (Notification.permission === 'granted') {
+        console.log('Permission already granted.');
         getFCMToken(registration);
-      } else {
-        console.log('Permission was denied.');
-      }
-    });
-  }
+    } else if (Notification.permission === 'default') {
+        Notification.requestPermission().then((permission) => {
+            if (permission === 'granted') {
+                console.log('Permission was granted.');
+                getFCMToken(registration);
+            } else {
+                console.log('Permission was denied.');
+            }
+        });
+    }
 }
 
 function isRunningStandalone() {
@@ -151,26 +149,30 @@ function isRunningStandalone() {
 }
 
 function initializeNotificationUI(registration) {
-  console.log('Initializing Notification UI...');
-  if (isRunningStandalone() && Notification.permission === 'default') {
-    console.log('Showing notification banner.');
-    if (notificationBanner) notificationBanner.style.display = 'flex';
-  } else {
-    console.log('Not showing notification banner. Standalone:', isRunningStandalone(), 'Permission:', Notification.permission);
-  }
-  
-  if (enableNotificationsButton) {
-    enableNotificationsButton.addEventListener('click', () => {
-      requestNotificationPermission(registration);
-      if (notificationBanner) notificationBanner.style.display = 'none';
-    });
-  }
-  
-  if (closeNotificationBannerButton) {
-    closeNotificationBannerButton.addEventListener('click', () => {
-      if (notificationBanner) notificationBanner.style.display = 'none';
-    });
-  }
+    console.log('Initializing Notification UI...');
+    if (isRunningStandalone() && Notification.permission === 'default') {
+        console.log('Showing notification banner.');
+        if (notificationBanner) notificationBanner.style.display = 'flex';
+    } else {
+        console.log('Not showing notification banner. Standalone:', isRunningStandalone(), 'Permission:', Notification.permission);
+        // Se a permissão já foi dada, tenta pegar o token mesmo assim
+        if (Notification.permission === 'granted') {
+            getFCMToken(registration);
+        }
+    }
+
+    if (enableNotificationsButton) {
+        enableNotificationsButton.addEventListener('click', () => {
+            requestNotificationPermission(registration);
+            if (notificationBanner) notificationBanner.style.display = 'none';
+        });
+    }
+
+    if (closeNotificationBannerButton) {
+        closeNotificationBannerButton.addEventListener('click', () => {
+            if (notificationBanner) notificationBanner.style.display = 'none';
+        });
+    }
 }
 
 
@@ -195,62 +197,56 @@ function wrapLabel(str, maxWidth) {
 
 const custoTotalData = {
     labels: ['Voos', 'Hospedagem', 'Seguro'],
-    datasets: [
-        { 
-            label: 'Custo por Pessoa (R$)',
-            data: custoTotalPorPessoaArray,
-            backgroundColor: ['#0EA5E9', '#F97316', '#FACC15'], 
-            borderColor: '#f0f4f8', 
-            borderWidth: 2,
-            hidden: false 
-        },
-        { 
-            label: 'Custo Total do Grupo (R$)',
-            data: custoTotalPorPessoaArray.map(cost => cost * numeroDeViajantes),
-            backgroundColor: ['#0EA5E9', '#F97316', '#FACC15'],
-            borderColor: '#f0f4f8',
-            borderWidth: 2,
-            hidden: true 
-        }
-    ]
+    datasets: [{
+        label: 'Custo por Pessoa (R$)',
+        data: custoTotalPorPessoaArray,
+        backgroundColor: ['#0EA5E9', '#F97316', '#FACC15'],
+        borderColor: '#f0f4f8',
+        borderWidth: 2,
+        hidden: false
+    }, {
+        label: 'Custo Total do Grupo (R$)',
+        data: custoTotalPorPessoaArray.map(cost => cost * numeroDeViajantes),
+        backgroundColor: ['#0EA5E9', '#F97316', '#FACC15'],
+        borderColor: '#f0f4f8',
+        borderWidth: 2,
+        hidden: true
+    }]
 };
 
-const custoCategoriaData = { 
+const custoCategoriaData = {
     labels: [
         wrapLabel('Voo GOL', 10), wrapLabel('Voo TAP', 10), wrapLabel('Voo LATAM', 10),
         wrapLabel('Hotel LON', 10), wrapLabel('Hotel LIS', 10), wrapLabel('Hotel GRU', 10),
         wrapLabel('Seguro', 10)
     ],
-    datasets: [
-        {
-            label: 'Custo por Pessoa (R$)',
-            data: custoCategoriaPorPessoaArray,
-            backgroundColor: ['#0EA5E9', '#38BDF8', '#7DD3FC', '#F97316', '#FB923C', '#FDBA74', '#FACC15'], 
-            borderColor: '#f0f4f8',
-            borderWidth: 1,
-            hidden: false
-        },
-        {
-            label: 'Custo Total do Grupo (R$)',
-            data: custoCategoriaPorPessoaArray.map(cost => cost * numeroDeViajantes),
-            backgroundColor: ['#0EA5E9', '#38BDF8', '#7DD3FC', '#F97316', '#FB923C', '#FDBA74', '#FACC15'],
-            borderColor: '#f0f4f8',
-            borderWidth: 1,
-            hidden: true
-        }
-    ]
+    datasets: [{
+        label: 'Custo por Pessoa (R$)',
+        data: custoCategoriaPorPessoaArray,
+        backgroundColor: ['#0EA5E9', '#38BDF8', '#7DD3FC', '#F97316', '#FB923C', '#FDBA74', '#FACC15'],
+        borderColor: '#f0f4f8',
+        borderWidth: 1,
+        hidden: false
+    }, {
+        label: 'Custo Total do Grupo (R$)',
+        data: custoCategoriaPorPessoaArray.map(cost => cost * numeroDeViajantes),
+        backgroundColor: ['#0EA5E9', '#38BDF8', '#7DD3FC', '#F97316', '#FB923C', '#FDBA74', '#FACC15'],
+        borderColor: '#f0f4f8',
+        borderWidth: 1,
+        hidden: true
+    }]
 };
 
-const pagamentoMensalData = { 
+const pagamentoMensalData = {
     labels: pagamentoMensalLabels,
     datasets: [{
         label: 'Total Mensal por Pessoa (R$)',
         data: pagamentoMensalValores,
         fill: true,
-        backgroundColor: 'rgba(14, 165, 233, 0.2)', 
-        borderColor: '#0EA5E9', 
+        backgroundColor: 'rgba(14, 165, 233, 0.2)',
+        borderColor: '#0EA5E9',
         tension: 0.2,
-        pointBackgroundColor: '#F97316', 
+        pointBackgroundColor: '#F97316',
         pointBorderColor: '#FFFFFF',
         pointRadius: 4,
         pointHoverRadius: 6
@@ -266,12 +262,12 @@ const tooltipTitleCallback = (tooltipItems) => {
     return Array.isArray(label) ? label.join(' ') : label;
 };
 
-const commonChartOptions = (type) => ({ 
+const commonChartOptions = (type) => ({
     responsive: true,
     maintainAspectRatio: false,
     plugins: {
         legend: {
-            display: false, 
+            display: false,
             position: 'top',
             labels: { font: { size: 10 }, color: '#475569' }
         },
@@ -281,14 +277,14 @@ const commonChartOptions = (type) => ({
             bodyColor: '#cbd5e1',
             callbacks: {
                 title: tooltipTitleCallback,
-                label: function(context) {
+                label: function (context) {
                     let label = context.dataset.label || '';
-                     if (label) {
+                    if (label) {
                         label = label.replace(/\s\(R\$\)$/, '') + ': ';
                     }
                     let value = 0;
                     const chartType = context.chart.config.type;
-                    const indexAxis = context.chart.config.options.indexAxis; 
+                    const indexAxis = context.chart.config.options.indexAxis;
                     if (chartType === 'doughnut' || chartType === 'pie') {
                         value = context.parsed;
                     } else if (chartType === 'bar') {
@@ -306,7 +302,7 @@ const commonChartOptions = (type) => ({
     }
 });
 
-const custoTotalChartOptions = { 
+const custoTotalChartOptions = {
     ...commonChartOptions('doughnut'),
     plugins: {
         ...commonChartOptions('doughnut').plugins,
@@ -336,13 +332,13 @@ const custoTotalChartOptions = {
     }
 };
 
-const custoCategoriaChartOptions = { 
+const custoCategoriaChartOptions = {
     ...commonChartOptions('bar'),
-    indexAxis: 'y', 
+    indexAxis: 'y',
     plugins: {
-         ...commonChartOptions('bar').plugins,
-         legend: { display: false },
-         datalabels: {
+        ...commonChartOptions('bar').plugins,
+        legend: { display: false },
+        datalabels: {
             display: (c) => c.dataset.data[c.dataIndex] > 0 && c.chart.isDatasetVisible(c.datasetIndex),
             anchor: 'end',
             align: (c) => (c.dataset.data[c.dataIndex] < Math.max(...c.dataset.data) * 0.25 ? 'right' : 'left'),
@@ -350,19 +346,19 @@ const custoCategoriaChartOptions = {
             color: (c) => {
                 const value = c.dataset.data[c.dataIndex];
                 const maxValue = Math.max(...c.dataset.data);
-                if (value < maxValue * 0.25) return '#334155'; 
+                if (value < maxValue * 0.25) return '#334155';
                 const barColor = Array.isArray(c.dataset.backgroundColor) ? c.dataset.backgroundColor[c.dataIndex] : c.dataset.backgroundColor;
                 const getLuminance = (hex) => {
-                    if (!hex || hex.length < 7) return 128; 
+                    if (!hex || hex.length < 7) return 128;
                     hex = hex.replace('#', '');
-                    const r = parseInt(hex.substring(0,2),16), g = parseInt(hex.substring(2,4),16), b = parseInt(hex.substring(4,6),16);
+                    const r = parseInt(hex.substring(0, 2), 16), g = parseInt(hex.substring(2, 4), 16), b = parseInt(hex.substring(4, 6), 16);
                     return 0.2126 * r + 0.7152 * g + 0.0722 * b;
                 };
-                return getLuminance(barColor) > 120 ? '#1e293b' : '#FFFFFF'; 
+                return getLuminance(barColor) > 120 ? '#1e293b' : '#FFFFFF';
             },
             font: { size: 9, weight: '500' },
             formatter: (value) => new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL', minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(value)
-         }
+        }
     },
     scales: {
         x: { beginAtZero: true, ticks: { display: false, font: { size: 10 }, color: '#475569' } },
@@ -370,7 +366,7 @@ const custoCategoriaChartOptions = {
     }
 };
 
-const pagamentoMensalChartOptions = { 
+const pagamentoMensalChartOptions = {
     ...commonChartOptions('line'),
     plugins: {
         ...commonChartOptions('line').plugins,
@@ -379,13 +375,13 @@ const pagamentoMensalChartOptions = {
             anchor: 'end',
             align: (c) => c.dataIndex % 2 === 0 ? 'top' : 'bottom',
             offset: (c) => c.dataIndex % 2 === 0 ? 6 : 10,
-            color: '#4A5568', 
-            font: { size: 8, weight: '600' }, 
+            color: '#4A5568',
+            font: { size: 8, weight: '600' },
             formatter: (v) => new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(v)
         }
     },
     scales: {
-        y: { beginAtZero: true, ticks: { display: false, font: { size: 10 }, color: '#475569' }, grid: {display: false} },
+        y: { beginAtZero: true, ticks: { display: false, font: { size: 10 }, color: '#475569' }, grid: { display: false } },
         x: { ticks: { font: { size: 10 }, color: '#475569' } }
     }
 };
@@ -395,8 +391,8 @@ function switchPage(pageId, title) {
         section.classList.remove('active');
         if (section.id === pageId) {
             section.classList.add('active');
-            document.querySelector('main').scrollTop = 0; 
-            window.scrollTo(0, 0); 
+            document.querySelector('main').scrollTop = 0;
+            window.scrollTo(0, 0);
         }
     });
 
@@ -407,7 +403,7 @@ function switchPage(pageId, title) {
         }
     });
 
-    if(appTitle) appTitle.textContent = title; 
+    if (appTitle) appTitle.textContent = title;
 
     if (pageId === 'page-custos') {
         const graficosContent = document.getElementById('content-financeiro-graficos');
@@ -415,9 +411,9 @@ function switchPage(pageId, title) {
         const isPorPessoaActive = btnPorPessoa && btnPorPessoa.classList.contains('active');
 
         if (graficosContent && !graficosContent.classList.contains('hidden')) {
-            setTimeout(() => { 
+            setTimeout(() => {
                 if (!appCustoTotalChartInstance) {
-                     appCustoTotalChartInstance = new Chart(document.getElementById('appCustoTotalChart'), { type: 'doughnut', data: custoTotalData, options: custoTotalChartOptions });
+                    appCustoTotalChartInstance = new Chart(document.getElementById('appCustoTotalChart'), { type: 'doughnut', data: custoTotalData, options: custoTotalChartOptions });
                 }
                 updateCustoTotalChartVisibility(isPorPessoaActive);
 
@@ -427,7 +423,7 @@ function switchPage(pageId, title) {
                 updateCustoCategoriaChartVisibility(isPorPessoaActive);
             }, 50);
         }
-         if (parcelasContent && !parcelasContent.classList.contains('hidden')) {
+        if (parcelasContent && !parcelasContent.classList.contains('hidden')) {
             setTimeout(() => {
                 if (!appPagamentoMensalChartInstance) {
                     appPagamentoMensalChartInstance = new Chart(document.getElementById('appPagamentoMensalChart'), { type: 'line', data: pagamentoMensalData, options: pagamentoMensalChartOptions });
@@ -455,21 +451,21 @@ function setupCollapsibleSections() {
             content.classList.toggle('hidden');
             if (icon) icon.classList.toggle('rotate-180');
 
-            if (!isCurrentlyExpanded) { 
+            if (!isCurrentlyExpanded) {
                 setTimeout(() => {
                     if (contentId === 'content-financeiro-graficos') {
                         const isPorPessoaActive = btnPorPessoa && btnPorPessoa.classList.contains('active');
                         if (appCustoTotalChartInstance) appCustoTotalChartInstance.destroy();
-                        appCustoTotalChartInstance = new Chart(document.getElementById('appCustoTotalChart'), {type: 'doughnut', data: custoTotalData, options: custoTotalChartOptions});
+                        appCustoTotalChartInstance = new Chart(document.getElementById('appCustoTotalChart'), { type: 'doughnut', data: custoTotalData, options: custoTotalChartOptions });
                         if (btnPorPessoa) updateCustoTotalChartVisibility(isPorPessoaActive);
 
                         if (appCustoCategoriaChartInstance) appCustoCategoriaChartInstance.destroy();
-                        appCustoCategoriaChartInstance = new Chart(document.getElementById('appCustoCategoriaChart'), {type: 'bar', data: custoCategoriaData, options: custoCategoriaChartOptions});
+                        appCustoCategoriaChartInstance = new Chart(document.getElementById('appCustoCategoriaChart'), { type: 'bar', data: custoCategoriaData, options: custoCategoriaChartOptions });
                         if (btnPorPessoa) updateCustoCategoriaChartVisibility(isPorPessoaActive);
 
                     } else if (contentId === 'content-financeiro-parcelas') {
                         if (appPagamentoMensalChartInstance) appPagamentoMensalChartInstance.destroy();
-                        appPagamentoMensalChartInstance = new Chart(document.getElementById('appPagamentoMensalChart'), {type: 'line', data: pagamentoMensalData, options: pagamentoMensalChartOptions});
+                        appPagamentoMensalChartInstance = new Chart(document.getElementById('appPagamentoMensalChart'), { type: 'line', data: pagamentoMensalData, options: pagamentoMensalChartOptions });
                     }
                 }, 50);
             }
@@ -495,7 +491,7 @@ function startCountdown() {
 
     const timerDiv = document.getElementById("countdown-timer-new");
 
-    const interval = setInterval(function() {
+    const interval = setInterval(function () {
         const now = new Date().getTime();
         const distance = countDownDate - now;
 
@@ -507,7 +503,7 @@ function startCountdown() {
         if (distance < 0) {
             clearInterval(interval);
             if (timerDiv) {
-                 timerDiv.innerHTML = "<p class='text-green-500 font-bold py-2 text-xl'>A VIAGEM COMEÇOU!</p>";
+                timerDiv.innerHTML = "<p class='text-green-500 font-bold py-2 text-xl'>A VIAGEM COMEÇOU!</p>";
             }
             const titleElement = countdownContainerNew.querySelector("h3");
             if (titleElement) titleElement.style.display = 'none';
@@ -521,7 +517,7 @@ function playTrack(trackId, token, clickedElement, autoplay = true) {
 
     const soundcloudUrl = `https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/${trackId}%3Fsecret_token%3Ds-${token}`;
     const params = `&color=%230ea5e9&auto_play=${autoplay}&hide_related=false&show_comments=false&show_user=false&show_reposts=false&show_teaser=false&visual=false`;
-    
+
     playerFrame.src = soundcloudUrl + params;
 
     document.querySelectorAll('.episode-item').forEach(item => {
@@ -548,8 +544,8 @@ function generateEpisodeList() {
     listContainer.innerHTML = '';
 
     if (releasedEpisodes.length === 0) {
-         listContainer.innerHTML = '<p class="text-center text-sm text-slate-500 py-4">Nenhum episódio lançado ainda. Volte em breve!</p>';
-         return;
+        listContainer.innerHTML = '<p class="text-center text-sm text-slate-500 py-4">Nenhum episódio lançado ainda. Volte em breve!</p>';
+        return;
     }
 
     releasedEpisodes.forEach((ep, index) => {
@@ -577,7 +573,7 @@ function generateEpisodeList() {
 
         listContainer.appendChild(item);
     });
-    
+
     const firstEpisodeData = releasedEpisodes[0];
     if (firstEpisodeData) {
         const firstEpisodeElement = listContainer.querySelector(`.episode-item[data-episode-number='${firstEpisodeData['Episódio']}']`);
@@ -603,14 +599,14 @@ function checkAndShowNewEpisodeToast() {
     const latestEpisode = releasedEpisodes[0];
     const [day, month, year] = latestEpisode['Data lançamento'].split('/');
     const releaseDate = new Date(year, month - 1, day);
-    
+
     const diffTime = today - releaseDate;
     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
 
     if (diffDays >= 0 && diffDays <= 5) {
         setTimeout(() => {
             toast.classList.add('show');
-        }, 1000); 
+        }, 1000);
     }
 }
 
@@ -635,11 +631,11 @@ function updateCustoCategoriaChartVisibility(showPorPessoa) {
 // --- INITIALIZATION ---
 
 document.addEventListener('DOMContentLoaded', () => {
-    // O resto da sua inicialização (gráficos, etc.) vai aqui...
+    // Inicializa toda a UI que não depende do Service Worker
     Chart.register(ChartDataLabels);
     setupCollapsibleSections();
     startCountdown();
-    generateEpisodeList(); 
+    generateEpisodeList();
     checkAndShowNewEpisodeToast();
 
     navItems.forEach(item => {
@@ -654,24 +650,21 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (toast && closeToastBtn && toastButton) {
         closeToastBtn.addEventListener('click', () => toast.classList.remove('show'));
-
         toastButton.addEventListener('click', () => {
             const geralNavItem = document.querySelector('.nav-item[data-page="page-geral"]');
             if (geralNavItem) {
                 switchPage(geralNavItem.dataset.page, geralNavItem.dataset.title);
             }
-            
             setTimeout(() => {
                 const podcastCard = document.getElementById('podcast-card');
                 const navMenu = document.querySelector('.top-nav');
                 if (podcastCard && navMenu) {
                     const navHeight = navMenu.offsetHeight;
                     const cardTopPosition = podcastCard.offsetTop;
-                    const targetScrollPosition = cardTopPosition - navHeight - 16; 
+                    const targetScrollPosition = cardTopPosition - navHeight - 16;
                     window.scrollTo({ top: targetScrollPosition, behavior: 'smooth' });
                 }
-            }, 100); 
-            
+            }, 100);
             toast.classList.remove('show');
         });
     }
@@ -695,29 +688,31 @@ document.addEventListener('DOMContentLoaded', () => {
     const initialPageId = 'page-geral';
     const initialTitleElement = document.querySelector(`.nav-item[data-page="${initialPageId}"]`);
     if (initialTitleElement && initialTitleElement.dataset.title) {
-         switchPage(initialPageId, initialTitleElement.dataset.title);
+        switchPage(initialPageId, initialTitleElement.dataset.title);
     } else {
-        switchPage(initialPageId, 'Visão Geral'); 
+        switchPage(initialPageId, 'Visão Geral');
         console.warn(`Initial navigation item for page "${initialPageId}" not found. Using default title.`);
     }
-});
 
-// **NOVA ABORDAGEM DE INICIALIZAÇÃO DO SERVICE WORKER**
-// Isso é executado assim que o script é carregado, não esperando pelo DOMContentLoaded
-if ('serviceWorker' in navigator) {
-    // Usamos navigator.serviceWorker.ready para garantir que o SW esteja ativo
-    navigator.serviceWorker.ready.then(registration => {
-        console.log('Service Worker is active and ready.');
-        
-        // Agora que temos certeza que o SW está pronto, inicializamos a UI de notificação
-        initializeNotificationUI(registration);
-        
-        // E configuramos o listener para mensagens em primeiro plano
-        messaging.onMessage((payload) => {
-            console.log('Foreground message received.', payload);
-            // Lógica para mostrar o toast...
-        });
-    }).catch(err => {
-        console.error('Service Worker not ready:', err);
-    });
-}
+    // **LÓGICA DE INICIALIZAÇÃO DO SERVICE WORKER CORRIGIDA**
+    if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('/service-worker.js')
+            .then(registration => {
+                console.log('Service Worker registered successfully. Scope:', registration.scope);
+                // Espera o SW estar pronto e ativo
+                return navigator.serviceWorker.ready;
+            })
+            .then(readyRegistration => {
+                console.log('Service Worker is active and ready.');
+                // AGORA é seguro inicializar a UI de notificação
+                initializeNotificationUI(readyRegistration);
+                
+                messaging.onMessage((payload) => {
+                    console.log('Foreground message received.', payload);
+                });
+            })
+            .catch(err => {
+                console.error('Service Worker registration or ready failed:', err);
+            });
+    }
+});

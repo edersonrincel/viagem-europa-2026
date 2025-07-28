@@ -631,7 +631,7 @@ function updateCustoCategoriaChartVisibility(showPorPessoa) {
 
 // Função que inicializa a UI principal (tudo que não depende do Service Worker)
 function initializeUI() {
-    console.log('Initializing UI...');
+    console.log('UI Initializing...');
     Chart.register(ChartDataLabels);
     setupCollapsibleSections();
     startCountdown();
@@ -693,31 +693,38 @@ function initializeUI() {
         switchPage(initialPageId, 'Visão Geral');
         console.warn(`Initial navigation item for page "${initialPageId}" not found. Using default title.`);
     }
+    console.log('UI Initialization complete.');
 }
 
 // Inicia a UI assim que o HTML for carregado
 document.addEventListener('DOMContentLoaded', initializeUI);
 
-// Inicia o Service Worker e as notificações quando a página inteira carregar
-window.addEventListener('load', () => {
-    if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('/service-worker.js')
-            .then(registration => {
-                console.log('Service Worker registered successfully. Scope:', registration.scope);
-                // Espera o SW estar pronto e ativo
-                return navigator.serviceWorker.ready;
-            })
-            .then(readyRegistration => {
-                console.log('Service Worker is active and ready.');
-                // AGORA é seguro inicializar a UI de notificação
-                initializeNotificationUI(readyRegistration);
-                
-                messaging.onMessage((payload) => {
-                    console.log('Foreground message received.', payload);
-                });
-            })
-            .catch(err => {
-                console.error('Service Worker registration or ready failed:', err);
-            });
+// **NOVA ABORDAGEM DE INICIALIZAÇÃO DO SERVICE WORKER**
+// Esta função é chamada quando a página termina de carregar
+async function main() {
+    console.log('Window loaded. Starting Service Worker setup...');
+    if (!('serviceWorker' in navigator)) {
+        console.log('Service Worker not supported.');
+        return;
     }
-});
+
+    try {
+        const registration = await navigator.serviceWorker.register('/service-worker.js');
+        console.log('Service Worker registration promise resolved. Scope:', registration.scope);
+
+        console.log('Waiting for Service Worker to be ready...');
+        const readyRegistration = await navigator.serviceWorker.ready;
+        console.log('Service Worker is active and ready.');
+        
+        // Agora é seguro inicializar a UI de notificação e o listener de mensagens
+        initializeNotificationUI(readyRegistration);
+        messaging.onMessage((payload) => {
+            console.log('Foreground message received.', payload);
+        });
+
+    } catch (err) {
+        console.error('A failure occurred during Service Worker setup:', err);
+    }
+}
+
+window.addEventListener('load', main);

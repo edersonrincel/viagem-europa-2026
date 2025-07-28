@@ -29,7 +29,7 @@ try {
         const notificationTitle = payload.notification.title;
         const notificationOptions = {
             body: payload.notification.body,
-            icon: payload.notification.icon || '/images/icons/icon-192x192.png',
+            icon: payload.notification.icon,/* || '/images/icons/icon-192x192.png',*/
             badge: undefined, /*'/images/icons/icon-grupo-40x40.png',*/
             image: undefined,
             data: { url: payload.data.link || '/' } // No v8, o link pode vir em `payload.data`

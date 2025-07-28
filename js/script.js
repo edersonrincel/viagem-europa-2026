@@ -98,7 +98,7 @@ if (closeInstallBannerButton) {
 // --- NOTIFICATION LOGIC ---
 
 async function sendTokenToServer(token) {
-    const serverUrl = 'http://localhost:3000/register-token';
+    const serverUrl = 'https://servidor-viagem-europa-2026.onrender.com/register-token';
     try {
         await fetch(serverUrl, {
             method: 'POST',

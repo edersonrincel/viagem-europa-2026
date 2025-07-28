@@ -3,7 +3,6 @@ importScripts('https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js'
 importScripts('https://www.gstatic.com/firebasejs/9.22.1/firebase-messaging-compat.js');
 
 // --- Configuração do Firebase ---
-// COLE AQUI O SEU OBJETO firebaseConfig
 const firebaseConfig = {
     apiKey: "AIzaSyDRf55_pNkz3FqMMm93jFwqEwVfx7AtH_c",
     authDomain: "viagem-europa-2026.firebaseapp.com",
@@ -18,7 +17,6 @@ firebase.initializeApp(firebaseConfig);
 const messaging = firebase.messaging();
 
 // --- Lógica de Notificações em Segundo Plano ---
-// Este código lida com notificações push quando o app está fechado ou em segundo plano.
 messaging.onBackgroundMessage((payload) => {
   console.log('[Service Worker] Received background message ', payload);
   
@@ -28,7 +26,7 @@ messaging.onBackgroundMessage((payload) => {
     icon: payload.notification.icon || '/images/icons/icon-192x192.png',
     badge: '/images/icons/icon-grupo-40x40.png',
     data: {
-        url: payload.fcmOptions.link || '/' // URL para abrir ao clicar
+        url: payload.fcmOptions.link || '/'
     }
   };
 
@@ -37,7 +35,6 @@ messaging.onBackgroundMessage((payload) => {
 
 
 // --- Lógica de Caching e Ciclo de Vida ---
-// ATENÇÃO: Mudei o nome do cache para 'v2' para forçar a atualização.
 const CACHE_NAME = 'viagem-app-cache-v2';
 const URLS_TO_CACHE = [
   '/',

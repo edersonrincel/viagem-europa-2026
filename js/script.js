@@ -155,7 +155,6 @@ function initializeNotificationUI(registration) {
         if (notificationBanner) notificationBanner.style.display = 'flex';
     } else {
         console.log('Not showing notification banner. Standalone:', isRunningStandalone(), 'Permission:', Notification.permission);
-        // Se a permissão já foi dada, tenta pegar o token mesmo assim
         if (Notification.permission === 'granted') {
             getFCMToken(registration);
         }
@@ -630,8 +629,9 @@ function updateCustoCategoriaChartVisibility(showPorPessoa) {
 
 // --- INITIALIZATION ---
 
-document.addEventListener('DOMContentLoaded', () => {
-    // Inicializa toda a UI que não depende do Service Worker
+// Função que inicializa a UI principal (tudo que não depende do Service Worker)
+function initializeUI() {
+    console.log('Initializing UI...');
     Chart.register(ChartDataLabels);
     setupCollapsibleSections();
     startCountdown();
@@ -693,8 +693,13 @@ document.addEventListener('DOMContentLoaded', () => {
         switchPage(initialPageId, 'Visão Geral');
         console.warn(`Initial navigation item for page "${initialPageId}" not found. Using default title.`);
     }
+}
 
-    // **LÓGICA DE INICIALIZAÇÃO DO SERVICE WORKER CORRIGIDA**
+// Inicia a UI assim que o HTML for carregado
+document.addEventListener('DOMContentLoaded', initializeUI);
+
+// Inicia o Service Worker e as notificações quando a página inteira carregar
+window.addEventListener('load', () => {
     if ('serviceWorker' in navigator) {
         navigator.serviceWorker.register('/service-worker.js')
             .then(registration => {

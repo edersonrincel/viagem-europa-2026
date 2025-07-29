@@ -65,14 +65,37 @@ const btnPeloGrupo = document.getElementById('btnPeloGrupo');
 
 // --- PWA INSTALLATION LOGIC ---
 
+// Helper function to detect iOS
+const isIOS = () => {
+  return [
+    'iPad Simulator',
+    'iPhone Simulator',
+    'iPod Simulator',
+    'iPad',
+    'iPhone',
+    'iPod'
+  ].includes(navigator.platform)
+  // Also check for 'MacIntel' and multitouch support, which can indicate an iPad on recent macOS
+  || (navigator.userAgent.includes("Mac") && "ontouchend" in document)
+}
+
+// Helper function to check if the app is in standalone mode (installed)
+const isInStandaloneMode = () => ('standalone' in window.navigator) && (window.navigator.standalone);
+
+// Logic for Android/Desktop Chrome (non-iOS devices)
 window.addEventListener('beforeinstallprompt', (e) => {
+    // Prevent the mini-infobar from appearing on mobile
     e.preventDefault();
+    // Stash the event so it can be triggered later.
     deferredPrompt = e;
-    if (installBanner) {
+    // Show the custom install banner only if it's not an iOS device
+    if (installBanner && !isIOS()) {
+        console.log('beforeinstallprompt fired for non-iOS device.');
         installBanner.classList.add('show');
     }
 });
 
+// Logic for the install button (for non-iOS)
 if (installButton) {
     installButton.addEventListener('click', async () => {
         if (installBanner) {
@@ -87,6 +110,36 @@ if (installButton) {
     });
 }
 
+// Logic for iOS devices
+// This runs on page load
+if (isIOS() && !isInStandaloneMode()) {
+    console.log('iOS device detected, not in standalone mode. Showing iOS install instructions.');
+    if (installBanner) {
+        // Find the elements within the banner to modify them
+        const bannerText = installBanner.querySelector('p.font-semibold');
+        const bannerSubText = installBanner.querySelector('p.text-sm');
+        
+        // Change the text to provide iOS-specific instructions
+        if (bannerText) {
+            bannerText.textContent = 'Instale o App no seu iPhone';
+        }
+        if (bannerSubText) {
+            // Use innerHTML to include a small share icon image for clarity
+            bannerSubText.innerHTML = `Toque em <svg class="inline-block h-5 w-5 -mt-1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path d="M13 4.5a2.5 2.5 0 11.702 4.283l-4.426 2.556a2.504 2.504 0 010 1.322l4.426 2.556A2.5 2.5 0 1114.5 18a2.5 2.5 0 01-2.47-2.161l-4.427-2.556a2.5 2.5 0 010-1.566l4.427-2.556A2.5 2.5 0 0113 4.5zM5.5 11a2.5 2.5 0 100-5 2.5 2.5 0 000 5z" /></svg> e depois em "Adicionar à Tela de Início".`;
+        }
+        
+        // Hide the original "Install" button as it's not needed for iOS
+        if (installButton) {
+            installButton.style.display = 'none';
+        }
+        
+        // Show the modified banner
+        installBanner.classList.add('show');
+    }
+}
+
+
+// Logic for the close button (works for all devices)
 if (closeInstallBannerButton) {
     closeInstallBannerButton.addEventListener('click', () => {
         if (installBanner) {
@@ -94,6 +147,7 @@ if (closeInstallBannerButton) {
         }
     });
 }
+
 
 // --- NOTIFICATION LOGIC ---
 

@@ -763,38 +763,31 @@ async function serviceWorkerSetup() {
     }
 
     try {
-        // Registra o service worker
+        // Regista o service worker. Retorna um objeto de registo.
         const registration = await navigator.serviceWorker.register('/service-worker.js');
         console.log('Service Worker registered with scope:', registration.scope);
 
-        // Esta função inicializa os recursos que dependem de um SW ativo (como notificações)
-        const initializeDependentFeatures = (reg) => {
-            console.log('Service Worker is active and controlling the page.');
-            initializeNotificationUI(reg);
-            messaging.onMessage((payload) => {
-                console.log('Foreground message received.', payload);
-            });
-        };
+        // A promessa navigator.serviceWorker.ready resolve quando um service worker
+        // foi registado com sucesso e está no estado 'active'.
+        // Este é o ponto mais fiável para inicializar funcionalidades que dependem dele.
+        await navigator.serviceWorker.ready;
+        
+        console.log('Service Worker is active and ready.');
+        
+        // Agora que o SW está pronto, inicializa funcionalidades como notificações.
+        initializeNotificationUI(registration);
+        
+        // Configura o listener de mensagens em primeiro plano.
+        messaging.onMessage((payload) => {
+            console.log('Foreground message received.', payload);
+            // Opcionalmente, pode manipular a mensagem em primeiro plano mostrando um toast/notificação personalizado.
+        });
 
-        // Verifica se um service worker já está controlando a página.
-        // Isso acontece em todas as aberturas do app, exceto na primeira.
-        if (navigator.serviceWorker.controller) {
-            console.log('A service worker is already in control.');
-            initializeDependentFeatures(registration);
-        } else {
-            // Se não houver um controlador, significa que é a primeira vez que o SW está ativando.
-            // Aguardamos o evento 'controllerchange', que dispara quando o novo SW assume o controle.
-            console.log('Waiting for a service worker to take control...');
-            navigator.serviceWorker.addEventListener('controllerchange', () => {
-                console.log('Controller changed. New service worker is now in control.');
-                // Usamos { once: true } para que este listener seja executado apenas uma vez.
-                initializeDependentFeatures(registration);
-            }, { once: true });
-        }
     } catch (err) {
         console.error('Service Worker setup failed:', err);
     }
 }
+
 
 // Adiciona o listener para o evento 'load' da janela
 window.addEventListener('load', serviceWorkerSetup);

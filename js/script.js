@@ -125,7 +125,7 @@ if (isIOS() && !isInStandaloneMode()) {
         }
         if (bannerSubText) {
             // Use innerHTML to include a small share icon image for clarity
-            bannerSubText.innerHTML = `Toque em <svg class="inline-block h-5 w-5 -mt-1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path d="M13 4.5a2.5 2.5 0 11.702 4.283l-4.426 2.556a2.504 2.504 0 010 1.322l4.426 2.556A2.5 2.5 0 1114.5 18a2.5 2.5 0 01-2.47-2.161l-4.427-2.556a2.5 2.5 0 010-1.566l4.427-2.556A2.5 2.5 0 0113 4.5zM5.5 11a2.5 2.5 0 100-5 2.5 2.5 0 000 5z" /></svg> e depois em "Adicionar à Tela de Início".`;
+            bannerSubText.innerHTML = `Use o Safari, toque em <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6"><path stroke-linecap="round" stroke-linejoin="round" d="M9 8.25H7.5a2.25 2.25 0 0 0-2.25 2.25v9a2.25 2.25 0 0 0 2.25 2.25h9a2.25 2.25 0 0 0 2.25-2.25v-9a2.25 2.25 0 0 0-2.25-2.25H15m0-3-3-3m0 0-3 3m3-3V15"/></svg> e depois em "Adicionar à Tela de Início".`;
         }
         
         // Hide the original "Install" button as it's not needed for iOS

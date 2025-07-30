@@ -77,7 +77,15 @@ async function loadPage(pageName) {
         const content = await response.text();
         mainContent.innerHTML = content;
         
-        // Após carregar o conteúdo, inicializa os componentes específicos da página
+        // CORREÇÃO: Garante que a nova seção carregada fique visível
+        const newSection = mainContent.querySelector('.page-section');
+        if (newSection) {
+            // Adiciona um pequeno atraso para a animação de fade-in funcionar
+             setTimeout(() => {
+                newSection.classList.add('active');
+            }, 10);
+        }
+
         initializePageComponents(pageName);
 
     } catch (error) {

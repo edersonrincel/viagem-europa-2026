@@ -38,7 +38,7 @@ try {
     });
 
     // --- Lógica de Caching e Ciclo de Vida ---
-    const CACHE_NAME = 'viagem-app-cache-v8'; // Versão do cache incrementada
+    const CACHE_NAME = 'viagem-app-cache-v9'; // Versão do cache incrementada
     const URLS_TO_CACHE = [
       '/',
       'index.html',

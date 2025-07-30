@@ -1,21 +1,15 @@
 // js/modules/podcast.js
 
 /**
- * @file Gerencia a lógica do podcast: exibe a lista, controla o player e mostra o toast de novo episódio.
+ * @file Gerencia a lógica do podcast: exibe a lista, controla o player e verifica se há novos episódios.
  */
 
 import { podcastEpisodes } from './data.js';
-import { switchPage } from './ui.js';
 
 let toastDismissedThisSession = false;
 
 // --- FUNÇÕES HELPER ---
 
-/**
- * Converte uma string de data "dd/mm/yyyy" para um objeto Date.
- * @param {string} dateString - A data no formato "dd/mm/yyyy".
- * @returns {Date}
- */
 const parseDate = (dateString) => {
     const [day, month, year] = dateString.split('/');
     return new Date(year, month - 1, day);
@@ -35,7 +29,7 @@ function playTrack(trackId, token, clickedElement, autoplay = true) {
     if (clickedElement) clickedElement.classList.add('active');
 }
 
-function generateEpisodeList() {
+export function generateEpisodeList() {
     const listContainer = document.getElementById('episode-list');
     if (!listContainer) return;
 
@@ -80,7 +74,7 @@ function generateEpisodeList() {
     }
 }
 
-function checkAndShowNewEpisodeToast() {
+export function checkAndShowNewEpisodeToast() {
     const toast = document.getElementById('new-episode-toast');
     if (!toast || toastDismissedThisSession) return;
 
@@ -110,33 +104,11 @@ function checkAndShowNewEpisodeToast() {
     }
 }
 
-function setupToast() {
+// Esta função é usada pelo módulo UI para controlar o estado do toast
+export function dismissToast() {
     const toast = document.getElementById('new-episode-toast');
-    const closeToastBtn = document.getElementById('close-toast');
-    const toastButton = document.getElementById('toast-button');
-    if (toast && closeToastBtn && toastButton) {
-        const dismissToast = () => {
-            toast.style.top = '-100%';
-            toastDismissedThisSession = true;
-        };
-
-        closeToastBtn.addEventListener('click', dismissToast);
-
-        toastButton.addEventListener('click', () => {
-            switchPage('geral');
-            setTimeout(() => {
-                const podcastCard = document.getElementById('podcast-card');
-                if (podcastCard) podcastCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
-            }, 200);
-            dismissToast();
-        });
+    if(toast) {
+       toast.style.top = '-100%';
+       toastDismissedThisSession = true;
     }
-}
-
-// --- FUNÇÃO DE INICIALIZAÇÃO EXPORTADA ---
-
-export function initializePodcast() {
-    generateEpisodeList();
-    checkAndShowNewEpisodeToast();
-    setupToast();
 }

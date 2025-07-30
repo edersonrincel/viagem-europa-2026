@@ -5,7 +5,7 @@
  * carregamento de conteúdo dinâmico e componentes interativos.
  */
 
-import { initializePodcast } from './podcast.js';
+import { generateEpisodeList, checkAndShowNewEpisodeToast, dismissToast } from './podcast.js';
 import * as charts from './charts.js';
 
 // --- SELETORES DE ELEMENTOS DOM ---
@@ -14,10 +14,6 @@ const navItems = document.querySelectorAll('.nav-item');
 
 // --- FUNÇÕES DE NAVEGAÇÃO E CARREGAMENTO ---
 
-/**
- * Carrega o conteúdo de uma página HTML para a área principal.
- * @param {string} pageName - O nome da página a ser carregada (ex: 'geral').
- */
 async function loadPage(pageName) {
     if (!mainContent) return;
     
@@ -44,10 +40,6 @@ async function loadPage(pageName) {
     }
 }
 
-/**
- * Lida com a troca de páginas, atualizando a UI.
- * @param {string} pageId - O ID da página para mostrar.
- */
 export function switchPage(pageId) {
     navItems.forEach(item => {
         item.classList.toggle('active', item.dataset.page === pageId);
@@ -60,16 +52,13 @@ export function switchPage(pageId) {
 
 // --- INICIALIZAÇÃO DE COMPONENTES DE PÁGINA ---
 
-/**
- * Inicializa os componentes JavaScript necessários para uma página específica.
- * @param {string} pageName - O nome da página que foi carregada.
- */
 function initializePageComponents(pageName) {
     setupCollapsibleSections(); 
 
     if (pageName === 'geral') {
         startCountdown();
-        initializePodcast();
+        generateEpisodeList();
+        checkAndShowNewEpisodeToast();
     }
     
     if (pageName === 'custos') {
@@ -129,10 +118,15 @@ function startCountdown() {
         const now = new Date().getTime();
         const distance = countDownDate - now;
 
-        document.getElementById("days").innerText = Math.floor(distance / (1000 * 60 * 60 * 24));
-        document.getElementById("hours").innerText = String(Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))).padStart(2, '0');
-        document.getElementById("minutes").innerText = String(Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60))).padStart(2, '0');
-        document.getElementById("seconds").innerText = String(Math.floor((distance % (1000 * 60)) / 1000)).padStart(2, '0');
+        const daysEl = document.getElementById("days");
+        const hoursEl = document.getElementById("hours");
+        const minutesEl = document.getElementById("minutes");
+        const secondsEl = document.getElementById("seconds");
+
+        if(daysEl) daysEl.innerText = Math.floor(distance / (1000 * 60 * 60 * 24));
+        if(hoursEl) hoursEl.innerText = String(Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))).padStart(2, '0');
+        if(minutesEl) minutesEl.innerText = String(Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60))).padStart(2, '0');
+        if(secondsEl) secondsEl.innerText = String(Math.floor((distance % (1000 * 60)) / 1000)).padStart(2, '0');
 
         if (distance < 0) {
             clearInterval(interval);
@@ -143,6 +137,26 @@ function startCountdown() {
     }, 1000);
 }
 
+function setupToastInteractions() {
+    const closeToastBtn = document.getElementById('close-toast');
+    const toastButton = document.getElementById('toast-button');
+    
+    if (closeToastBtn) {
+        closeToastBtn.addEventListener('click', dismissToast);
+    }
+
+    if (toastButton) {
+        toastButton.addEventListener('click', () => {
+            switchPage('geral');
+            setTimeout(() => {
+                const podcastCard = document.getElementById('podcast-card');
+                if (podcastCard) podcastCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }, 200);
+            dismissToast();
+        });
+    }
+}
+
 
 // --- FUNÇÃO DE INICIALIZAÇÃO EXPORTADA ---
 
@@ -150,6 +164,8 @@ export function initializeUI() {
     navItems.forEach(item => {
         item.addEventListener('click', () => switchPage(item.dataset.page));
     });
+    
+    setupToastInteractions();
     
     // Carrega a página inicial
     switchPage('geral');

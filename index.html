@@ -39,7 +39,7 @@
         </div>
     </div>
     
-    <!-- Notification Permission Banner (pode ser controlado via JS se necessário) -->
+    <!-- Notification Permission Banner -->
     <div id="notification-banner" class="fixed top-16 left-0 right-0 bg-amber-400 text-amber-900 p-3 flex-col md:flex-row justify-between items-center shadow-lg text-center" style="display: none;">
         <p class="mb-2 md:mb-0 md:mr-4">
             <i class="fas fa-bell"></i>
@@ -92,8 +92,9 @@
         </div>
     </div>
     
-    <!-- Firebase SDK (Ainda necessário para o Service Worker) -->
-    <!-- Não é mais necessário carregar aqui se o SW usa importScripts -->
+    <!-- Firebase SDK (v9 compat) - Carregar ANTES do main.js -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-messaging-compat.js"></script>
 
     <!-- Link to your new main JavaScript file as a module -->
     <script type="module" src="js/main.js"></script>

@@ -22,6 +22,7 @@ const enableNotificationsButton = document.getElementById('enable-notifications-
 const closeNotificationBannerButton = document.getElementById('close-notification-banner');
 const mainContent = document.getElementById('main-content');
 const navItems = document.querySelectorAll('.nav-item');
+let toastDismissedThisSession = false; // Flag para controlar a exibição do toast
 
 // Dados para os gráficos e podcast
 const numeroDeViajantes = 4;
@@ -520,7 +521,7 @@ function generateEpisodeList() {
 
 function checkAndShowNewEpisodeToast() {
     const toast = document.getElementById('new-episode-toast');
-    if (!toast) return;
+    if (!toast || toastDismissedThisSession) return; // Não mostrar se já foi dispensado
 
     const today = new Date();
     today.setHours(0, 0, 0, 0);
@@ -544,7 +545,6 @@ function checkAndShowNewEpisodeToast() {
     if (diffDays >= 0 && diffDays <= 5) {
         setTimeout(() => {
             toast.style.top = '5rem';
-            // Also update toast content if needed
             const toastTitle = toast.querySelector('.font-bold');
             if(toastTitle) toastTitle.textContent = `Novo episódio: ${latestEpisode['Título']}`;
         }, 1000);
@@ -564,14 +564,20 @@ document.addEventListener('DOMContentLoaded', () => {
     const closeToastBtn = document.getElementById('close-toast');
     const toastButton = document.getElementById('toast-button');
     if (toast && closeToastBtn && toastButton) {
-        closeToastBtn.addEventListener('click', () => toast.style.top = '-100%');
+        const dismissToast = () => {
+            toast.style.top = '-100%';
+            toastDismissedThisSession = true; // Marca como dispensado
+        };
+
+        closeToastBtn.addEventListener('click', dismissToast);
+
         toastButton.addEventListener('click', () => {
             switchPage('geral');
             setTimeout(() => {
                 const podcastCard = document.getElementById('podcast-card');
                 if (podcastCard) podcastCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
             }, 200);
-            toast.style.top = '-100%';
+            dismissToast(); // Dispensa o toast ao clicar no botão principal
         });
     }
 

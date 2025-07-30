@@ -33,7 +33,7 @@ const podcastEpisodes = [
     { "Episódio": 1, "Data lançamento": "07/06/2025", "Título": "A Origem da aventura", "Narrador": "Bruna", "Duração": "3:03", "trackId": "2109241797", "token": "I0JucbUhfCc" },
     { "Episódio": 2, "Data lançamento": "21/06/2025", "Título": "O Mapa da viagem", "Narrador": "Diego", "Duração": "3:50", "trackId": "2109241770", "token": "lPnekm8yTs2" },
     { "Episódio": 3, "Data lançamento": "05/07/2025", "Título": "Passaportes em dia", "Narrador": "Giovana", "Duração": "4:09", "trackId": "2109241779", "token": "Oxie7YtJM03" },
-    { "Episódio": 4, "Data lançamento": "19/07/2025", "Título": "As siglas da viagem", "Narrador": "Eder", "Duração": "4:01", "trackId": "2109241794", "token": "UDBYOZgZ5tE" },
+    { "Episódio": 4, "Data lançamento": "29/07/2025", "Título": "As siglas da viagem", "Narrador": "Eder", "Duração": "4:01", "trackId": "2109241794", "token": "UDBYOZgZ5tE" },
     { "Episódio": 5, "Data lançamento": "02/08/2025", "Título": "Nossa rede de segurança", "Narrador": "Bruna", "Duração": "3:52", "trackId": "2109241764", "token": "x0MUpRDm1jO" },
     { "Episódio": 6, "Data lançamento": "16/08/2025", "Título": "Libras, Euros & Cartões", "Narrador": "Diego", "Duração": "4:22", "trackId": "2109459120", "token": "WntGp7nwrSt" },
     { "Episódio": 7, "Data lançamento": "30/08/2025", "Título": "Conectados na Europa", "Narrador": "Giovana", "Duração": "4:39", "trackId": "2109241767", "token": "nCEgXnp8PTk" },
@@ -53,7 +53,7 @@ const podcastEpisodes = [
     { "Episódio": 21, "Data lançamento": "03/01/2026", "Título": "A viagem de volta", "Narrador": "Bruna", "Duração": "3:14", "trackId": "2109241809", "token": "GTgyZ48GE1z" },
     { "Episódio": 22, "Data lançamento": "10/01/2026", "Título": "As regras das tarifas", "Narrador": "Diego", "Duração": "3:46", "trackId": "2109241827", "token": "PNzCktX4Sbe" },
     { "Episódio": 23, "Data lançamento": "17/01/2026", "Título": "Checklist final", "Narrador": "Giovana", "Duração": "4:07", "trackId": "2109462783", "token": "LJSbjMeqq7h" }
-].sort((a, b) => b['Episódio'] - a['Episódio']);
+];
 
 // Instâncias dos gráficos
 let appCustoTotalChartInstance = null;
@@ -462,6 +462,16 @@ function playTrack(trackId, token, clickedElement, autoplay = true) {
     if (clickedElement) clickedElement.classList.add('active');
 }
 
+/**
+ * Helper function to parse dd/mm/yyyy date strings into Date objects.
+ * @param {string} dateString - The date string in "dd/mm/yyyy" format.
+ * @returns {Date}
+ */
+const parseDate = (dateString) => {
+    const [day, month, year] = dateString.split('/');
+    return new Date(year, month - 1, day);
+};
+
 function generateEpisodeList() {
     const listContainer = document.getElementById('episode-list');
     if (!listContainer) return;
@@ -469,9 +479,13 @@ function generateEpisodeList() {
     const today = new Date();
     today.setHours(0, 0, 0, 0);
 
-    const releasedEpisodes = podcastEpisodes.filter(ep => {
-        const [day, month, year] = ep['Data lançamento'].split('/');
-        return new Date(year, month - 1, day) <= today;
+    // Sort episodes by release date in descending order to get the latest first
+    const sortedEpisodes = [...podcastEpisodes].sort((a, b) => {
+        return parseDate(b['Data lançamento']) - parseDate(a['Data lançamento']);
+    });
+
+    const releasedEpisodes = sortedEpisodes.filter(ep => {
+        return parseDate(ep['Data lançamento']) <= today;
     });
 
     if (releasedEpisodes.length === 0) {
@@ -511,14 +525,29 @@ function checkAndShowNewEpisodeToast() {
     const today = new Date();
     today.setHours(0, 0, 0, 0);
 
-    const latestEpisode = podcastEpisodes[0];
-    const [day, month, year] = latestEpisode['Data lançamento'].split('/');
-    const releaseDate = new Date(year, month - 1, day);
+    // Sort to find the most recent episode
+    const sortedEpisodes = [...podcastEpisodes].sort((a, b) => {
+        return parseDate(b['Data lançamento']) - parseDate(a['Data lançamento']);
+    });
+    
+    // Filter for episodes that have been released
+    const releasedEpisodes = sortedEpisodes.filter(ep => parseDate(ep['Data lançamento']) <= today);
 
-    const diffDays = Math.ceil((today - releaseDate) / (1000 * 60 * 60 * 24));
+    if (releasedEpisodes.length === 0) return;
+
+    const latestEpisode = releasedEpisodes[0];
+    const releaseDate = parseDate(latestEpisode['Data lançamento']);
+
+    const diffTime = today - releaseDate;
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
 
     if (diffDays >= 0 && diffDays <= 5) {
-        setTimeout(() => toast.style.top = '5rem', 1000);
+        setTimeout(() => {
+            toast.style.top = '5rem';
+            // Also update toast content if needed
+            const toastTitle = toast.querySelector('.font-bold');
+            if(toastTitle) toastTitle.textContent = `Novo episódio: ${latestEpisode['Título']}`;
+        }, 1000);
     }
 }
 

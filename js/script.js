@@ -8,11 +8,11 @@ const firebaseConfig = {
     appId: "1:731813444174:web:389dc8d7dd58df5deca11f"
 };
 
+// Inicializa o Firebase
 const app = firebase.initializeApp(firebaseConfig);
 const messaging = firebase.messaging();
 
-
-// --- GLOBAL CONSTANTS AND VARIABLES ---
+// --- CONSTANTES E VARIÁVEIS GLOBAIS ---
 let deferredPrompt;
 const installBanner = document.getElementById('install-banner');
 const installButton = document.getElementById('install-button');
@@ -20,6 +20,10 @@ const closeInstallBannerButton = document.getElementById('close-install-banner')
 const notificationBanner = document.getElementById('notification-banner');
 const enableNotificationsButton = document.getElementById('enable-notifications-button');
 const closeNotificationBannerButton = document.getElementById('close-notification-banner');
+const mainContent = document.getElementById('main-content');
+const navItems = document.querySelectorAll('.nav-item');
+
+// Dados para os gráficos e podcast
 const numeroDeViajantes = 4;
 const custoTotalPorPessoaArray = [4468.94, 2771.315, 240.43];
 const custoCategoriaPorPessoaArray = [410.48, 3868.94, 189.52, 1633.9375, 918.978, 218.40, 240.43];
@@ -51,55 +55,107 @@ const podcastEpisodes = [
     { "Episódio": 23, "Data lançamento": "17/01/2026", "Título": "Checklist final", "Narrador": "Giovana", "Duração": "4:07", "trackId": "2109462783", "token": "LJSbjMeqq7h" }
 ].sort((a, b) => b['Episódio'] - a['Episódio']);
 
+// Instâncias dos gráficos
 let appCustoTotalChartInstance = null;
 let appCustoCategoriaChartInstance = null;
 let appPagamentoMensalChartInstance = null;
 
-const navItems = document.querySelectorAll('.nav-item');
-const pageSections = document.querySelectorAll('.page-section');
-const appTitle = document.getElementById('appTitle');
-const custoTotalTituloEl = document.getElementById('custoTotalTitulo');
-const custoCategoriaTituloEl = document.getElementById('custoCategoriaTitulo');
-const btnPorPessoa = document.getElementById('btnPorPessoa');
-const btnPeloGrupo = document.getElementById('btnPeloGrupo');
+// --- LÓGICA DE NAVEGAÇÃO E CARREGAMENTO DE PÁGINA ---
 
-// --- PWA INSTALLATION LOGIC ---
+/**
+ * Carrega o conteúdo de uma página HTML para a área principal.
+ * @param {string} pageName - O nome da página a ser carregada (ex: 'geral').
+ */
+async function loadPage(pageName) {
+    if (!mainContent) return;
+    
+    try {
+        const response = await fetch(`pages/${pageName}.html`);
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const content = await response.text();
+        mainContent.innerHTML = content;
+        
+        // Após carregar o conteúdo, inicializa os componentes específicos da página
+        initializePageComponents(pageName);
 
-// Helper function to detect iOS
-const isIOS = () => {
-  return [
-    'iPad Simulator',
-    'iPhone Simulator',
-    'iPod Simulator',
-    'iPad',
-    'iPhone',
-    'iPod'
-  ].includes(navigator.platform)
-  // Also check for 'MacIntel' and multitouch support, which can indicate an iPad on recent macOS
-  || (navigator.userAgent.includes("Mac") && "ontouchend" in document)
+    } catch (error) {
+        console.error(`Error loading page ${pageName}:`, error);
+        mainContent.innerHTML = `<div class="card text-center p-8"><p class="text-red-500 font-semibold">Erro ao carregar a página.</p><p class="text-slate-600 mt-2">Por favor, tente novamente.</p></div>`;
+    }
 }
 
-// Helper function to check if the app is in standalone mode (installed)
+/**
+ * Inicializa os componentes JavaScript necessários para uma página específica.
+ * @param {string} pageName - O nome da página que foi carregada.
+ */
+function initializePageComponents(pageName) {
+    setupCollapsibleSections(); // Sempre re-inicializa os acordeões
+
+    if (pageName === 'geral') {
+        startCountdown();
+        generateEpisodeList();
+        checkAndShowNewEpisodeToast();
+    }
+    
+    if (pageName === 'custos') {
+        // Adiciona listeners para os botões de toggle dos gráficos
+        const btnPorPessoa = document.getElementById('btnPorPessoa');
+        const btnPeloGrupo = document.getElementById('btnPeloGrupo');
+
+        if (btnPorPessoa && btnPeloGrupo) {
+            btnPorPessoa.addEventListener('click', () => {
+                btnPorPessoa.classList.add('active');
+                btnPeloGrupo.classList.remove('active');
+                updateCustoTotalChartVisibility(true);
+                updateCustoCategoriaChartVisibility(true);
+            });
+
+            btnPeloGrupo.addEventListener('click', () => {
+                btnPeloGrupo.classList.add('active');
+                btnPorPessoa.classList.remove('active');
+                updateCustoTotalChartVisibility(false);
+                updateCustoCategoriaChartVisibility(false);
+            });
+        }
+    }
+}
+
+/**
+ * Lida com a troca de páginas, atualizando a UI.
+ * @param {string} pageId - O ID da página para mostrar.
+ */
+function switchPage(pageId) {
+    // Atualiza o estado ativo na barra de navegação
+    navItems.forEach(item => {
+        item.classList.toggle('active', item.dataset.page === pageId);
+    });
+    
+    // Carrega o conteúdo da nova página
+    loadPage(pageId);
+    
+    // Rola a página para o topo
+    window.scrollTo(0, 0);
+}
+
+// --- LÓGICA DO PWA (INSTALAÇÃO) ---
+
+const isIOS = () => /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
 const isInStandaloneMode = () => ('standalone' in window.navigator) && (window.navigator.standalone);
 
-// Logic for Android/Desktop Chrome (non-iOS devices)
 window.addEventListener('beforeinstallprompt', (e) => {
-    // Prevent the mini-infobar from appearing on mobile
     e.preventDefault();
-    // Stash the event so it can be triggered later.
     deferredPrompt = e;
-    // Show the custom install banner only if it's not an iOS device
     if (installBanner && !isIOS()) {
-        console.log('beforeinstallprompt fired for non-iOS device.');
-        installBanner.classList.add('show');
+        installBanner.style.transform = 'translateY(0)';
     }
 });
 
-// Logic for the install button (for non-iOS)
 if (installButton) {
     installButton.addEventListener('click', async () => {
         if (installBanner) {
-            installBanner.classList.remove('show');
+            installBanner.style.transform = 'translateY(-150%)';
         }
         if (deferredPrompt) {
             deferredPrompt.prompt();
@@ -110,46 +166,26 @@ if (installButton) {
     });
 }
 
-// Logic for iOS devices
-// This runs on page load
 if (isIOS() && !isInStandaloneMode()) {
-    console.log('iOS device detected, not in standalone mode. Showing iOS install instructions.');
     if (installBanner) {
-        // Find the elements within the banner to modify them
         const bannerText = installBanner.querySelector('p.font-semibold');
         const bannerSubText = installBanner.querySelector('p.text-sm');
-        
-        // Change the text to provide iOS-specific instructions
-        if (bannerText) {
-            bannerText.textContent = 'Instale o App no seu iPhone';
-        }
-        if (bannerSubText) {
-            // Use innerHTML to include a small share icon image for clarity
-            bannerSubText.innerHTML = `Use o Safari, toque em <svg class="inline-block h-4 w-5 -mt-1" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9 8.25H7.5a2.25 2.25 0 0 0-2.25 2.25v9a2.25 2.25 0 0 0 2.25 2.25h9a2.25 2.25 0 0 0 2.25-2.25v-9a2.25 2.25 0 0 0-2.25-2.25H15m0-3-3-3m0 0-3 3m3-3V15"/></svg> e depois em "Adicionar à Tela de Início".`;
-        }
-        
-        // Hide the original "Install" button as it's not needed for iOS
-        if (installButton) {
-            installButton.style.display = 'none';
-        }
-        
-        // Show the modified banner
-        installBanner.classList.add('show');
+        if (bannerText) bannerText.textContent = 'Instale o App no seu iPhone';
+        if (bannerSubText) bannerSubText.innerHTML = `Use o Safari, toque em <svg class="inline-block h-4 w-5 -mt-1" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9 8.25H7.5a2.25 2.25 0 0 0-2.25 2.25v9a2.25 2.25 0 0 0 2.25 2.25h9a2.25 2.25 0 0 0 2.25-2.25v-9a2.25 2.25 0 0 0-2.25-2.25H15m0-3-3-3m0 0-3 3m3-3V15"/></svg> e depois em "Adicionar à Tela de Início".`;
+        if (installButton) installButton.style.display = 'none';
+        installBanner.style.transform = 'translateY(0)';
     }
 }
 
-
-// Logic for the close button (works for all devices)
 if (closeInstallBannerButton) {
     closeInstallBannerButton.addEventListener('click', () => {
         if (installBanner) {
-            installBanner.classList.remove('show');
+            installBanner.style.transform = 'translateY(-150%)';
         }
     });
 }
 
-
-// --- NOTIFICATION LOGIC ---
+// --- LÓGICA DE NOTIFICAÇÕES (FCM) ---
 
 async function sendTokenToServer(token) {
     const serverUrl = 'https://servidor-viagem-europa-2026.onrender.com/register-token';
@@ -167,7 +203,6 @@ async function sendTokenToServer(token) {
 
 function getFCMToken(registration) {
     const VAPID_KEY = 'BHrRmsDe1Y9ZiUXp9C7Nb2TwpGFl-HBVEO4ngpWwuK3rg2xZWvbvFzGixkL-JV_6nhuu8Ywn81Wqg8xr9hqjh98';
-
     messaging.getToken({ vapidKey: VAPID_KEY, serviceWorkerRegistration: registration })
         .then((currentToken) => {
             if (currentToken) {
@@ -182,36 +217,19 @@ function getFCMToken(registration) {
 }
 
 function requestNotificationPermission(registration) {
-    console.log('Requesting notification permission...');
-    if (Notification.permission === 'granted') {
-        console.log('Permission already granted.');
-        getFCMToken(registration);
-    } else if (Notification.permission === 'default') {
-        Notification.requestPermission().then((permission) => {
-            if (permission === 'granted') {
-                console.log('Permission was granted.');
-                getFCMToken(registration);
-            } else {
-                console.log('Permission was denied.');
-            }
-        });
-    }
-}
-
-function isRunningStandalone() {
-    return window.matchMedia('(display-mode: standalone)').matches;
+    Notification.requestPermission().then((permission) => {
+        if (permission === 'granted') {
+            getFCMToken(registration);
+        }
+    });
 }
 
 function initializeNotificationUI(registration) {
-    console.log('Initializing Notification UI...');
-    if (isRunningStandalone() && Notification.permission === 'default') {
-        console.log('Showing notification banner.');
+    const isStandalone = window.matchMedia('(display-mode: standalone)').matches;
+    if (isStandalone && Notification.permission === 'default') {
         if (notificationBanner) notificationBanner.style.display = 'flex';
-    } else {
-        console.log('Not showing notification banner. Standalone:', isRunningStandalone(), 'Permission:', Notification.permission);
-        if (Notification.permission === 'granted') {
-            getFCMToken(registration);
-        }
+    } else if (Notification.permission === 'granted') {
+        getFCMToken(registration);
     }
 
     if (enableNotificationsButton) {
@@ -228,8 +246,7 @@ function initializeNotificationUI(registration) {
     }
 }
 
-
-// --- CHART CONFIGURATION & OTHER FUNCTIONS ---
+// --- LÓGICA DOS GRÁFICOS ---
 
 function wrapLabel(str, maxWidth) {
     if (!str) return '';
@@ -306,185 +323,64 @@ const pagamentoMensalData = {
     }]
 };
 
-const tooltipTitleCallback = (tooltipItems) => {
-    const item = tooltipItems[0];
-    if (!item || !item.chart || !item.chart.data || !item.chart.data.labels || typeof item.dataIndex === 'undefined') {
-        return '';
-    }
-    let label = item.chart.data.labels[item.dataIndex];
-    return Array.isArray(label) ? label.join(' ') : label;
-};
-
 const commonChartOptions = (type) => ({
     responsive: true,
     maintainAspectRatio: false,
     plugins: {
-        legend: {
-            display: false,
-            position: 'top',
-            labels: { font: { size: 10 }, color: '#475569' }
-        },
+        legend: { display: false },
         tooltip: {
             backgroundColor: '#1e293b',
             titleColor: '#f0f4f8',
             bodyColor: '#cbd5e1',
             callbacks: {
-                title: tooltipTitleCallback,
-                label: function (context) {
+                title: (tooltipItems) => {
+                    const item = tooltipItems[0];
+                    if (!item || !item.chart.data.labels) return '';
+                    let label = item.chart.data.labels[item.dataIndex];
+                    return Array.isArray(label) ? label.join(' ') : label;
+                },
+                label: (context) => {
                     let label = context.dataset.label || '';
-                    if (label) {
-                        label = label.replace(/\s\(R\$\)$/, '') + ': ';
-                    }
-                    let value = 0;
-                    const chartType = context.chart.config.type;
-                    const indexAxis = context.chart.config.options.indexAxis;
-                    if (chartType === 'doughnut' || chartType === 'pie') {
-                        value = context.parsed;
-                    } else if (chartType === 'bar') {
-                        value = (indexAxis === 'y') ? context.parsed.x : context.parsed.y;
-                    } else if (chartType === 'line') {
-                        value = context.parsed.y;
-                    }
+                    label = label.replace(/\s\(R\$\)$/, '') + ': ';
+                    const value = context.parsed.y || context.parsed;
                     return typeof value === 'number' ? label + new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(value) : label;
                 }
             }
         },
-        datalabels: {
-            display: false
-        }
+        datalabels: { display: false }
     }
 });
 
-const custoTotalChartOptions = {
-    ...commonChartOptions('doughnut'),
-    plugins: {
-        ...commonChartOptions('doughnut').plugins,
-        legend: {
-            display: true,
-            position: 'bottom',
-            labels: { font: { size: 10 }, color: '#475569' }
-        },
-        datalabels: {
-            display: true,
-            formatter: (value, context) => {
-                if (context.chart.isDatasetVisible(context.datasetIndex)) {
-                    return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(value);
-                }
-                return '';
-            },
-            color: (context) => {
-                const bgColor = context.dataset.backgroundColor[context.dataIndex];
-                if (!bgColor) return '#000';
-                const r = parseInt(bgColor.slice(1, 3), 16);
-                const g = parseInt(bgColor.slice(3, 5), 16);
-                const b = parseInt(bgColor.slice(5, 7), 16);
-                return (0.2126 * r + 0.7152 * g + 0.0722 * b) > 120 ? '#1e293b' : '#FFFFFF';
-            },
-            font: { size: 10, weight: 'bold' }
-        }
+function createChart(canvasId, type, data, options) {
+    const canvas = document.getElementById(canvasId);
+    if (!canvas) {
+        console.error(`Canvas with id ${canvasId} not found.`);
+        return null;
     }
-};
+    return new Chart(canvas, { type, data, options });
+}
 
-const custoCategoriaChartOptions = {
-    ...commonChartOptions('bar'),
-    indexAxis: 'y',
-    plugins: {
-        ...commonChartOptions('bar').plugins,
-        legend: { display: false },
-        datalabels: {
-            display: (c) => c.dataset.data[c.dataIndex] > 0 && c.chart.isDatasetVisible(c.datasetIndex),
-            anchor: 'end',
-            align: (c) => (c.dataset.data[c.dataIndex] < Math.max(...c.dataset.data) * 0.25 ? 'right' : 'left'),
-            offset: 4,
-            color: (c) => {
-                const value = c.dataset.data[c.dataIndex];
-                const maxValue = Math.max(...c.dataset.data);
-                if (value < maxValue * 0.25) return '#334155';
-                const barColor = Array.isArray(c.dataset.backgroundColor) ? c.dataset.backgroundColor[c.dataIndex] : c.dataset.backgroundColor;
-                const getLuminance = (hex) => {
-                    if (!hex || hex.length < 7) return 128;
-                    hex = hex.replace('#', '');
-                    const r = parseInt(hex.substring(0, 2), 16), g = parseInt(hex.substring(2, 4), 16), b = parseInt(hex.substring(4, 6), 16);
-                    return 0.2126 * r + 0.7152 * g + 0.0722 * b;
-                };
-                return getLuminance(barColor) > 120 ? '#1e293b' : '#FFFFFF';
-            },
-            font: { size: 9, weight: '500' },
-            formatter: (value) => new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL', minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(value)
-        }
-    },
-    scales: {
-        x: { beginAtZero: true, ticks: { display: false, font: { size: 10 }, color: '#475569' } },
-        y: { ticks: { font: { size: 9 }, color: '#475569', autoSkip: false } }
-    }
-};
-
-const pagamentoMensalChartOptions = {
-    ...commonChartOptions('line'),
-    plugins: {
-        ...commonChartOptions('line').plugins,
-        datalabels: {
-            display: true,
-            anchor: 'end',
-            align: (c) => c.dataIndex % 2 === 0 ? 'top' : 'bottom',
-            offset: (c) => c.dataIndex % 2 === 0 ? 6 : 10,
-            color: '#4A5568',
-            font: { size: 8, weight: '600' },
-            formatter: (v) => new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(v)
-        }
-    },
-    scales: {
-        y: { beginAtZero: true, ticks: { display: false, font: { size: 10 }, color: '#475569' }, grid: { display: false } },
-        x: { ticks: { font: { size: 10 }, color: '#475569' } }
-    }
-};
-
-function switchPage(pageId, title) {
-    pageSections.forEach(section => {
-        section.classList.remove('active');
-        if (section.id === pageId) {
-            section.classList.add('active');
-            document.querySelector('main').scrollTop = 0;
-            window.scrollTo(0, 0);
-        }
-    });
-
-    navItems.forEach(item => {
-        item.classList.remove('active');
-        if (item.dataset.page === pageId) {
-            item.classList.add('active');
-        }
-    });
-
-    if (appTitle) appTitle.textContent = title;
-
-    if (pageId === 'page-custos') {
-        const graficosContent = document.getElementById('content-financeiro-graficos');
-        const parcelasContent = document.getElementById('content-financeiro-parcelas');
-        const isPorPessoaActive = btnPorPessoa && btnPorPessoa.classList.contains('active');
-
-        if (graficosContent && !graficosContent.classList.contains('hidden')) {
-            setTimeout(() => {
-                if (!appCustoTotalChartInstance) {
-                    appCustoTotalChartInstance = new Chart(document.getElementById('appCustoTotalChart'), { type: 'doughnut', data: custoTotalData, options: custoTotalChartOptions });
-                }
-                updateCustoTotalChartVisibility(isPorPessoaActive);
-
-                if (!appCustoCategoriaChartInstance) {
-                    appCustoCategoriaChartInstance = new Chart(document.getElementById('appCustoCategoriaChart'), { type: 'bar', data: custoCategoriaData, options: custoCategoriaChartOptions });
-                }
-                updateCustoCategoriaChartVisibility(isPorPessoaActive);
-            }, 50);
-        }
-        if (parcelasContent && !parcelasContent.classList.contains('hidden')) {
-            setTimeout(() => {
-                if (!appPagamentoMensalChartInstance) {
-                    appPagamentoMensalChartInstance = new Chart(document.getElementById('appPagamentoMensalChart'), { type: 'line', data: pagamentoMensalData, options: pagamentoMensalChartOptions });
-                }
-            }, 50);
-        }
+function updateCustoTotalChartVisibility(showPorPessoa) {
+    const custoTotalTituloEl = document.getElementById('custoTotalTitulo');
+    if (appCustoTotalChartInstance && custoTotalTituloEl) {
+        appCustoTotalChartInstance.data.datasets[0].hidden = !showPorPessoa;
+        appCustoTotalChartInstance.data.datasets[1].hidden = showPorPessoa;
+        appCustoTotalChartInstance.update();
+        custoTotalTituloEl.textContent = showPorPessoa ? 'Composição do Custo Total por Pessoa' : 'Composição do Custo Total do Grupo';
     }
 }
+
+function updateCustoCategoriaChartVisibility(showPorPessoa) {
+    const custoCategoriaTituloEl = document.getElementById('custoCategoriaTitulo');
+    if (appCustoCategoriaChartInstance && custoCategoriaTituloEl) {
+        appCustoCategoriaChartInstance.data.datasets[0].hidden = !showPorPessoa;
+        appCustoCategoriaChartInstance.data.datasets[1].hidden = showPorPessoa;
+        appCustoCategoriaChartInstance.update();
+        custoCategoriaTituloEl.textContent = showPorPessoa ? 'Custos Específicos por Pessoa' : 'Custos Específicos Totais do Grupo';
+    }
+}
+
+// --- FUNÇÕES DE INICIALIZAÇÃO DE COMPONENTES ---
 
 function setupCollapsibleSections() {
     const triggers = document.querySelectorAll('.collapsible-trigger');
@@ -493,32 +389,33 @@ function setupCollapsibleSections() {
         const content = document.getElementById(contentId);
         const icon = trigger.querySelector('.collapsible-icon');
 
-        if (!content) {
-            console.warn(`Collapsible content with ID '${contentId}' not found.`);
-            return;
-        }
-
         trigger.addEventListener('click', () => {
-            const isCurrentlyExpanded = trigger.getAttribute('aria-expanded') === 'true';
-            trigger.setAttribute('aria-expanded', !isCurrentlyExpanded);
+            const isExpanded = trigger.getAttribute('aria-expanded') === 'true';
+            trigger.setAttribute('aria-expanded', !isExpanded);
             content.classList.toggle('hidden');
-            if (icon) icon.classList.toggle('rotate-180');
+            icon.classList.toggle('rotate-180');
 
-            if (!isCurrentlyExpanded) {
+            // Se está abrindo e for a seção de gráficos, cria os gráficos
+            if (!isExpanded) {
                 setTimeout(() => {
                     if (contentId === 'content-financeiro-graficos') {
-                        const isPorPessoaActive = btnPorPessoa && btnPorPessoa.classList.contains('active');
                         if (appCustoTotalChartInstance) appCustoTotalChartInstance.destroy();
-                        appCustoTotalChartInstance = new Chart(document.getElementById('appCustoTotalChart'), { type: 'doughnut', data: custoTotalData, options: custoTotalChartOptions });
-                        if (btnPorPessoa) updateCustoTotalChartVisibility(isPorPessoaActive);
-
                         if (appCustoCategoriaChartInstance) appCustoCategoriaChartInstance.destroy();
-                        appCustoCategoriaChartInstance = new Chart(document.getElementById('appCustoCategoriaChart'), { type: 'bar', data: custoCategoriaData, options: custoCategoriaChartOptions });
-                        if (btnPorPessoa) updateCustoCategoriaChartVisibility(isPorPessoaActive);
+                        
+                        const custoTotalChartOptions = { ...commonChartOptions('doughnut'), plugins: { ...commonChartOptions('doughnut').plugins, legend: { display: true, position: 'bottom', labels: { font: { size: 10 }, color: '#475569' } }, datalabels: { display: true, formatter: (v) => new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(v), color: '#fff', font: { size: 10, weight: 'bold' } } } };
+                        const custoCategoriaChartOptions = { ...commonChartOptions('bar'), indexAxis: 'y', scales: { x: { beginAtZero: true, ticks: { display: false } }, y: { ticks: { font: { size: 9 }, color: '#475569', autoSkip: false } } }, plugins: { ...commonChartOptions('bar').plugins, datalabels: { display: (c) => c.dataset.data[c.dataIndex] > 0, anchor: 'end', align: 'right', offset: 4, color: '#334155', font: { size: 9 }, formatter: (v) => new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(v) } } };
+                        
+                        appCustoTotalChartInstance = createChart('appCustoTotalChart', 'doughnut', custoTotalData, custoTotalChartOptions);
+                        appCustoCategoriaChartInstance = createChart('appCustoCategoriaChart', 'bar', custoCategoriaData, custoCategoriaChartOptions);
+                        
+                        const isPorPessoaActive = document.getElementById('btnPorPessoa')?.classList.contains('active');
+                        updateCustoTotalChartVisibility(isPorPessoaActive);
+                        updateCustoCategoriaChartVisibility(isPorPessoaActive);
 
                     } else if (contentId === 'content-financeiro-parcelas') {
                         if (appPagamentoMensalChartInstance) appPagamentoMensalChartInstance.destroy();
-                        appPagamentoMensalChartInstance = new Chart(document.getElementById('appPagamentoMensalChart'), { type: 'line', data: pagamentoMensalData, options: pagamentoMensalChartOptions });
+                        const pagamentoMensalChartOptions = { ...commonChartOptions('line'), scales: { y: { beginAtZero: true, ticks: { display: false } }, x: { ticks: { font: { size: 10 }, color: '#475569' } } }, plugins: { ...commonChartOptions('line').plugins, datalabels: { display: true, anchor: 'end', align: 'top', color: '#4A5568', font: { size: 8, weight: '600' }, formatter: (v) => new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(v) } } };
+                        appPagamentoMensalChartInstance = createChart('appPagamentoMensalChart', 'line', pagamentoMensalData, pagamentoMensalChartOptions);
                     }
                 }, 50);
             }
@@ -528,37 +425,22 @@ function setupCollapsibleSections() {
 
 function startCountdown() {
     const countDownDate = new Date("Jan 22, 2026 00:00:00").getTime();
-    const countdownContainerNew = document.getElementById("countdown-container-new");
-
-    if (!countdownContainerNew) return;
-
-    const daysEl = document.getElementById("days");
-    const hoursEl = document.getElementById("hours");
-    const minutesEl = document.getElementById("minutes");
-    const secondsEl = document.getElementById("seconds");
-
-    if (!daysEl || !hoursEl || !minutesEl || !secondsEl) {
-        console.error("One or more countdown timer elements not found.");
-        return;
-    }
-
     const timerDiv = document.getElementById("countdown-timer-new");
+    if (!timerDiv) return;
 
-    const interval = setInterval(function () {
+    const interval = setInterval(() => {
         const now = new Date().getTime();
         const distance = countDownDate - now;
 
-        daysEl.innerText = Math.floor(distance / (1000 * 60 * 60 * 24));
-        hoursEl.innerText = String(Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))).padStart(2, '0');
-        minutesEl.innerText = String(Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60))).padStart(2, '0');
-        secondsEl.innerText = String(Math.floor((distance % (1000 * 60)) / 1000)).padStart(2, '0');
+        document.getElementById("days").innerText = Math.floor(distance / (1000 * 60 * 60 * 24));
+        document.getElementById("hours").innerText = String(Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))).padStart(2, '0');
+        document.getElementById("minutes").innerText = String(Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60))).padStart(2, '0');
+        document.getElementById("seconds").innerText = String(Math.floor((distance % (1000 * 60)) / 1000)).padStart(2, '0');
 
         if (distance < 0) {
             clearInterval(interval);
-            if (timerDiv) {
-                timerDiv.innerHTML = "<p class='text-green-500 font-bold py-2 text-xl'>A VIAGEM COMEÇOU!</p>";
-            }
-            const titleElement = countdownContainerNew.querySelector("h3");
+            timerDiv.innerHTML = "<p class='text-green-500 font-bold py-2 text-xl'>A VIAGEM COMEÇOU!</p>";
+            const titleElement = document.getElementById("countdown-container-new")?.querySelector("h3");
             if (titleElement) titleElement.style.display = 'none';
         }
     }, 1000);
@@ -570,15 +452,10 @@ function playTrack(trackId, token, clickedElement, autoplay = true) {
 
     const soundcloudUrl = `https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/${trackId}%3Fsecret_token%3Ds-${token}`;
     const params = `&color=%230ea5e9&auto_play=${autoplay}&hide_related=false&show_comments=false&show_user=false&show_reposts=false&show_teaser=false&visual=false`;
-
     playerFrame.src = soundcloudUrl + params;
 
-    document.querySelectorAll('.episode-item').forEach(item => {
-        item.classList.remove('active');
-    });
-    if (clickedElement) {
-        clickedElement.classList.add('active');
-    }
+    document.querySelectorAll('.episode-item').forEach(item => item.classList.remove('active'));
+    if (clickedElement) clickedElement.classList.add('active');
 }
 
 function generateEpisodeList() {
@@ -590,46 +467,35 @@ function generateEpisodeList() {
 
     const releasedEpisodes = podcastEpisodes.filter(ep => {
         const [day, month, year] = ep['Data lançamento'].split('/');
-        const releaseDate = new Date(year, month - 1, day);
-        return releaseDate <= today;
+        return new Date(year, month - 1, day) <= today;
     });
 
-    listContainer.innerHTML = '';
-
     if (releasedEpisodes.length === 0) {
-        listContainer.innerHTML = '<p class="text-center text-sm text-slate-500 py-4">Nenhum episódio lançado ainda. Volte em breve!</p>';
+        listContainer.innerHTML = '<p class="text-center text-sm text-slate-500 py-4">Nenhum episódio lançado ainda.</p>';
         return;
     }
 
-    releasedEpisodes.forEach((ep, index) => {
-        const item = document.createElement('div');
-        item.className = 'episode-item';
-        item.setAttribute('data-track-id', ep.trackId);
-        item.setAttribute('data-token', ep.token);
-        item.setAttribute('data-episode-number', ep['Episódio']);
-
-        let badgeHTML = (index === 0) ? '<span class="new-badge">NOVO</span>' : '';
-
-        item.innerHTML = `
-            ${badgeHTML}
+    listContainer.innerHTML = releasedEpisodes.map((ep, index) => `
+        <div class="episode-item" data-track-id="${ep.trackId}" data-token="${ep.token}" data-episode-number="${ep['Episódio']}">
+            ${index === 0 ? '<span class="new-badge">NOVO</span>' : ''}
             <div class="play-icon"><i class="fas fa-podcast"></i></div>
             <div class="episode-details">
                 <div class="episode-title">Ep ${ep['Episódio']}: ${ep['Título']}</div>
                 <div class="episode-meta">By ${ep.Narrador}</div>
             </div>
             <div class="episode-duration">${ep['Duração']}</div>
-        `;
+        </div>
+    `).join('');
 
+    listContainer.querySelectorAll('.episode-item').forEach(item => {
         item.addEventListener('click', () => {
-            playTrack(ep.trackId, ep.token, item, true);
+            playTrack(item.dataset.trackId, item.dataset.token, item, true);
         });
-
-        listContainer.appendChild(item);
     });
 
     const firstEpisodeData = releasedEpisodes[0];
     if (firstEpisodeData) {
-        const firstEpisodeElement = listContainer.querySelector(`.episode-item[data-episode-number='${firstEpisodeData['Episódio']}']`);
+        const firstEpisodeElement = listContainer.querySelector(`.episode-item`);
         playTrack(firstEpisodeData.trackId, firstEpisodeData.token, firstEpisodeElement, false);
     }
 }
@@ -641,153 +507,60 @@ function checkAndShowNewEpisodeToast() {
     const today = new Date();
     today.setHours(0, 0, 0, 0);
 
-    const releasedEpisodes = podcastEpisodes.filter(ep => {
-        const [day, month, year] = ep['Data lançamento'].split('/');
-        const releaseDate = new Date(year, month - 1, day);
-        return releaseDate <= today;
-    });
-
-    if (releasedEpisodes.length === 0) return;
-
-    const latestEpisode = releasedEpisodes[0];
+    const latestEpisode = podcastEpisodes[0];
     const [day, month, year] = latestEpisode['Data lançamento'].split('/');
     const releaseDate = new Date(year, month - 1, day);
 
-    const diffTime = today - releaseDate;
-    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    const diffDays = Math.ceil((today - releaseDate) / (1000 * 60 * 60 * 24));
 
     if (diffDays >= 0 && diffDays <= 5) {
-        setTimeout(() => {
-            toast.classList.add('show');
-        }, 1000);
+        setTimeout(() => toast.style.top = '5rem', 1000);
     }
 }
 
-function updateCustoTotalChartVisibility(showPorPessoa) {
-    if (appCustoTotalChartInstance && custoTotalTituloEl) {
-        appCustoTotalChartInstance.data.datasets[0].hidden = !showPorPessoa;
-        appCustoTotalChartInstance.data.datasets[1].hidden = showPorPessoa;
-        appCustoTotalChartInstance.update();
-        custoTotalTituloEl.textContent = showPorPessoa ? 'Composição do Custo Total por Pessoa' : 'Composição do Custo Total do Grupo';
-    }
-}
+// --- INICIALIZAÇÃO GERAL E DO SERVICE WORKER ---
 
-function updateCustoCategoriaChartVisibility(showPorPessoa) {
-    if (appCustoCategoriaChartInstance && custoCategoriaTituloEl) {
-        appCustoCategoriaChartInstance.data.datasets[0].hidden = !showPorPessoa;
-        appCustoCategoriaChartInstance.data.datasets[1].hidden = showPorPessoa;
-        appCustoCategoriaChartInstance.update();
-        custoCategoriaTituloEl.textContent = showPorPessoa ? 'Custos Específicos por Pessoa' : 'Custos Específicos Totais do Grupo';
-    }
-}
-
-// --- INITIALIZATION ---
-
-// Função que inicializa a UI principal (tudo que não depende do Service Worker)
-function initializeUI() {
-    console.log('UI Initializing...');
+document.addEventListener('DOMContentLoaded', () => {
     Chart.register(ChartDataLabels);
-    setupCollapsibleSections();
-    startCountdown();
-    generateEpisodeList();
-    checkAndShowNewEpisodeToast();
 
+    // Adiciona listeners aos itens de navegação
     navItems.forEach(item => {
-        item.addEventListener('click', () => {
-            switchPage(item.dataset.page, item.dataset.title);
-        });
+        item.addEventListener('click', () => switchPage(item.dataset.page));
     });
 
+    // Configura o Toast de novo episódio
     const toast = document.getElementById('new-episode-toast');
     const closeToastBtn = document.getElementById('close-toast');
     const toastButton = document.getElementById('toast-button');
-
     if (toast && closeToastBtn && toastButton) {
-        closeToastBtn.addEventListener('click', () => toast.classList.remove('show'));
+        closeToastBtn.addEventListener('click', () => toast.style.top = '-100%');
         toastButton.addEventListener('click', () => {
-            const geralNavItem = document.querySelector('.nav-item[data-page="page-geral"]');
-            if (geralNavItem) {
-                switchPage(geralNavItem.dataset.page, geralNavItem.dataset.title);
-            }
+            switchPage('geral');
             setTimeout(() => {
                 const podcastCard = document.getElementById('podcast-card');
-                const navMenu = document.querySelector('.top-nav');
-                if (podcastCard && navMenu) {
-                    const navHeight = navMenu.offsetHeight;
-                    const cardTopPosition = podcastCard.offsetTop;
-                    const targetScrollPosition = cardTopPosition - navHeight - 16;
-                    window.scrollTo({ top: targetScrollPosition, behavior: 'smooth' });
-                }
-            }, 100);
-            toast.classList.remove('show');
+                if (podcastCard) podcastCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }, 200);
+            toast.style.top = '-100%';
         });
     }
 
-    if (btnPorPessoa && btnPeloGrupo) {
-        btnPorPessoa.addEventListener('click', () => {
-            btnPorPessoa.classList.add('active');
-            btnPeloGrupo.classList.remove('active');
-            updateCustoTotalChartVisibility(true);
-            updateCustoCategoriaChartVisibility(true);
-        });
+    // Carrega a página inicial
+    switchPage('geral');
+});
 
-        btnPeloGrupo.addEventListener('click', () => {
-            btnPeloGrupo.classList.add('active');
-            btnPorPessoa.classList.remove('active');
-            updateCustoTotalChartVisibility(false);
-            updateCustoCategoriaChartVisibility(false);
-        });
+window.addEventListener('load', async () => {
+    if ('serviceWorker' in navigator) {
+        try {
+            const registration = await navigator.serviceWorker.register('/service-worker.js');
+            console.log('Service Worker registered with scope:', registration.scope);
+            await navigator.serviceWorker.ready;
+            console.log('Service Worker is active and ready.');
+            initializeNotificationUI(registration);
+            messaging.onMessage((payload) => {
+                console.log('Foreground message received.', payload);
+            });
+        } catch (err) {
+            console.error('Service Worker setup failed:', err);
+        }
     }
-
-    const initialPageId = 'page-geral';
-    const initialTitleElement = document.querySelector(`.nav-item[data-page="${initialPageId}"]`);
-    if (initialTitleElement && initialTitleElement.dataset.title) {
-        switchPage(initialPageId, initialTitleElement.dataset.title);
-    } else {
-        switchPage(initialPageId, 'Visão Geral');
-        console.warn(`Initial navigation item for page "${initialPageId}" not found. Using default title.`);
-    }
-    console.log('UI Initialization complete.');
-}
-
-// Inicia a UI assim que o HTML for carregado
-document.addEventListener('DOMContentLoaded', initializeUI);
-
-// **NOVA ABORDAGEM DE INICIALIZAÇÃO DO SERVICE WORKER (CORRIGIDA)**
-// Esta função é chamada quando a página termina de carregar para configurar o Service Worker.
-async function serviceWorkerSetup() {
-    console.log('Page loaded. Starting Service Worker setup...');
-    if (!('serviceWorker' in navigator)) {
-        console.log('Service Worker not supported.');
-        return;
-    }
-
-    try {
-        // Regista o service worker. Retorna um objeto de registo.
-        const registration = await navigator.serviceWorker.register('/service-worker.js');
-        console.log('Service Worker registered with scope:', registration.scope);
-
-        // A promessa navigator.serviceWorker.ready resolve quando um service worker
-        // foi registado com sucesso e está no estado 'active'.
-        // Este é o ponto mais fiável para inicializar funcionalidades que dependem dele.
-        await navigator.serviceWorker.ready;
-        
-        console.log('Service Worker is active and ready.');
-        
-        // Agora que o SW está pronto, inicializa funcionalidades como notificações.
-        initializeNotificationUI(registration);
-        
-        // Configura o listener de mensagens em primeiro plano.
-        messaging.onMessage((payload) => {
-            console.log('Foreground message received.', payload);
-            // Opcionalmente, pode manipular a mensagem em primeiro plano mostrando um toast/notificação personalizado.
-        });
-
-    } catch (err) {
-        console.error('Service Worker setup failed:', err);
-    }
-}
-
-
-// Adiciona o listener para o evento 'load' da janela
-window.addEventListener('load', serviceWorkerSetup);
+});

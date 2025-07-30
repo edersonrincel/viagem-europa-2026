@@ -77,10 +77,8 @@ async function loadPage(pageName) {
         const content = await response.text();
         mainContent.innerHTML = content;
         
-        // CORREÇÃO: Garante que a nova seção carregada fique visível
         const newSection = mainContent.querySelector('.page-section');
         if (newSection) {
-            // Adiciona um pequeno atraso para a animação de fade-in funcionar
              setTimeout(() => {
                 newSection.classList.add('active');
             }, 10);
@@ -99,7 +97,7 @@ async function loadPage(pageName) {
  * @param {string} pageName - O nome da página que foi carregada.
  */
 function initializePageComponents(pageName) {
-    setupCollapsibleSections(); // Sempre re-inicializa os acordeões
+    setupCollapsibleSections(); 
 
     if (pageName === 'geral') {
         startCountdown();
@@ -108,7 +106,6 @@ function initializePageComponents(pageName) {
     }
     
     if (pageName === 'custos') {
-        // Adiciona listeners para os botões de toggle dos gráficos
         const btnPorPessoa = document.getElementById('btnPorPessoa');
         const btnPeloGrupo = document.getElementById('btnPeloGrupo');
 
@@ -135,15 +132,12 @@ function initializePageComponents(pageName) {
  * @param {string} pageId - O ID da página para mostrar.
  */
 function switchPage(pageId) {
-    // Atualiza o estado ativo na barra de navegação
     navItems.forEach(item => {
         item.classList.toggle('active', item.dataset.page === pageId);
     });
     
-    // Carrega o conteúdo da nova página
     loadPage(pageId);
     
-    // Rola a página para o topo
     window.scrollTo(0, 0);
 }
 
@@ -403,15 +397,17 @@ function setupCollapsibleSections() {
             content.classList.toggle('hidden');
             icon.classList.toggle('rotate-180');
 
-            // Se está abrindo e for a seção de gráficos, cria os gráficos
             if (!isExpanded) {
                 setTimeout(() => {
                     if (contentId === 'content-financeiro-graficos') {
                         if (appCustoTotalChartInstance) appCustoTotalChartInstance.destroy();
                         if (appCustoCategoriaChartInstance) appCustoCategoriaChartInstance.destroy();
                         
-                        const custoTotalChartOptions = { ...commonChartOptions('doughnut'), plugins: { ...commonChartOptions('doughnut').plugins, legend: { display: true, position: 'bottom', labels: { font: { size: 10 }, color: '#475569' } }, datalabels: { display: true, formatter: (v) => new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(v), color: '#fff', font: { size: 10, weight: 'bold' } } } };
-                        const custoCategoriaChartOptions = { ...commonChartOptions('bar'), indexAxis: 'y', scales: { x: { beginAtZero: true, ticks: { display: false } }, y: { ticks: { font: { size: 9 }, color: '#475569', autoSkip: false } } }, plugins: { ...commonChartOptions('bar').plugins, datalabels: { display: (c) => c.dataset.data[c.dataIndex] > 0, anchor: 'end', align: 'right', offset: 4, color: '#334155', font: { size: 9 }, formatter: (v) => new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(v) } } };
+                        // CORREÇÃO GRÁFICO DE PIZZA (DOUGHNUT)
+                        const custoTotalChartOptions = { ...commonChartOptions('doughnut'), plugins: { ...commonChartOptions('doughnut').plugins, legend: { display: true, position: 'bottom', labels: { font: { size: 10 }, color: '#475569' } }, datalabels: { display: true, formatter: (value) => new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(value), color: (context) => { const bgColor = context.dataset.backgroundColor[context.dataIndex]; if (!bgColor) return '#000'; const r = parseInt(bgColor.slice(1, 3), 16); const g = parseInt(bgColor.slice(3, 5), 16); const b = parseInt(bgColor.slice(5, 7), 16); return (0.2126 * r + 0.7152 * g + 0.0722 * b) > 120 ? '#1e293b' : '#FFFFFF'; }, font: { size: 10, weight: 'bold' } } } };
+                        
+                        // CORREÇÃO GRÁFICO DE BARRAS
+                        const custoCategoriaChartOptions = { ...commonChartOptions('bar'), indexAxis: 'y', scales: { x: { beginAtZero: true, ticks: { display: false } }, y: { ticks: { font: { size: 9 }, color: '#475569', autoSkip: false } } }, plugins: { ...commonChartOptions('bar').plugins, datalabels: { display: (c) => c.dataset.data[c.dataIndex] > 0, anchor: 'end', align: (c) => (c.dataset.data[c.dataIndex] < Math.max(...c.dataset.data) * 0.25 ? 'right' : 'left'), offset: 4, color: (c) => { const value = c.dataset.data[c.dataIndex]; const maxValue = Math.max(...c.dataset.data); if (value < maxValue * 0.25) return '#334155'; const barColor = Array.isArray(c.dataset.backgroundColor) ? c.dataset.backgroundColor[c.dataIndex] : c.dataset.backgroundColor; const getLuminance = (hex) => { if (!hex || hex.length < 7) return 128; hex = hex.replace('#', ''); const r = parseInt(hex.substring(0, 2), 16), g = parseInt(hex.substring(2, 4), 16), b = parseInt(hex.substring(4, 6), 16); return 0.2126 * r + 0.7152 * g + 0.0722 * b; }; return getLuminance(barColor) > 120 ? '#1e293b' : '#FFFFFF'; }, font: { size: 9, weight: '500' }, formatter: (value) => new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL', minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(value) } } };
                         
                         appCustoTotalChartInstance = createChart('appCustoTotalChart', 'doughnut', custoTotalData, custoTotalChartOptions);
                         appCustoCategoriaChartInstance = createChart('appCustoCategoriaChart', 'bar', custoCategoriaData, custoCategoriaChartOptions);
@@ -422,7 +418,7 @@ function setupCollapsibleSections() {
 
                     } else if (contentId === 'content-financeiro-parcelas') {
                         if (appPagamentoMensalChartInstance) appPagamentoMensalChartInstance.destroy();
-                        const pagamentoMensalChartOptions = { ...commonChartOptions('line'), scales: { y: { beginAtZero: true, ticks: { display: false } }, x: { ticks: { font: { size: 10 }, color: '#475569' } } }, plugins: { ...commonChartOptions('line').plugins, datalabels: { display: true, anchor: 'end', align: 'top', color: '#4A5568', font: { size: 8, weight: '600' }, formatter: (v) => new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(v) } } };
+                        const pagamentoMensalChartOptions = { ...commonChartOptions('line'), scales: { y: { beginAtZero: true, ticks: { display: false } }, x: { ticks: { font: { size: 10 }, color: '#475569' } } }, plugins: { ...commonChartOptions('line').plugins, datalabels: { display: true, anchor: 'end', align: (c) => c.dataIndex % 2 === 0 ? 'top' : 'bottom', offset: (c) => c.dataIndex % 2 === 0 ? 6 : 10, color: '#4A5568', font: { size: 8, weight: '600' }, formatter: (v) => new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(v) } } };
                         appPagamentoMensalChartInstance = createChart('appPagamentoMensalChart', 'line', pagamentoMensalData, pagamentoMensalChartOptions);
                     }
                 }, 50);
@@ -531,12 +527,10 @@ function checkAndShowNewEpisodeToast() {
 document.addEventListener('DOMContentLoaded', () => {
     Chart.register(ChartDataLabels);
 
-    // Adiciona listeners aos itens de navegação
     navItems.forEach(item => {
         item.addEventListener('click', () => switchPage(item.dataset.page));
     });
 
-    // Configura o Toast de novo episódio
     const toast = document.getElementById('new-episode-toast');
     const closeToastBtn = document.getElementById('close-toast');
     const toastButton = document.getElementById('toast-button');
@@ -552,7 +546,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Carrega a página inicial
     switchPage('geral');
 });
 

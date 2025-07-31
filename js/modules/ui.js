@@ -28,30 +28,31 @@ function handleDeepLink() {
     const elementToExpandId = params.get('expand');
 
     if (pageName) {
-        // Define a ação a ser executada após o carregamento da página
         const onPageLoad = () => {
             if (elementToExpandId) {
                 const trigger = document.querySelector(`[aria-controls='${elementToExpandId}']`);
                 const element = document.getElementById(elementToExpandId);
 
                 if (trigger && element) {
-                    // Abre a seção se estiver fechada
                     if (trigger.getAttribute('aria-expanded') === 'false') {
                         trigger.click();
                     }
-                    // Rola a tela até o elemento após um pequeno atraso para a animação
+
+                    // --- LÓGICA DE SCROLL ATUALIZADA ---
+                    // Adiciona a classe, rola a tela e remove a classe após um instante.
+                    trigger.classList.add('scroll-target');
+                    trigger.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+                    // Remove a classe após a animação de scroll para não afetar outros comportamentos.
                     setTimeout(() => {
-                        element.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                    }, 350);
+                        trigger.classList.remove('scroll-target');
+                    }, 1500);
                 }
             }
         };
-
-        // Carrega a página e passa a ação como um callback
         switchPage(pageName, onPageLoad);
     }
 
-    // Limpa o hash da URL para evitar comportamento inesperado na navegação
     history.pushState("", document.title, window.location.pathname + window.location.search);
     return true;
 }

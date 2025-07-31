@@ -567,3 +567,8 @@ body {
 #install-banner.show {
     transform: translateY(0);
 }
+
+/* Target para deeplink scrolling para adicionar offset do menu do topo */
+.scroll-target {
+    scroll-margin-top: 5rem; /* Aprox. 80px, dá espaço para o menu de 4rem/64px */
+}

@@ -41,7 +41,7 @@ function handleDeepLink() {
                     }
                     // Rola a tela até o elemento após um pequeno atraso para a animação
                     setTimeout(() => {
-                        element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                        element.scrollIntoView({ behavior: 'smooth', block: 'start' });
                     }, 350);
                 }
             }

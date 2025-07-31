@@ -1,0 +1,88 @@
+Páginas e IDs Disponíveis para Deeplink:
+
+>>> Página: logistica
+
+Roteiro da Viagem
+    ID: content-roteiro
+    Exemplo de deeplink: logistica?expand=content-roteiro
+
+Programação de Voos
+    ID: content-voos
+    Exemplo de deeplink: logistica?expand=content-voos
+
+Hospedagens
+    ID: content-hospedagens
+    Exemplo de deeplink: logistica?expand=content-hospedagens
+
+Mapas de Transporte
+    ID: content-mapas-transporte
+    Exemplo de deeplink: logistica?expand=content-mapas-transporte
+
+Seguro Viagem
+    ID: content-seguro-viagem
+    Exemplo de deeplink: logistica?expand=content-seguro-viagem
+
+
+>>> Página: custos
+
+Detalhes dos Custos
+    ID: content-financeiro-graficos
+    Exemplo de deeplink: custos?expand=content-financeiro-graficos
+
+Parcelas
+    ID: content-financeiro-parcelas
+    Exemplo de deeplink: custos?expand=content-financeiro-parcelas
+
+Recibos e Reservas
+    ID: content-recibos-reservas
+    Exemplo de deeplink: custos?expand=content-recibos-reservas
+
+Conversor de Moedas
+    ID: content-conversor-moeda
+    Exemplo de deeplink: custos?expand=content-conversor-moeda
+
+
+>>> Página: sabores
+
+Londres
+    ID: content-food-londres
+    Exemplo de deeplink: sabores?expand=content-food-londres
+
+Lisboa
+    ID: content-food-lisboa
+    Exemplo de deeplink: sabores?expand=content-food-lisboa
+
+Paris
+    ID: content-food-paris
+    Exemplo de deeplink: sabores?expand=content-food-paris
+
+Oxford
+    ID: content-food-oxford
+    Exemplo de deeplink: sabores?expand=content-food-oxford
+
+
+>>> Página: dicas
+
+Documentação
+    ID: content-dica-documentacao
+    Exemplo de deeplink: dicas?expand=content-dica-documentacao
+
+Moeda e Pagamentos
+    ID: content-dica-moeda
+    Exemplo de deeplink: dicas?expand=content-dica-moeda
+
+Tomadas e Voltagem
+    ID: content-dica-tomadas
+    Exemplo de deeplink: dicas?expand=content-dica-tomadas
+    
+Transporte Público
+    ID: content-dica-transporte
+    Exemplo de deeplink: dicas?expand=content-dica-transporte
+
+Mala de Inverno
+    ID: content-dica-mala
+    Exemplo de deeplink: dicas?expand=content-dica-mala
+
+Segurança e Cuidados
+    ID: content-dica-seguranca
+    Exemplo de deeplink: dicas?expand=content-dica-seguranca

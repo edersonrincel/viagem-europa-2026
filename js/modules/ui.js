@@ -38,15 +38,25 @@ function handleDeepLink() {
                         trigger.click();
                     }
 
-                    // --- LÓGICA DE SCROLL ATUALIZADA ---
-                    // Adiciona a classe, rola a tela e remove a classe após um instante.
-                    trigger.classList.add('scroll-target');
-                    trigger.scrollIntoView({ behavior: 'smooth', block: 'start' });
-
-                    // Remove a classe após a animação de scroll para não afetar outros comportamentos.
+                    // --- NOVA LÓGICA DE SCROLL MANUAL ---
+                    // Aguarda um momento para a animação de expansão terminar
+                    // antes de calcular a posição e rolar a tela.
                     setTimeout(() => {
-                        trigger.classList.remove('scroll-target');
-                    }, 1500);
+                        const topNav = document.querySelector('.top-nav');
+                        const navHeight = topNav ? topNav.offsetHeight : 0;
+                        
+                        // Calcula a posição exata do topo do botão em relação ao documento
+                        const elementPosition = trigger.getBoundingClientRect().top + window.scrollY;
+                        
+                        // Define a posição final da rolagem, subtraindo a altura do menu e adicionando uma pequena margem
+                        const offsetPosition = elementPosition - navHeight - 16; // 16px = 1rem de margem extra
+
+                        // Executa a rolagem manualmente
+                        window.scrollTo({
+                            top: offsetPosition,
+                            behavior: 'smooth'
+                        });
+                    }, 400); // Aumentamos o tempo para 400ms para garantir que a animação CSS conclua.
                 }
             }
         };

@@ -2,7 +2,7 @@
 
 /**
  * @file Controla todos os aspectos da interface do usuário (UI), como navegação,
- * carregamento de conteúdo dinâmico e componentes interativos.
+ * carregamento de conteúdo dinâmico, componentes interativos e deeplinks.
  */
 
 import { generateEpisodeList, checkAndShowNewEpisodeToast, dismissToast } from './podcast.js';
@@ -12,9 +12,54 @@ import * as charts from './charts.js';
 const mainContent = document.getElementById('main-content');
 const navItems = document.querySelectorAll('.nav-item');
 
+// --- LÓGICA DE DEEPLINK ---
+
+/**
+ * Lida com deeplinks baseados no hash da URL.
+ * Procura por um hash como #pagina?expand=id_do_elemento
+ * @returns {boolean} - Retorna true se um deeplink foi processado.
+ */
+function handleDeepLink() {
+    const hash = window.location.hash.substring(1);
+    if (!hash) return false;
+
+    const [pageName, paramsString] = hash.split('?');
+    const params = new URLSearchParams(paramsString);
+    const elementToExpandId = params.get('expand');
+
+    if (pageName) {
+        // Define a ação a ser executada após o carregamento da página
+        const onPageLoad = () => {
+            if (elementToExpandId) {
+                const trigger = document.querySelector(`[aria-controls='${elementToExpandId}']`);
+                const element = document.getElementById(elementToExpandId);
+
+                if (trigger && element) {
+                    // Abre a seção se estiver fechada
+                    if (trigger.getAttribute('aria-expanded') === 'false') {
+                        trigger.click();
+                    }
+                    // Rola a tela até o elemento após um pequeno atraso para a animação
+                    setTimeout(() => {
+                        element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    }, 350);
+                }
+            }
+        };
+
+        // Carrega a página e passa a ação como um callback
+        switchPage(pageName, onPageLoad);
+    }
+
+    // Limpa o hash da URL para evitar comportamento inesperado na navegação
+    history.pushState("", document.title, window.location.pathname + window.location.search);
+    return true;
+}
+
+
 // --- FUNÇÕES DE NAVEGAÇÃO E CARREGAMENTO ---
 
-async function loadPage(pageName) {
+async function loadPage(pageName, onPageLoadCallback = null) {
     if (!mainContent) return;
     
     try {
@@ -33,6 +78,11 @@ async function loadPage(pageName) {
         }
 
         initializePageComponents(pageName);
+        
+        // Executa o callback se ele foi fornecido (usado pelo deeplink)
+        if (onPageLoadCallback) {
+            onPageLoadCallback();
+        }
 
     } catch (error) {
         console.error(`Erro ao carregar a página ${pageName}:`, error);
@@ -40,14 +90,17 @@ async function loadPage(pageName) {
     }
 }
 
-export function switchPage(pageId) {
+export function switchPage(pageId, callback = null) {
     navItems.forEach(item => {
         item.classList.toggle('active', item.dataset.page === pageId);
     });
     
-    loadPage(pageId);
+    loadPage(pageId, callback);
     
-    window.scrollTo(0, 0);
+    // Rola para o topo, exceto quando for um deeplink
+    if (!callback) {
+        window.scrollTo(0, 0);
+    }
 }
 
 // --- INICIALIZAÇÃO DE COMPONENTES DE PÁGINA ---
@@ -96,7 +149,8 @@ function setupCollapsibleSections() {
             content.classList.toggle('hidden');
             icon.classList.toggle('rotate-180');
 
-            if (!isExpanded) {
+            // Lógica para carregar gráficos apenas quando a seção se torna visível
+            if (!isExpanded && (contentId === 'content-financeiro-graficos' || contentId === 'content-financeiro-parcelas')) {
                 setTimeout(() => {
                     if (contentId === 'content-financeiro-graficos') {
                         charts.createCostCharts();
@@ -167,6 +221,12 @@ export function initializeUI() {
     
     setupToastInteractions();
     
-    // Carrega a página inicial
-    switchPage('geral');
+    // Tenta processar um deeplink. Se não houver um, carrega a página inicial.
+    const wasDeepLinked = handleDeepLink();
+    if (!wasDeepLinked) {
+        switchPage('geral');
+    }
+
+    // Adiciona um listener para o caso de o hash mudar enquanto o app está aberto
+    window.addEventListener('hashchange', handleDeepLink);
 }

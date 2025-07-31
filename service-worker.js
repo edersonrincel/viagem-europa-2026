@@ -24,21 +24,26 @@ try {
     console.log('Service Worker: Firebase v8 initialized.'); // Ponto de verificação 3
 
     // --- Lógica de Notificações em Segundo Plano ---
-    messaging.onBackgroundMessage((payload) => {
-        console.log('[Service Worker] Received background message ', payload);
-        const notificationTitle = payload.notification.title;
-        const notificationOptions = {
-            body: payload.notification.body,
-            icon: payload.notification.icon || '/images/icons/icon-192x192.png',
-            badge: '/images/icons/icon-40x40.png',
-            image: undefined,
-            data: { url: payload.data.link || '/' } // No v8, o link pode vir em `payload.data`
-        };
-        return self.registration.showNotification(notificationTitle, notificationOptions);
-    });
+  messaging.onBackgroundMessage((payload) => {
+    console.log('[Service Worker] Received background message ', payload);
+
+    const notificationTitle = payload.notification.title;
+    const notificationOptions = {
+        body: payload.notification.body,
+        icon: payload.notification.icon || '/images/icons/icon-192x192.png',
+        badge: '/images/icons/icon-40x40.png',
+        // Adicionamos o campo 'deepLink' aos dados da notificação.
+        // Ele virá do payload da notificação que você envia.
+        data: {
+            url: payload.data.link || '/',
+            deepLink: payload.data.deepLink || '' // Ex: 'custos?expand=content-conversor-moeda'
+        }
+    };
+    return self.registration.showNotification(notificationTitle, notificationOptions);
+});
 
     // --- Lógica de Caching e Ciclo de Vida ---
-    const CACHE_NAME = 'viagem-app-cache-v22'; // Versão do cache incrementada
+    const CACHE_NAME = 'viagem-app-cache-v32'; // Versão do cache incrementada
     const URLS_TO_CACHE = [
       '/',
       'index.html',
@@ -94,22 +99,33 @@ try {
     });
 
     self.addEventListener('notificationclick', (event) => {
-      console.log('On notification click: ', event.notification);
-      event.notification.close();
-      const urlToOpen = event.notification.data.url || '/';
-      event.waitUntil(
+    console.log('On notification click: ', event.notification);
+    event.notification.close();
+
+    const deepLink = event.notification.data.deepLink;
+    const baseUrl = self.location.origin;
+
+    // Constrói a URL final. Se houver um deeplink, ele será adicionado como um "hash".
+    // Ex: https://seu-site.com/#custos?expand=content-conversor-moeda
+    const urlToOpen = deepLink ? `${baseUrl}/#${deepLink}` : (event.notification.data.url || '/');
+
+    // Esta lógica verifica se o app já está aberto.
+    // Se estiver, foca na aba existente e navega para a URL do deeplink.
+    // Se não, abre uma nova aba.
+    event.waitUntil(
         clients.matchAll({ type: 'window', includeUncontrolled: true }).then(clientList => {
-          for (const client of clientList) {
-            if (client.url === urlToOpen && 'focus' in client) {
-              return client.focus();
+            for (const client of clientList) {
+                if (client.url === '/' && 'focus' in client) {
+                    client.navigate(urlToOpen); // Navega na janela existente
+                    return client.focus();
+                }
             }
-          }
-          if (clients.openWindow) {
-            return clients.openWindow(urlToOpen);
-          }
+            if (clients.openWindow) {
+                return clients.openWindow(urlToOpen);
+            }
         })
-      );
-    });
+    );
+});
 
 } catch (error) {
     console.error('Service Worker: A top-level error occurred:', error); // Ponto de verificação de erro

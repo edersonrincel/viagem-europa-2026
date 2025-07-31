@@ -68,10 +68,15 @@ function requestNotificationPermission(registration) {
 }
 
 function setupNotificationUI(registration) {
-    const isStandalone = window.matchMedia('(display-mode: standalone)').matches;
-    if (isStandalone && Notification.permission === 'default') {
-        if (notificationBanner) notificationBanner.style.display = 'flex';
-    } else if (Notification.permission === 'granted') {
+    // Adiciona um pequeno atraso para dar tempo ao navegador de reconhecer o modo standalone na primeira inicialização
+    setTimeout(() => {
+        const isStandalone = window.matchMedia('(display-mode: standalone)').matches;
+        if (isStandalone && Notification.permission === 'default') {
+            if (notificationBanner) notificationBanner.style.display = 'flex';
+        }
+    }, 500); // Atraso de 500ms
+
+    if (Notification.permission === 'granted') {
         getFCMToken(registration);
     }
 
@@ -88,7 +93,6 @@ function setupNotificationUI(registration) {
         });
     }
 }
-
 
 export function initializeFirebaseAndNotifications(registration) {
     console.log('Inicializando Firebase e UI de notificações...');

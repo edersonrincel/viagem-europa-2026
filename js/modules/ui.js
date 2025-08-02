@@ -7,6 +7,7 @@
 
 import { generateEpisodeList, checkAndShowNewEpisodeToast, dismissToast } from './podcast.js';
 import * as charts from './charts.js';
+import { initializeSaboresPage } from './sabores.js';
 
 // --- SELETORES DE ELEMENTOS DOM ---
 const mainContent = document.getElementById('main-content');
@@ -144,6 +145,10 @@ function initializePageComponents(pageName) {
                 charts.updateCustoCategoriaChartVisibility(false);
             });
         }
+    }
+
+    if (pageName === 'sabores') {
+        initializeSaboresPage();
     }
 }
 

@@ -63,6 +63,76 @@
             </div>
         </div>
     </div>
+
+    <div class="card">
+        <button class="collapsible-trigger original-collapsible" aria-expanded="false" aria-controls="content-orcamento-diario">
+            <h3 class="text-lg"><i class="fas fa-wallet mr-2 text-sky-500"></i>Orçamento Diário</h3>
+            <i class="fas fa-chevron-down collapsible-icon"></i>
+        </button>
+        <div id="content-orcamento-diario" class="collapsible-content hidden">
+            <p class="mb-6 text-slate-600 text-center">Estimativa de gastos diários por pessoa com alimentação e transporte.</p>
+            
+            <div class="space-y-6">
+                <!-- Orçamento Londres -->
+                <div class="budget-section bg-slate-50 p-4 rounded-lg border border-slate-200">
+                    <h4 class="font-semibold text-slate-800 text-md mb-3 flex items-center">
+                        <img src="https://flagcdn.com/gb.svg" class="w-5 h-auto mr-2" alt="Bandeira do Reino Unido">
+                        Londres: ~£ 60 / dia
+                    </h4>
+                    <ul class="list-disc list-inside text-sm text-slate-600 space-y-1 pl-2">
+                        <li><strong>Alimentação:</strong> Aproximadamente £ 50</li>
+                        <li><strong>Transporte:</strong> £ 8,50 (valor fixo diário para zonas 1-2)</li>
+                    </ul>
+                    <p class="text-xs text-slate-500 mt-3 pt-3 border-t border-slate-200">
+                        <strong>Orçamento total para 7 dias:</strong> £ 420 por pessoa.
+                    </p>
+                </div>
+
+                <!-- Orçamento Lisboa -->
+                <div class="budget-section bg-slate-50 p-4 rounded-lg border border-slate-200">
+                    <h4 class="font-semibold text-slate-800 text-md mb-3 flex items-center">
+                        <img src="https://flagcdn.com/pt.svg" class="w-5 h-auto mr-2" alt="Bandeira de Portugal">
+                        Lisboa: ~€ 60 / dia
+                    </h4>
+                    <ul class="list-disc list-inside text-sm text-slate-600 space-y-1 pl-2">
+                        <li><strong>Alimentação:</strong> Aproximadamente € 50</li>
+                        <li><strong>Transporte:</strong> Aproximadamente € 6</li>
+                    </ul>
+                     <p class="text-xs text-slate-500 mt-3 pt-3 border-t border-slate-200">
+                        <strong>Orçamento total para 4 dias:</strong> € 240 por pessoa.
+                    </p>
+                </div>
+
+                <!-- Resumo Total -->
+                <div class="summary-section bg-sky-50 p-4 rounded-lg border border-sky-200">
+                    <h4 class="font-semibold text-sky-800 text-md mb-2">Resumo Geral (Extra)</h4>
+                    <p class="text-sm text-sky-700">
+                        O orçamento total para alimentação e transporte durante a viagem é de aproximadamente <strong>£ 420 + € 240</strong>.
+                    </p>
+                    <p class="text-md font-bold text-sky-900 mt-2">
+                        Total em Reais (conversão média): ~R$ 4.500,00 por pessoa.
+                    </p>
+                </div>
+                
+                 <!-- Custo Extra -->
+                <div class="extra-cost-section bg-amber-50 p-4 rounded-lg border border-amber-200">
+                     <h4 class="font-semibold text-amber-800 text-sm mb-2"><i class="fas fa-info-circle mr-2"></i>Custo Adicional</h4>
+                     <p class="text-xs text-amber-700">
+                         Haverá um custo extra de aproximadamente <strong>£ 20 por pessoa</strong> para o trem de ida e volta para Oxford.
+                     </p>
+                </div>
+            </div>
+            
+            <div class="mt-8 bg-slate-100 p-3 rounded-lg border border-slate-200">
+                <h4 class="font-semibold text-slate-700 text-xs mb-2">Observações:</h4>
+                <ul class="list-disc list-inside text-xs text-slate-600 space-y-1">
+                    <li>Os valores de alimentação são estimativas e podem variar.</li>
+                    <li>O valor do transporte em Londres é fixo (teto diário do Oyster/Contactless).</li>
+                    <li>A conversão para Reais é uma aproximação e pode flutuar.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
     
     <div class="card">
         <button class="collapsible-trigger original-collapsible" aria-expanded="false" aria-controls="content-recibos-reservas"> <h3 class="text-lg"><i class="fas fa-receipt mr-2 text-sky-500"></i>Recibos e Reservas</h3> <i class="fas fa-chevron-down collapsible-icon"></i>

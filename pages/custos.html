@@ -66,21 +66,24 @@
 
     <div class="card">
         <button class="collapsible-trigger original-collapsible" aria-expanded="false" aria-controls="content-orcamento-diario">
-            <h3 class="text-lg"><i class="fas fa-wallet mr-2 text-sky-500"></i>Orçamento Diário</h3>
+            <h3 class="text-lg"><i class="fas fa-wallet mr-2 text-sky-500"></i>Quanto dinheiro levar?</h3>
             <i class="fas fa-chevron-down collapsible-icon"></i>
         </button>
         <div id="content-orcamento-diario" class="collapsible-content hidden">
-            <p class="mb-6 text-slate-600 text-center">Estimativa de gastos diários por pessoa durante a viagem.</p>
+            <div class="cost-summary-card">
+                <h3>Valor estimado a levar, por pessoa</h3>
+                <p class="cost-value text-3xl text-orange-500">R$ 4.500,00</p>
+            </div>
+            <p class="mb-6 text-slate-600 text-center">Detalhes da estimativa de gastos diários por pessoa durante a viagem.</p>
             
             <div class="space-y-6">
-                <!-- Orçamento Londres -->
+                <!-- Orçamento Londres/Oxford -->
                 <div class="budget-section bg-slate-50 p-4 rounded-lg border border-slate-200">
                     <h4 class="font-semibold text-slate-800 text-md mb-3 flex items-center">
-                        <img src="https://flagcdn.com/gb.svg" class="w-5 h-auto mr-2" alt="Bandeira do Reino Unido">
-                        Londres: ~£60/dia
+                        🇬🇧 Londres/Oxford: ~£60/dia
                     </h4>
                     <ul class="list-disc list-inside text-sm text-slate-600 space-y-1 pl-2">
-                        <li><strong>Alimentação:</strong> Aprox. £50</li>
+                        <li><strong>Alimentação:</strong> ~£50 <a href="#sabores?expand=content-food-londres" class="external-link"><i class="fas fa-utensils mr-1"></i>Lista locais GF</a></li>
                         <li><strong>Transporte:</strong> £8,50 (valor fixo)</li>
                     </ul>
                     <p class="text-xs text-slate-500 mt-3 pt-3 border-t border-slate-200">
@@ -95,11 +98,11 @@
                         Lisboa: ~€60/dia
                     </h4>
                     <ul class="list-disc list-inside text-sm text-slate-600 space-y-1 pl-2">
-                        <li><strong>Alimentação:</strong> Aprox. €50</li>
-                        <li><strong>Transporte:</strong> Aprox. €6</li>
+                        <li><strong>Alimentação:</strong> ~€50 <a href="#sabores?expand=content-food-lisboa" class="external-link"><i class="fas fa-utensils mr-1"></i>Lista locais GF</a></li>
+                        <li><strong>Transporte:</strong> ~€6</li>
                     </ul>
                      <p class="text-xs text-slate-500 mt-3 pt-3 border-t border-slate-200">
-                        <strong>Orçamento total para 4 dias:</strong> €240 por pessoa.
+                        <strong>Orçamento total para 4 dias:</strong> ~€240 por pessoa.
                     </p>
                 </div>
 
@@ -126,7 +129,7 @@
             <div class="mt-8 bg-slate-100 p-3 rounded-lg border border-slate-200">
                 <h4 class="font-semibold text-slate-700 text-xs mb-2">Observações:</h4>
                 <ul class="list-disc list-inside text-xs text-slate-600 space-y-1">
-                    <li>Os valores de alimentação consideram locais Gluten Free e são estimativas que podem variar.</li>
+                    <li>Os valores de alimentação consideram locais <b>Gluten Free</b> e são estimativas que podem variar.</li>
                     <li>O valor do transporte em Londres é fixo (teto diário do Oyster/Contactless).</li>
                     <li>A conversão para Reais é uma aproximação e pode flutuar.</li>
                 </ul>

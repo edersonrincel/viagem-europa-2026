@@ -41,7 +41,7 @@ try {
     });
 
     // --- Lógica de Caching e Ciclo de Vida ---
-    const CACHE_NAME = 'viagem-app-cache-v1.16'; 
+    const CACHE_NAME = 'viagem-app-cache-v1.17'; 
     const URLS_TO_CACHE = [
         '/',
         '/index.html',

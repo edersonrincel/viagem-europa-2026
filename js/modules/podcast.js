@@ -99,7 +99,7 @@ export function checkAndShowNewEpisodeToast() {
         setTimeout(() => {
             toast.style.top = '5rem';
             const toastTitle = toast.querySelector('.font-bold');
-            if(toastTitle) toastTitle.textContent = `Novo episódio: ${latestEpisode['Título']}`;
+            if(toastTitle) toastTitle.textContent = `Novo episódio disponível!`;
         }, 1000);
     }
 }

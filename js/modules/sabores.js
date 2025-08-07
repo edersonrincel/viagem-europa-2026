@@ -29,8 +29,23 @@ function createRestaurantCard(restaurant) {
 
     const currentSafetyInfo = safetyInfo[restaurant.safety.level] || { icon: 'fa-info-circle', color: 'text-slate-600', text: 'Informação' };
 
-    // Formata a lista de endereços
-    const addressList = restaurant.addresses.map(addr => `<li>${addr}</li>`).join('');
+    // --- NOVA LÓGICA PARA LISTA DE ENDEREÇOS ---
+    const addresses = restaurant.addresses;
+    let addressListHtml = '';
+    let seeMoreButtonHtml = '';
+
+    if (addresses.length > 3) {
+        // Mostra os 3 primeiros endereços
+        addressListHtml += addresses.slice(0, 3).map(addr => `<li>${addr}</li>`).join('');
+        // Adiciona os endereços restantes como ocultos
+        addressListHtml += addresses.slice(3).map(addr => `<li class="hidden extra-address">${addr}</li>`).join('');
+        // Cria o botão "Veja mais"
+        seeMoreButtonHtml = `<button class="text-xs text-sky-600 hover:underline mt-1 show-more-addresses">Veja mais...</button>`;
+    } else {
+        // Se tiver 3 ou menos, apenas lista todos
+        addressListHtml = addresses.map(addr => `<li>${addr}</li>`).join('');
+    }
+    // --- FIM DA NOVA LÓGICA ---
 
     // Adiciona o atributo data-safety-level para permitir a filtragem
     return `
@@ -41,7 +56,8 @@ function createRestaurantCard(restaurant) {
                 <p>
                     <i class="fas fa-map-marker-alt fa-fw w-4 text-center mr-1 text-slate-400"></i>
                     <strong class="font-semibold">Endereço(s):</strong>
-                    <ul class="list-disc list-inside pl-5 mt-1">${addressList}</ul>
+                    <ul class="list-disc list-inside pl-5 mt-1">${addressListHtml}</ul>
+                    ${seeMoreButtonHtml}
                 </p>
                 <p>
                     <i class="fas fa-utensils fa-fw w-4 text-center mr-1 text-slate-400"></i>
@@ -124,6 +140,40 @@ function setupFilterListeners() {
     });
 }
 
+/**
+ * Configura os event listeners para os botões "Veja mais" dos endereços.
+ * Utiliza a delegação de eventos para otimizar a performance.
+ */
+function setupAddressToggles() {
+    const grids = document.querySelectorAll('[id^="content-food-"][id$="-grid"]');
+    grids.forEach(grid => {
+        grid.addEventListener('click', function(event) {
+            const target = event.target;
+            // Verifica se o elemento clicado é o nosso botão
+            if (!target.classList.contains('show-more-addresses')) {
+                return;
+            }
+
+            event.preventDefault();
+
+            // O <ul> é o elemento irmão anterior ao botão
+            const addressList = target.previousElementSibling;
+            if (!addressList || addressList.tagName !== 'UL') return;
+
+            const extraAddresses = addressList.querySelectorAll('.extra-address');
+            const isHidden = target.textContent.includes('Veja mais');
+
+            // Alterna a visibilidade dos endereços extras
+            extraAddresses.forEach(addr => {
+                addr.classList.toggle('hidden');
+            });
+
+            // Alterna o texto do botão
+            target.textContent = isHidden ? 'Veja menos' : 'Veja mais...';
+        });
+    });
+}
+
 
 /**
  * Gera a lista de restaurantes para uma cidade específica.
@@ -155,5 +205,6 @@ export function initializeSaboresPage() {
     generateRestaurantList('oxford', 'content-food-oxford-grid');
     generateRestaurantList('paris', 'content-food-paris-grid');
     generateRestaurantList('lisboa', 'content-food-lisboa-grid');
-    setupFilterListeners(); // Configura os eventos dos novos botões de filtro
+    setupFilterListeners();
+    setupAddressToggles(); // Adiciona a configuração para os botões de endereço
 }

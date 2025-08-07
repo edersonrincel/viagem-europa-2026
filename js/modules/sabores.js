@@ -56,8 +56,7 @@ function createRestaurantCard(restaurant) {
                 </p>
                 <p>
                     <i class="fas fa-book fa-fw w-4 text-center mr-1 text-slate-400"></i>
-                    <strong><a href="${restaurant.link}" target="_blank" class="font-semibold text-blue-600 hover:text-blue-800 hover:underline">Cardápio no Maps</a></strong>
-                    (clique na aba "Cardápio" abaixo das fotos do local)
+                    <strong><a href="${restaurant.link}" target="_blank" class="font-semibold underline">Ver cardápio no  Google Maps</a></strong>
                 </p>
             </div>
 

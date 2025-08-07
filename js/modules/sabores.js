@@ -29,17 +29,22 @@ function createRestaurantCard(restaurant) {
 
     const currentSafetyInfo = safetyInfo[restaurant.safety.level] || { icon: 'fa-info-circle', color: 'text-slate-600', text: 'Informação' };
 
-    // --- LÓGICA ATUALIZADA PARA LISTA DE ENDEREÇOS COM LINKS ---
+    // --- LÓGICA ATUALIZADA PARA LISTA DE ENDEREÇOS COM ÍCONES E LINKS ---
     const addresses = restaurant.addresses;
     let addressListHtml = '';
     let seeMoreButtonHtml = '';
 
-    // Função auxiliar para criar um item da lista com link para o Google Maps
+    // Função auxiliar para criar um item da lista com ícone e link para o Google Maps
     const createLinkedListItem = (addr, isHidden = false) => {
         const encodedAddr = encodeURIComponent(addr);
         const hiddenClass = isHidden ? 'hidden extra-address' : '';
-        // Adiciona o link em volta do endereço
-        return `<li class="${hiddenClass}"><a href="https://www.google.com/maps?q=${encodedAddr}" target="_blank" class="hover:underline text-slate-600">${addr}</a></li>`;
+        // Adiciona ícone, muda a cor do link e o torna um flex container para alinhar
+        return `<li class="${hiddenClass}">
+                    <a href="https://www.google.com/maps?q=${encodedAddr}" target="_blank" class="inline-flex items-start text-sky-600 hover:underline hover:text-orange-500 transition-colors">
+                        <i class="fas fa-map-marked-alt fa-fw w-4 text-center mr-1.5 text-slate-400 pt-1"></i>
+                        <span>${addr}</span>
+                    </a>
+                </li>`;
     };
 
     if (addresses.length > 3) {
@@ -48,7 +53,7 @@ function createRestaurantCard(restaurant) {
         // Adiciona os endereços restantes como ocultos, também com links
         addressListHtml += addresses.slice(3).map(addr => createLinkedListItem(addr, true)).join('');
         // Cria o botão "Veja mais"
-        seeMoreButtonHtml = `<button class="text-xs text-sky-600 hover:underline mt-1 show-more-addresses">Veja mais...</button>`;
+        seeMoreButtonHtml = `<button class="text-xs text-sky-600 hover:underline mt-2 ml-6 show-more-addresses">Veja mais...</button>`;
     } else {
         // Se tiver 3 ou menos, apenas lista todos com links
         addressListHtml = addresses.map(addr => createLinkedListItem(addr)).join('');
@@ -61,12 +66,14 @@ function createRestaurantCard(restaurant) {
             <h4 class="food-card-title text-base font-bold text-slate-800 mb-2">${restaurant.name}</h4>
             
             <div class="text-xs text-slate-600 space-y-2 mb-3">
-                <p>
-                    <i class="fas fa-map-marker-alt fa-fw w-4 text-center mr-1 text-slate-400"></i>
-                    <strong class="font-semibold">Endereço(s):</strong>
-                    <ul class="list-disc list-inside pl-5 mt-1">${addressListHtml}</ul>
-                    ${seeMoreButtonHtml}
-                </p>
+                <div class="flex items-start">
+                    <i class="fas fa-map-marker-alt fa-fw w-4 text-center mr-1 text-slate-400 pt-1"></i>
+                    <div>
+                        <strong class="font-semibold">Endereço(s):</strong>
+                        <ul class="list-none space-y-1.5 mt-1">${addressListHtml}</ul>
+                        ${seeMoreButtonHtml}
+                    </div>
+                </div>
                 <p>
                     <i class="fas fa-utensils fa-fw w-4 text-center mr-1 text-slate-400"></i>
                     <strong class="font-semibold">Cozinha:</strong> ${restaurant.cuisine}
@@ -164,9 +171,10 @@ function setupAddressToggles() {
 
             event.preventDefault();
 
-            // O <ul> é o elemento irmão anterior ao botão
-            const addressList = target.previousElementSibling;
-            if (!addressList || addressList.tagName !== 'UL') return;
+            // O <ul> é o elemento pai do container do botão
+            const addressContainer = target.parentElement;
+            const addressList = addressContainer.querySelector('ul');
+            if (!addressList) return;
 
             const extraAddresses = addressList.querySelectorAll('.extra-address');
             const isHidden = target.textContent.includes('Veja mais');

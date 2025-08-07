@@ -38,11 +38,11 @@ function createRestaurantCard(restaurant) {
     const createLinkedListItem = (addr, isHidden = false) => {
         const encodedAddr = encodeURIComponent(addr);
         const hiddenClass = isHidden ? 'hidden extra-address' : '';
-        // Adiciona ícone e aplica o sublinhado apenas no texto (span)
+        // Adiciona ícone, aplica o sublinhado apenas no texto (span) e reduz a fonte
         return `<li class="${hiddenClass}">
                     <a href="https://www.google.com/maps?q=${encodedAddr}" target="_blank" class="inline-flex items-start text-slate-600 hover:text-orange-500 transition-colors">
-                        <i class="fas fa-map-marked-alt fa-fw w-4 text-center mr-1.5 text-slate-400 pt-1"></i>
-                        <span class="underline">${addr}</span>
+                        <i class="fas fa-map-marked-alt fa-fw w-4 text-center mr-1.5 text-slate-400 pt-0.5"></i>
+                        <span class="underline text-[11px] leading-tight">${addr}</span>
                     </a>
                 </li>`;
     };

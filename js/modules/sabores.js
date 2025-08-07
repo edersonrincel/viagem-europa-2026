@@ -3,6 +3,22 @@
 import { restaurantData } from './data.js';
 
 /**
+ * Converte uma string para um formato "slug" (ex: "Italiano / Pizza" -> "italiano-pizza").
+ * @param {string} text - O texto a ser convertido.
+ * @returns {string} - O texto em formato slug.
+ */
+function slugify(text) {
+    if (!text) return '';
+    return text.toString().toLowerCase()
+        .replace(/\s+/g, '-') // Substitui espaços por -
+        .replace(/\//g, '-') // Substitui / por -
+        .replace(/[^\w\-]+/g, '') // Remove todos os caracteres não-alfanuméricos exceto -
+        .replace(/\-\-+/g, '-') // Substitui múltiplos - por um único -
+        .replace(/^-+/, '') // Remove - do início
+        .replace(/-+$/, ''); // Remove - do fim
+}
+
+/**
  * Cria o HTML para um único card de restaurante com a nova estrutura de dados.
  * @param {object} restaurant - O objeto do restaurante.
  * @returns {string} - O HTML do card.
@@ -10,35 +26,19 @@ import { restaurantData } from './data.js';
 function createRestaurantCard(restaurant) {
     // Mapeia o nível de segurança para classes CSS e ícones
     const safetyInfo = {
-        safe: {
-            icon: 'fa-check-circle',
-            color: 'text-green-600',
-            text: 'Seguro'
-        },
-        accredited: {
-            icon: 'fa-shield-alt',
-            color: 'text-sky-600',
-            text: 'Acreditado'
-        },
-        caution: {
-            icon: 'fa-exclamation-triangle',
-            color: 'text-amber-600',
-            text: 'Cautela'
-        }
+        safe: { icon: 'fa-check-circle', color: 'text-green-600', text: 'Seguro' },
+        accredited: { icon: 'fa-shield-alt', color: 'text-sky-600', text: 'Acreditado' },
+        caution: { icon: 'fa-exclamation-triangle', color: 'text-amber-600', text: 'Cautela' }
     };
-
     const currentSafetyInfo = safetyInfo[restaurant.safety.level] || { icon: 'fa-info-circle', color: 'text-slate-600', text: 'Informação' };
 
-    // --- LÓGICA ATUALIZADA PARA LISTA DE ENDEREÇOS COM ÍCONES E LINKS ---
     const addresses = restaurant.addresses;
     let addressListHtml = '';
     let seeMoreButtonHtml = '';
 
-    // Função auxiliar para criar um item da lista com ícone e link para o Google Maps
     const createLinkedListItem = (addr, isHidden = false) => {
         const encodedAddr = encodeURIComponent(addr);
         const hiddenClass = isHidden ? 'hidden extra-address' : '';
-        // Adiciona ícone, aplica o sublinhado apenas no texto (span) e reduz a fonte
         return `<li class="${hiddenClass}">
                     <a href="https://www.google.com/maps?q=${encodedAddr}" target="_blank" class="inline-flex items-start text-slate-600 hover:text-orange-500 transition-colors">
                         <i class="fas fa-map-marked-alt fa-fw w-4 text-center mr-1.5 text-slate-400 pt-0.5"></i>
@@ -48,21 +48,23 @@ function createRestaurantCard(restaurant) {
     };
 
     if (addresses.length > 3) {
-        // Mostra os 3 primeiros endereços com links
         addressListHtml += addresses.slice(0, 3).map(addr => createLinkedListItem(addr)).join('');
-        // Adiciona os endereços restantes como ocultos, também com links
         addressListHtml += addresses.slice(3).map(addr => createLinkedListItem(addr, true)).join('');
-        // Cria o botão "Veja mais"
         seeMoreButtonHtml = `<button class="text-xs text-sky-600 hover:underline mt-2 ml-6 show-more-addresses">Veja mais...</button>`;
     } else {
-        // Se tiver 3 ou menos, apenas lista todos com links
         addressListHtml = addresses.map(addr => createLinkedListItem(addr)).join('');
     }
-    // --- FIM DA LÓGICA ATUALIZADA ---
 
-    // Adiciona o atributo data-safety-level para permitir a filtragem
+    // Adiciona atributos de dados para todos os filtros
+    const cuisineSlug = slugify(restaurant.cuisine);
+    const priceSlug = slugify(restaurant.price);
+
     return `
-        <div class="food-card p-4 rounded-lg border bg-slate-50 flex flex-col h-full" data-safety-level="${restaurant.safety.level}">
+        <div class="food-card p-4 rounded-lg border bg-slate-50 flex flex-col h-full" 
+             data-safety-level="${restaurant.safety.level}" 
+             data-cuisine="${cuisineSlug}" 
+             data-price="${priceSlug}">
+            
             <h4 class="food-card-title text-base font-bold text-slate-800 mb-2">${restaurant.name}</h4>
             
             <div class="text-xs text-slate-600 space-y-2 mb-3">
@@ -101,21 +103,29 @@ function createRestaurantCard(restaurant) {
 }
 
 /**
- * Aplica o filtro de segurança aos cards de uma cidade.
+ * Aplica os filtros de segurança, cozinha e preço aos cards de uma cidade.
  * @param {string} city - A chave da cidade (ex: 'londres').
- * @param {string} filter - O nível de segurança a ser filtrado (ex: 'safe', 'all').
  */
-function applyFilter(city, filter) {
+function applyFilters(city) {
     const grid = document.getElementById(`content-food-${city}-grid`);
     if (!grid) return;
+
+    // Obtém os valores de todos os filtros para a cidade especificada
+    const safetyFilter = document.querySelector(`.filter-btn[data-city='${city}'].active`).dataset.filter;
+    const cuisineFilter = document.getElementById(`filter-cuisine-${city}`).value;
+    const priceFilter = document.getElementById(`filter-price-${city}`).value;
 
     const cards = grid.querySelectorAll('.food-card');
     let hasVisibleCards = false;
 
     cards.forEach(card => {
-        const safetyLevel = card.dataset.safetyLevel;
-        if (filter === 'all' || safetyLevel === filter) {
-            card.style.display = 'flex'; // Usar 'flex' pois é o display padrão do card
+        const safetyMatch = safetyFilter === 'all' || card.dataset.safetyLevel === safetyFilter;
+        const cuisineMatch = cuisineFilter === 'all' || card.dataset.cuisine === cuisineFilter;
+        const priceMatch = priceFilter === 'all' || card.dataset.price === priceFilter;
+
+        // O card só é visível se corresponder a TODOS os filtros ativos
+        if (safetyMatch && cuisineMatch && priceMatch) {
+            card.style.display = 'flex';
             hasVisibleCards = true;
         } else {
             card.style.display = 'none';
@@ -127,7 +137,7 @@ function applyFilter(city, filter) {
     if (!noResultsMsg) {
         noResultsMsg = document.createElement('p');
         noResultsMsg.className = 'no-results-message text-center text-slate-500 col-span-full';
-        noResultsMsg.textContent = 'Nenhum local encontrado para este filtro.';
+        noResultsMsg.textContent = 'Nenhum local encontrado para esta combinação de filtros.';
         grid.appendChild(noResultsMsg);
     }
 
@@ -135,65 +145,100 @@ function applyFilter(city, filter) {
 }
 
 /**
- * Adiciona os event listeners aos botões de filtro.
+ * Adiciona os event listeners aos botões e seletores de filtro.
  */
 function setupFilterListeners() {
+    // Botões de segurança
     const filterButtons = document.querySelectorAll('.filter-btn');
     filterButtons.forEach(button => {
         button.addEventListener('click', () => {
             const city = button.dataset.city;
             const filter = button.dataset.filter;
 
-            // Atualiza o estado 'active' para os botões do mesmo grupo da cidade
-            document.querySelectorAll(`.filter-btn[data-city='${city}']`).forEach(btn => {
-                btn.classList.remove('active');
-            });
+            document.querySelectorAll(`.filter-btn[data-city='${city}']`).forEach(btn => btn.classList.remove('active'));
             button.classList.add('active');
 
-            applyFilter(city, filter);
+            applyFilters(city);
+        });
+    });
+
+    // Seletores de Cozinha e Preço
+    const filterSelects = document.querySelectorAll('.filter-select');
+    filterSelects.forEach(select => {
+        select.addEventListener('change', () => {
+            const city = select.dataset.city;
+            applyFilters(city);
         });
     });
 }
 
 /**
  * Configura os event listeners para os botões "Veja mais" dos endereços.
- * Utiliza a delegação de eventos para otimizar a performance.
  */
 function setupAddressToggles() {
     const grids = document.querySelectorAll('[id^="content-food-"][id$="-grid"]');
     grids.forEach(grid => {
         grid.addEventListener('click', function(event) {
             const target = event.target;
-            // Verifica se o elemento clicado é o nosso botão
-            if (!target.classList.contains('show-more-addresses')) {
-                return;
-            }
-
+            if (!target.classList.contains('show-more-addresses')) return;
+            
             event.preventDefault();
-
-            // O <ul> é o elemento pai do container do botão
             const addressContainer = target.parentElement;
             const addressList = addressContainer.querySelector('ul');
             if (!addressList) return;
 
             const extraAddresses = addressList.querySelectorAll('.extra-address');
             const isHidden = target.textContent.includes('Veja mais');
-
-            // Alterna a visibilidade dos endereços extras
-            extraAddresses.forEach(addr => {
-                addr.classList.toggle('hidden');
-            });
-
-            // Alterna o texto do botão
+            
+            extraAddresses.forEach(addr => addr.classList.toggle('hidden'));
             target.textContent = isHidden ? 'Veja menos' : 'Veja mais...';
         });
     });
 }
 
+/**
+ * Popula dinamicamente os filtros de cozinha e preço para uma cidade.
+ * @param {string} cityKey - A chave da cidade.
+ */
+function populateFilters(cityKey) {
+    const restaurants = restaurantData[cityKey] || [];
+    if (restaurants.length === 0) return;
+
+    const cuisineSet = new Set();
+    const priceSet = new Set();
+
+    restaurants.forEach(r => {
+        if (r.cuisine) cuisineSet.add(r.cuisine);
+        if (r.price) priceSet.add(r.price);
+    });
+
+    const cuisineSelect = document.getElementById(`filter-cuisine-${cityKey}`);
+    const priceSelect = document.getElementById(`filter-price-${cityKey}`);
+
+    if (cuisineSelect) {
+        cuisineSelect.innerHTML = '<option value="all">Todos os Tipos</option>';
+        [...cuisineSet].sort().forEach(cuisine => {
+            const option = document.createElement('option');
+            option.value = slugify(cuisine);
+            option.textContent = cuisine;
+            cuisineSelect.appendChild(option);
+        });
+    }
+
+    if (priceSelect) {
+        priceSelect.innerHTML = '<option value="all">Todas as Faixas</option>';
+        [...priceSet].sort().forEach(price => {
+            const option = document.createElement('option');
+            option.value = slugify(price);
+            option.textContent = price;
+            priceSelect.appendChild(option);
+        });
+    }
+}
 
 /**
  * Gera a lista de restaurantes para uma cidade específica.
- * @param {string} cityKey - A chave da cidade no objeto restaurantData (ex: 'londres').
+ * @param {string} cityKey - A chave da cidade no objeto restaurantData.
  * @param {string} containerId - O ID do elemento onde a lista será inserida.
  */
 function generateRestaurantList(cityKey, containerId) {
@@ -205,7 +250,6 @@ function generateRestaurantList(cityKey, containerId) {
 
     const restaurants = restaurantData[cityKey] || [];
     if (restaurants.length > 0) {
-        // Ordena os restaurantes alfabeticamente pelo nome
         const sortedRestaurants = restaurants.sort((a, b) => a.name.localeCompare(b.name));
         container.innerHTML = sortedRestaurants.map(createRestaurantCard).join('');
     } else {
@@ -214,13 +258,19 @@ function generateRestaurantList(cityKey, containerId) {
 }
 
 /**
- * Inicializa a página de sabores, gerando todas as listas de restaurantes e configurando os filtros.
+ * Inicializa a página de sabores, gerando listas, populando filtros e configurando listeners.
  */
 export function initializeSaboresPage() {
-    generateRestaurantList('londres', 'content-food-londres-grid');
-    generateRestaurantList('oxford', 'content-food-oxford-grid');
-    generateRestaurantList('paris', 'content-food-paris-grid');
-    generateRestaurantList('lisboa', 'content-food-lisboa-grid');
+    const cities = ['londres', 'oxford', 'paris', 'lisboa'];
+    
+    cities.forEach(city => {
+        // Verifica se o container da cidade existe na página antes de processar
+        if (document.getElementById(`content-food-${city}`)) {
+            generateRestaurantList(city, `content-food-${city}-grid`);
+            populateFilters(city);
+        }
+    });
+
     setupFilterListeners();
-    setupAddressToggles(); // Adiciona a configuração para os botões de endereço
+    setupAddressToggles();
 }

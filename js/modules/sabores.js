@@ -55,9 +55,8 @@ function createRestaurantCard(restaurant) {
                     <strong class="font-semibold">Preço:</strong> ${restaurant.price}
                 </p>
                 <p>
-                    <a href="${restaurant.link}" target="_blank" class="fas fa-tag fa-fw w-4 text-center mr-1 text-slate-400">
-                        Ver no Mapa
-                    </a>
+                    <i class="fas fa-book fa-fw w-4 text-center mr-1 text-slate-400"></i>
+                    <strong><a href="${restaurant.link}" target="_blank" class="font-semibold">Cardápio</strong>
                 </p>
             </div>
 

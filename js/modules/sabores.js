@@ -54,18 +54,24 @@ function createRestaurantCard(restaurant) {
                     <i class="fas fa-tag fa-fw w-4 text-center mr-1 text-slate-400"></i>
                     <strong class="font-semibold">Preço:</strong> ${restaurant.price}
                 </p>
+                <p>
+                    <a href="${restaurant.link}" target="_blank" class="fas fa-tag fa-fw w-4 text-center mr-1 text-slate-400">
+                        Ver no Mapa
+                    </a>
+                </p>
             </div>
 
             <div class="text-xs text-slate-700 pt-3 border-t border-slate-200 space-y-2 mb-4">
                  <p><strong class="font-semibold text-slate-800">Recomendação:</strong> ${restaurant.recommendation}</p>
                  <p><strong class="font-semibold text-slate-800">Imperdível:</strong> ${restaurant.mustTry}</p>
             </div>
-            
+            <!--
             <div class="mt-auto text-center">
                 <a href="${restaurant.link}" target="_blank" class="action-button inline-block w-full sm:w-auto">
                     <i class="fas fa-map-marked-alt"></i>Ver no Mapa
                 </a>
             </div>
+            -->
         </div>
     `;
 }

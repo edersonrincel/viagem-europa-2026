@@ -56,7 +56,7 @@ function createRestaurantCard(restaurant) {
                 </p>
                 <p>
                     <i class="fas fa-book fa-fw w-4 text-center mr-1 text-slate-400"></i>
-                    <strong><a href="${restaurant.link}" target="_blank" class="font-semibold">Cardápio</strong>
+                    <strong><a href="${restaurant.link}" target="_blank" class="font-semibold">Cardápio</a></strong>
                 </p>
             </div>
 

@@ -29,23 +29,31 @@ function createRestaurantCard(restaurant) {
 
     const currentSafetyInfo = safetyInfo[restaurant.safety.level] || { icon: 'fa-info-circle', color: 'text-slate-600', text: 'Informação' };
 
-    // --- NOVA LÓGICA PARA LISTA DE ENDEREÇOS ---
+    // --- LÓGICA ATUALIZADA PARA LISTA DE ENDEREÇOS COM LINKS ---
     const addresses = restaurant.addresses;
     let addressListHtml = '';
     let seeMoreButtonHtml = '';
 
+    // Função auxiliar para criar um item da lista com link para o Google Maps
+    const createLinkedListItem = (addr, isHidden = false) => {
+        const encodedAddr = encodeURIComponent(addr);
+        const hiddenClass = isHidden ? 'hidden extra-address' : '';
+        // Adiciona o link em volta do endereço
+        return `<li class="${hiddenClass}"><a href="https://www.google.com/maps?q=${encodedAddr}" target="_blank" class="hover:underline text-slate-600">${addr}</a></li>`;
+    };
+
     if (addresses.length > 3) {
-        // Mostra os 3 primeiros endereços
-        addressListHtml += addresses.slice(0, 3).map(addr => `<li>${addr}</li>`).join('');
-        // Adiciona os endereços restantes como ocultos
-        addressListHtml += addresses.slice(3).map(addr => `<li class="hidden extra-address">${addr}</li>`).join('');
+        // Mostra os 3 primeiros endereços com links
+        addressListHtml += addresses.slice(0, 3).map(addr => createLinkedListItem(addr)).join('');
+        // Adiciona os endereços restantes como ocultos, também com links
+        addressListHtml += addresses.slice(3).map(addr => createLinkedListItem(addr, true)).join('');
         // Cria o botão "Veja mais"
         seeMoreButtonHtml = `<button class="text-xs text-sky-600 hover:underline mt-1 show-more-addresses">Veja mais...</button>`;
     } else {
-        // Se tiver 3 ou menos, apenas lista todos
-        addressListHtml = addresses.map(addr => `<li>${addr}</li>`).join('');
+        // Se tiver 3 ou menos, apenas lista todos com links
+        addressListHtml = addresses.map(addr => createLinkedListItem(addr)).join('');
     }
-    // --- FIM DA NOVA LÓGICA ---
+    // --- FIM DA LÓGICA ATUALIZADA ---
 
     // Adiciona o atributo data-safety-level para permitir a filtragem
     return `

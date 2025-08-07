@@ -56,7 +56,8 @@ function createRestaurantCard(restaurant) {
                 </p>
                 <p>
                     <i class="fas fa-book fa-fw w-4 text-center mr-1 text-slate-400"></i>
-                    <strong><a href="${restaurant.link}" target="_blank" class="font-semibold">Cardápio</a></strong>
+                    <strong><a href="${restaurant.link}" target="_blank" class="font-semibold text-blue-600 hover:text-blue-800 hover:underline">Cardápio no Maps</a></strong>
+                    (clique na aba "Cardápio" abaixo das fotos do local)
                 </p>
             </div>
 
@@ -64,13 +65,6 @@ function createRestaurantCard(restaurant) {
                  <p><strong class="font-semibold text-slate-800">Recomendação:</strong> ${restaurant.recommendation}</p>
                  <p><strong class="font-semibold text-slate-800">Imperdível:</strong> ${restaurant.mustTry}</p>
             </div>
-            <!--
-            <div class="mt-auto text-center">
-                <a href="${restaurant.link}" target="_blank" class="action-button inline-block w-full sm:w-auto">
-                    <i class="fas fa-map-marked-alt"></i>Ver no Mapa
-                </a>
-            </div>
-            -->
         </div>
     `;
 }

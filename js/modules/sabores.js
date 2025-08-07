@@ -32,8 +32,9 @@ function createRestaurantCard(restaurant) {
     // Formata a lista de endereços
     const addressList = restaurant.addresses.map(addr => `<li>${addr}</li>`).join('');
 
+    // Adiciona o atributo data-safety-level para permitir a filtragem
     return `
-        <div class="food-card p-4 rounded-lg border bg-slate-50 flex flex-col h-full">
+        <div class="food-card p-4 rounded-lg border bg-slate-50 flex flex-col h-full" data-safety-level="${restaurant.safety.level}">
             <h4 class="food-card-title text-base font-bold text-slate-800 mb-2">${restaurant.name}</h4>
             
             <div class="text-xs text-slate-600 space-y-2 mb-3">
@@ -68,6 +69,61 @@ function createRestaurantCard(restaurant) {
     `;
 }
 
+/**
+ * Aplica o filtro de segurança aos cards de uma cidade.
+ * @param {string} city - A chave da cidade (ex: 'londres').
+ * @param {string} filter - O nível de segurança a ser filtrado (ex: 'safe', 'all').
+ */
+function applyFilter(city, filter) {
+    const grid = document.getElementById(`content-food-${city}-grid`);
+    if (!grid) return;
+
+    const cards = grid.querySelectorAll('.food-card');
+    let hasVisibleCards = false;
+
+    cards.forEach(card => {
+        const safetyLevel = card.dataset.safetyLevel;
+        if (filter === 'all' || safetyLevel === filter) {
+            card.style.display = 'flex'; // Usar 'flex' pois é o display padrão do card
+            hasVisibleCards = true;
+        } else {
+            card.style.display = 'none';
+        }
+    });
+
+    // Mostra ou esconde a mensagem de "nenhum resultado"
+    let noResultsMsg = grid.querySelector('.no-results-message');
+    if (!noResultsMsg) {
+        noResultsMsg = document.createElement('p');
+        noResultsMsg.className = 'no-results-message text-center text-slate-500 col-span-full';
+        noResultsMsg.textContent = 'Nenhum local encontrado para este filtro.';
+        grid.appendChild(noResultsMsg);
+    }
+
+    noResultsMsg.style.display = hasVisibleCards ? 'none' : 'block';
+}
+
+/**
+ * Adiciona os event listeners aos botões de filtro.
+ */
+function setupFilterListeners() {
+    const filterButtons = document.querySelectorAll('.filter-btn');
+    filterButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            const city = button.dataset.city;
+            const filter = button.dataset.filter;
+
+            // Atualiza o estado 'active' para os botões do mesmo grupo da cidade
+            document.querySelectorAll(`.filter-btn[data-city='${city}']`).forEach(btn => {
+                btn.classList.remove('active');
+            });
+            button.classList.add('active');
+
+            applyFilter(city, filter);
+        });
+    });
+}
+
 
 /**
  * Gera a lista de restaurantes para uma cidade específica.
@@ -92,11 +148,12 @@ function generateRestaurantList(cityKey, containerId) {
 }
 
 /**
- * Inicializa a página de sabores, gerando todas as listas de restaurantes.
+ * Inicializa a página de sabores, gerando todas as listas de restaurantes e configurando os filtros.
  */
 export function initializeSaboresPage() {
     generateRestaurantList('londres', 'content-food-londres-grid');
     generateRestaurantList('oxford', 'content-food-oxford-grid');
     generateRestaurantList('paris', 'content-food-paris-grid');
     generateRestaurantList('lisboa', 'content-food-lisboa-grid');
+    setupFilterListeners(); // Configura os eventos dos novos botões de filtro
 }

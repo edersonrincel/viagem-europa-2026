@@ -572,3 +572,43 @@ body {
 .scroll-target {
     scroll-margin-top: 5rem; /* Aprox. 80px, dá espaço para o menu de 4rem/64px */
 }
+
+/* Filter Button Styles */
+.filter-controls {
+    border-bottom: 1px solid #e2e8f0;
+    padding-bottom: 1rem;
+}
+
+.filter-btn {
+    padding: 0.5rem 1rem;
+    border: 1px solid #cbd5e1;
+    color: #475569;
+    background-color: white;
+    border-radius: 9999px; /* Pill shape */
+    cursor: pointer;
+    font-size: 0.875rem;
+    font-weight: 500;
+    transition: background-color 0.2s, color 0.2s, box-shadow 0.2s;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.filter-btn:hover {
+    background-color: #f1f5f9;
+}
+
+.filter-btn.active {
+    background-color: #0EA5E9; /* Sky Blue */
+    color: white;
+    border-color: #0EA5E9;
+    box-shadow: 0 2px 5px rgba(14, 165, 233, 0.3);
+}
+
+.filter-btn.active i {
+    color: white !important; /* Override icon color when active */
+}
+
+.no-results-message {
+    display: none; /* Hidden by default */
+}

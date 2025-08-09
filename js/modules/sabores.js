@@ -296,7 +296,7 @@ function setupViewToggler() {
  * Inicializa a página de sabores, gerando listas, populando filtros e configurando listeners.
  */
 export function initializeSaboresPage() {
-    const cities = ['londres', 'oxford', 'lisboa'];
+    const cities = ['londres', 'oxford', 'lisboa', 'paris'];
     
     cities.forEach(city => {
         if (document.getElementById(`content-food-${city}`)) {

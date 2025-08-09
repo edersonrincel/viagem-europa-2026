@@ -4,57 +4,66 @@ import { restaurantData } from './data.js';
 import { navigateToRestaurant } from './sabores.js';
 
 let map = null;
+let markers = null;
 
 // --- FUNÇÕES HELPER ---
 
-/**
- * Converte uma string para um formato "slug" (ex: "Italiano / Pizza" -> "italiano-pizza").
- * @param {string} text - O texto a ser convertido.
- * @returns {string} - O texto em formato slug.
- */
 function slugify(text) {
     if (!text) return '';
     return text.toString().toLowerCase()
-        .replace(/\s+/g, '-') // Substitui espaços por -
-        .replace(/\//g, '-') // Substitui / por -
-        .replace(/[^\w\-]+/g, '') // Remove todos os caracteres não-alfanuméricos exceto -
-        .replace(/\-\-+/g, '-') // Substitui múltiplos - por um único -
-        .replace(/^-+/, '') // Remove - do início
-        .replace(/-+$/, ''); // Remove - do fim
+        .replace(/\s+/g, '-')
+        .replace(/\//g, '-')
+        .replace(/[^\w\-]+/g, '')
+        .replace(/\-\-+/g, '-')
+        .replace(/^-+/, '')
+        .replace(/-+$/, '');
 }
 
 // --- DEFINIÇÕES E CRIAÇÃO DO MAPA ---
 
-/**
- * Cria ícones personalizados para os marcadores do mapa com base no nível de segurança.
- * @returns {object} - Um objeto contendo os ícones para cada nível.
- */
 function createCustomIcons() {
-    const baseIcon = {
-        iconSize: [32, 32],
-        iconAnchor: [16, 32],
-        popupAnchor: [0, -32],
-    };
+    const baseStyle = `
+        width: 32px; 
+        height: 32px; 
+        display: flex; 
+        justify-content: center; 
+        align-items: center; 
+        border-radius: 50% 50% 50% 0; 
+        transform: rotate(-45deg); 
+        box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+        border: 2px solid white;
+    `;
+    const innerStyle = `
+        transform: rotate(45deg); 
+        color: white; 
+        font-size: 16px;
+    `;
 
     return {
-        safe: L.icon({ ...baseIcon, iconUrl: 'https://img.icons8.com/plasticine/100/000000/marker.png' }),
-        accredited: L.icon({ ...baseIcon, iconUrl: 'https://img.icons8.com/ultraviolet/80/000000/marker.png' }),
-        caution: L.icon({ ...baseIcon, iconUrl: 'https://img.icons8.com/fluency/96/000000/marker.png' }),
-        user: L.icon({
-            iconUrl: 'https://img.icons8.com/pulsar-color/96/user-location.png',
-            iconSize: [38, 38],
-            iconAnchor: [19, 38],
-            popupAnchor: [0, -38],
+        safe: L.divIcon({
+            className: 'custom-div-icon',
+            html: `<div style="${baseStyle} background-color: #10B981;"><i class="fas fa-check-circle" style="${innerStyle}"></i></div>`,
+            iconSize: [32, 32],
+            iconAnchor: [16, 32],
+            popupAnchor: [0, -32],
         }),
+        accredited: L.divIcon({
+            className: 'custom-div-icon',
+            html: `<div style="${baseStyle} background-color: #0EA5E9;"><i class="fas fa-shield-alt" style="${innerStyle}"></i></div>`,
+            iconSize: [32, 32],
+            iconAnchor: [16, 32],
+            popupAnchor: [0, -32],
+        }),
+        caution: L.divIcon({
+            className: 'custom-div-icon',
+            html: `<div style="${baseStyle} background-color: #F59E0B;"><i class="fas fa-exclamation-triangle" style="${innerStyle}"></i></div>`,
+            iconSize: [32, 32],
+            iconAnchor: [16, 32],
+            popupAnchor: [0, -32],
+        })
     };
 }
 
-/**
- * Cria o conteúdo HTML para o pop-up de um marcador.
- * @param {object} restaurant - O objeto do restaurante.
- * @param {object} address - O objeto do endereço específico.
- * @returns {string} - O HTML do pop-up.
- */
 function createPopupContent(restaurant, address) {
     const safetyInfo = {
         safe: { text: 'Seguro', class: 'popup-safety-safe' },
@@ -81,26 +90,45 @@ function createPopupContent(restaurant, address) {
     `;
 }
 
-/**
- * Adiciona todos os restaurantes ao mapa como marcadores.
- */
-function addRestaurantMarkers(icons) {
-    if (!map) return;
+function updateMapMarkers() {
+    if (!map || !markers) return;
 
-    Object.values(restaurantData).flat().forEach(restaurant => {
+    markers.clearLayers();
+    const icons = createCustomIcons();
+    const city = document.getElementById('map-filter-city').value;
+    const safety = document.querySelector('.map-filter-btn.active').dataset.filter;
+
+    const locations = [];
+    const restaurantsInCity = restaurantData[city] || [];
+
+    const filteredRestaurants = restaurantsInCity.filter(r => safety === 'all' || r.safety.level === safety);
+
+    filteredRestaurants.forEach(restaurant => {
         restaurant.addresses.forEach(address => {
             if (address.lat && address.lng) {
                 const icon = icons[restaurant.safety.level] || icons.caution;
-                const marker = L.marker([address.lat, address.lng], { icon: icon }).addTo(map);
+                const marker = L.marker([address.lat, address.lng], { icon: icon });
                 marker.bindPopup(createPopupContent(restaurant, address));
+                markers.addLayer(marker);
+                locations.push([address.lat, address.lng]);
             }
         });
     });
+
+    if (locations.length > 0) {
+        map.fitBounds(locations, { padding: [50, 50] });
+    } else {
+        // Padrão para o centro da cidade se não houver marcadores
+        const cityCenters = {
+            londres: [51.5074, -0.1278],
+            oxford: [51.7520, -1.2577],
+            lisboa: [38.7223, -9.1393],
+            paris: [48.8566, 2.3522]
+        };
+        map.setView(cityCenters[city] || [51.5074, -0.1278], 12);
+    }
 }
 
-/**
- * Adiciona um listener para os botões "Ver detalhes" nos pop-ups.
- */
 function setupPopupDetailButtons() {
     map.on('popupopen', function (e) {
         const detailButton = e.popup._container.querySelector('.popup-button-details');
@@ -113,32 +141,22 @@ function setupPopupDetailButtons() {
     });
 }
 
+function setupMapFilters() {
+    const citySelect = document.getElementById('map-filter-city');
+    const safetyButtons = document.querySelectorAll('.map-filter-btn');
 
-/**
- * Adiciona a localização do usuário ao mapa.
- */
-function addUserLocation(icons) {
-    if (!map) return;
-    navigator.geolocation.getCurrentPosition(
-        (position) => {
-            const { latitude, longitude } = position.coords;
-            L.marker([latitude, longitude], { icon: icons.user }).addTo(map)
-                .bindPopup("Sua localização atual").openPopup();
-            map.setView([latitude, longitude], 13);
-        },
-        () => {
-            console.warn("Não foi possível obter a localização do usuário.");
-            // Centraliza em Londres como padrão se a localização falhar
-            map.setView([51.5074, -0.1278], 11);
-        }
-    );
+    citySelect?.addEventListener('change', updateMapMarkers);
+    safetyButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            safetyButtons.forEach(btn => btn.classList.remove('active'));
+            button.classList.add('active');
+            updateMapMarkers();
+        });
+    });
 }
 
-/**
- * Inicializa o mapa Leaflet, adiciona camadas, marcadores e a localização do usuário.
- */
 export function initializeMap() {
-    if (map) return; // Previne reinicialização
+    if (map) return;
 
     const mapContainer = document.getElementById('map-container');
     if (!mapContainer) return;
@@ -149,18 +167,18 @@ export function initializeMap() {
         attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
     }).addTo(map);
 
-    const icons = createCustomIcons();
-    addRestaurantMarkers(icons);
-    addUserLocation(icons);
+    markers = L.markerClusterGroup();
+    map.addLayer(markers);
+
     setupPopupDetailButtons();
+    setupMapFilters();
+    updateMapMarkers(); // Initial population
 }
 
-/**
- * Destrói a instância do mapa para liberar recursos.
- */
 export function destroyMap() {
     if (map) {
         map.remove();
         map = null;
+        markers = null;
     }
 }

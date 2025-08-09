@@ -579,7 +579,7 @@ body {
     padding-bottom: 1rem;
 }
 
-.filter-btn {
+.filter-btn, .map-filter-btn {
     padding: 0.5rem 1rem;
     border: 1px solid #cbd5e1;
     color: #475569;
@@ -594,18 +594,18 @@ body {
     gap: 0.5rem;
 }
 
-.filter-btn:hover {
+.filter-btn:hover, .map-filter-btn:hover {
     background-color: #f1f5f9;
 }
 
-.filter-btn.active {
+.filter-btn.active, .map-filter-btn.active {
     background-color: #0EA5E9; /* Sky Blue */
     color: white;
     border-color: #0EA5E9;
     box-shadow: 0 2px 5px rgba(14, 165, 233, 0.3);
 }
 
-.filter-btn.active i {
+.filter-btn.active i, .map-filter-btn.active i {
     color: white !important; /* Override icon color when active */
 }
 
@@ -645,45 +645,6 @@ body {
     outline: none;
     border-color: #0EA5E9; /* sky-500 */
     box-shadow: 0 0 0 2px rgba(14, 165, 233, 0.2);
-}
-
-.filter-controls {
-    border-bottom: 1px solid #e2e8f0;
-    padding-bottom: 1rem;
-}
-
-.filter-btn {
-    padding: 0.5rem 1rem;
-    border: 1px solid #cbd5e1;
-    color: #475569;
-    background-color: white;
-    border-radius: 9999px; /* Pill shape */
-    cursor: pointer;
-    font-size: 0.875rem;
-    font-weight: 500;
-    transition: background-color 0.2s, color 0.2s, box-shadow 0.2s;
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-}
-
-.filter-btn:hover {
-    background-color: #f1f5f9;
-}
-
-.filter-btn.active {
-    background-color: #0EA5E9; /* Sky Blue */
-    color: white;
-    border-color: #0EA5E9;
-    box-shadow: 0 2px 5px rgba(14, 165, 233, 0.3);
-}
-
-.filter-btn.active i {
-    color: white !important; /* Override icon color when active */
-}
-
-.no-results-message {
-    display: none; /* Hidden by default */
 }
 
 /* Leaflet Map Styles */
@@ -756,4 +717,41 @@ body {
 }
 .popup-button-details:hover {
     background-color: #475569;
+}
+
+/* Marker Cluster Styles */
+.marker-cluster-small, .marker-cluster-medium, .marker-cluster-large {
+    background-clip: padding-box;
+    border-radius: 20px;
+}
+.marker-cluster-small div, .marker-cluster-medium div, .marker-cluster-large div {
+    width: 30px;
+    height: 30px;
+    margin-left: 5px;
+    margin-top: 5px;
+    text-align: center;
+    border-radius: 15px;
+    font: 12px "Helvetica Neue", Arial, Helvetica, sans-serif;
+    color: white;
+}
+.marker-cluster-small {
+    background-color: rgba(2, 132, 199, 0.6); /* sky-600 */
+}
+.marker-cluster-small div {
+    background-color: rgba(14, 165, 233, 0.8); /* sky-500 */
+    line-height: 30px;
+}
+.marker-cluster-medium {
+    background-color: rgba(249, 115, 22, 0.6); /* orange-500 */
+}
+.marker-cluster-medium div {
+    background-color: rgba(251, 146, 60, 0.8); /* orange-400 */
+    line-height: 30px;
+}
+.marker-cluster-large {
+    background-color: rgba(239, 68, 68, 0.6); /* red-500 */
+}
+.marker-cluster-large div {
+    background-color: rgba(248, 113, 113, 0.8); /* red-400 */
+    line-height: 30px;
 }

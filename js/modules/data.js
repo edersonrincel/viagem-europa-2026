@@ -1,7 +1,7 @@
 // js/modules/data.js
 
 /**
- * @file Contém todos os dados estáticos da aplicação, como custos e informações do podcast.
+ * @file Contém todos os dados estáticos da aplicação, como custos, informações do podcast e dados de restaurantes.
  * Isso separa os dados da lógica da aplicação.
  */
 
@@ -41,12 +41,12 @@ export const podcastEpisodes = [
     { "Episódio": 23, "Data lançamento": "17/01/2026", "Título": "Checklist final", "Narrador": "Giovana", "Duração": "4:07", "trackId": "2109462783", "token": "LJSbjMeqq7h" }
 ];
 
-// --- DADOS DOS RESTAURANTES (ESTRUTURA PADRONIZADA) ---
+// --- DADOS DOS RESTAURANTES (ESTRUTURA PADRONIZADA COM COORDENADAS) ---
 export const restaurantData = {
     lisboa: [
         {
             name: "Bali do Cais",
-            addresses: ["R. Bernardino Costa 21, 1200-052 Lisboa, Portugal"],
+            addresses: [{ address: "R. Bernardino Costa 21, 1200-052 Lisboa, Portugal", lat: 38.7068816, lng: -9.14244 }],
             cuisine: "Asiático",
             safety: { text: "Cozinha mista com certificação da APC.", level: "accredited" },
             price: "€€",
@@ -56,7 +56,7 @@ export const restaurantData = {
         },
         {
             name: "Batarda's",
-            addresses: ["Praceta Lagoa de Óbidos 38, 2775-722 Parede, Portugal"],
+            addresses: [{ address: "Praceta Lagoa de Óbidos 38, 2775-722 Parede, Portugal", lat: 38.6945668, lng: -9.3428507 }],
             cuisine: "Padaria / Café",
             safety: { text: "Cozinha mista com certificação da APC.", level: "accredited" },
             price: "N/A",
@@ -66,7 +66,7 @@ export const restaurantData = {
         },
         {
             name: "Café do Rio",
-            addresses: ["Rua da Alfândega 114, 1100-016 Lisboa, Portugal"],
+            addresses: [{ address: "Rua da Alfândega 114, 1100-016 Lisboa, Portugal", lat: 38.708802, lng: -9.1343489 }],
             cuisine: "Hambúrguer",
             safety: { text: "100% isenta de glúten e certificada pela APC.", level: "safe" },
             price: "€€",
@@ -76,7 +76,7 @@ export const restaurantData = {
         },
         {
             name: "Churrasqueira Franguito",
-            addresses: ["Estr. Algueirão 138, 2725-079 Algueirão-Mem Martins, Portugal"],
+            addresses: [{ address: "Estr. Algueirão 138, 2725-079 Algueirão-Mem Martins, Portugal", lat: 38.8078657, lng: -9.3332395 }],
             cuisine: "Variado",
             safety: { text: "Cozinha mista com certificação da APC.", level: "accredited" },
             price: "N/A",
@@ -86,7 +86,7 @@ export const restaurantData = {
         },
         {
             name: "Cozinha por Mim",
-            addresses: ["R. São José 3 B Loja 3, 2750-623 Cascais, Portugal"],
+            addresses: [{ address: "R. São José 3 B Loja 3, 2750-623 Cascais, Portugal", lat: 38.696348, lng: -9.420563 }],
             cuisine: "Variado",
             safety: { text: "Cozinha mista com certificação da APC.", level: "accredited" },
             price: "N/A",
@@ -96,7 +96,7 @@ export const restaurantData = {
         },
         {
             name: "Despensa N.6",
-            addresses: ["Av. Sacadura Cabral 6A, 1000-274 Lisboa, Portugal"],
+            addresses: [{ address: "Av. Sacadura Cabral 6A, 1000-274 Lisboa, Portugal", lat: 38.7448556, lng: -9.1402889 }],
             cuisine: "Padaria / Café",
             safety: { text: "100% sem glúten, sem açúcares refinados e certificada pela APC.", level: "safe" },
             price: "€€€",
@@ -106,7 +106,10 @@ export const restaurantData = {
         },
         {
             name: "Gelateria Italiana Fabio Lupi",
-            addresses: ["Av. Valbom 10A, 2750-508 Cascais, Portugal", "Avenida Nossa Senhora do Cabo 101, 2750-374 Cascais, Portugal"],
+            addresses: [
+                { address: "Av. Valbom 10A, 2750-508 Cascais, Portugal", lat: 38.6990787, lng: -9.420091 },
+                { address: "Avenida Nossa Senhora do Cabo 101, 2750-374 Cascais, Portugal", lat: 38.701130, lng: -9.440260 }
+            ],
             cuisine: "Gelataria",
             safety: { text: "Cozinha mista com certificação da APC.", level: "accredited" },
             price: "N/A",
@@ -116,7 +119,7 @@ export const restaurantData = {
         },
         {
             name: "Gluten'Out",
-            addresses: ["Av. Vasco da Gama 53, 2840-745 Seixal, Portugal"],
+            addresses: [{ address: "Av. Vasco da Gama 53, 2840-745 Seixal, Portugal", lat: 38.641830, lng: -9.102810 }],
             cuisine: "Padaria / Café",
             safety: { text: "Cozinha mista com certificação da APC.", level: "accredited" },
             price: "N/A",
@@ -126,7 +129,7 @@ export const restaurantData = {
         },
         {
             name: "GROM (Chiado)",
-            addresses: ["R. Garrett 42, 1200-204 Lisboa, Portugal"],
+            addresses: [{ address: "R. Garrett 42, 1200-204 Lisboa, Portugal", lat: 38.710925, lng: -9.1405719 }],
             cuisine: "Gelataria",
             safety: { text: "100% sem glúten, incluindo cones, e certificada pela APC.", level: "safe" },
             price: "€€",
@@ -136,7 +139,7 @@ export const restaurantData = {
         },
         {
             name: "Inspira Liberdade Boutique Hotel",
-            addresses: ["R. de Santa Marta 48, 1150-297 Lisboa, Portugal"],
+            addresses: [{ address: "R. de Santa Marta 48, 1150-297 Lisboa, Portugal", lat: 38.723176, lng: -9.145611 }],
             cuisine: "Contemporâneo",
             safety: { text: "Cozinha mista certificada pela APC, com uma área de cozinha separada e exclusiva para pratos sem glúten.", level: "accredited" },
             price: "€€€",
@@ -146,7 +149,7 @@ export const restaurantData = {
         },
         {
             name: "La Trattoria",
-            addresses: ["R. Artilharia 1 79, 1250-038 Lisboa, Portugal"],
+            addresses: [{ address: "R. Artilharia 1 79, 1250-038 Lisboa, Portugal", lat: 38.724543, lng: -9.15606 }],
             cuisine: "Italiano",
             safety: { text: "Cozinha mista certificada pela APC com menu dedicado sem glúten.", level: "accredited" },
             price: "€€€",
@@ -156,7 +159,31 @@ export const restaurantData = {
         },
         {
             name: "McDonald's",
-            addresses: ["Pç do Marquês de Pombal 3, 1250-161 Lisboa, Portugal", "Armazéns do Chiado, R. do Carmo 2 Lj.6, 10A, 1200-049 Lisboa, Portugal", "Amoreiras Shopping Center, Ljs 2041 a, 2043, 1070-102 Lisboa, Portugal", "R. Rodrigo da Fonseca 33 37, 1250-190 Lisboa, Portugal", "Av. República 10F, 1050-191 Lisboa, Portugal", "Av. Padre Cruz, 1600-000 Lisboa, Portugal", "Largo do Chiado 4 a 7, 1200-108 Lisboa, Portugal", "Praça Dom Pedro IV 81 83, 1100-202 Lisboa, Portugal", "Av. Lusíada, 1500-392 Lisboa, Portugal", "Aeroporto Humberto Delgado, Terminal 2, 1700-007 Lisboa, Portugal", "Av. Dom Carlos I 17-25, 1200-000 Lisboa, Portugal", "ACESSO LIVRE, Praça Marechal Humberto Delgado, 1549-004 Lisboa, Portugal", "Av. Marechal Gomes da Costa 33 Avª Drº, Av. Dr. Augusto de Castro Lote 408 Bloco 3, 1950-081 Lisboa, Portugal", "Parque, Largo Alm. Gago Coutinho, 2780-322 Oeiras, Portugal", "Edifício Caleidoscópio, Jardim do Campo Grande, 1700-090 Lisboa, Portugal", "Centro Comercial Alegro Alfragide, Loja 1422720-000, 2720-000 Lisboa, Portugal", "Av. das Nações Unidas, 1600-528 Lisboa, Portugal", "Alvalade - Av. Igreja, Praça Alvalade 14A 15D, 1700-000 Lisboa, Portugal", "Av. de Roma 3A 3B, 1000-260 Lisboa, Portugal", "R. Gregório Lopes, 1400-195 Lisboa, Portugal", "Centro Comercial da Bela Vista, lj. 9 10, 1950-441 Lisboa, Portugal", "Tv. da Praça 2-14, 1300-469 Lisboa, Portugal", "R. Birre 581, 2750-217 Cascais, Portugal"],
+            addresses: [
+                { address: "Pç do Marquês de Pombal 3, 1250-161 Lisboa, Portugal", lat: 38.7245694, lng: -9.1508837 },
+                { address: "Armazéns do Chiado, R. do Carmo 2 Lj.6, 10A, 1200-049 Lisboa, Portugal", lat: 38.711100, lng: -9.139600 },
+                { address: "Amoreiras Shopping Center, Ljs 2041 a, 2043, 1070-102 Lisboa, Portugal", lat: 38.723800, lng: -9.162200 },
+                { address: "Aeroporto Humberto Delgado, Terminal 2, 1700-007 Lisboa, Portugal", lat: 38.768600, lng: -9.129300 },
+                { address: "Praça Dom Pedro IV 81 83, 1100-202 Lisboa, Portugal", lat: 38.7138, lng: -9.1395 },
+                { address: "Av. da República 10F, 1050-191 Lisboa, Portugal", lat: 38.7363, lng: -9.1455 },
+                { address: "Av. Lusíada, 1500-392 Lisboa, Portugal", lat: 38.7533, lng: -9.1885 },
+                { address: "R. Rodrigo da Fonseca 33 37, 1250-190 Lisboa, Portugal", lat: 38.7225, lng: -9.1528 },
+                { address: "Av. Padre Cruz, 1600-000 Lisboa, Portugal", lat: 38.7611, lng: -9.1691 },
+                { address: "Largo do Chiado 4 a 7, 1200-108 Lisboa, Portugal", lat: 38.7107, lng: -9.1417 },
+                { address: "Av. Dom Carlos I 17-25, 1200-000 Lisboa, Portugal", lat: 38.7070, lng: -9.1504 },
+                { address: "Praça Marechal Humberto Delgado, 1549-004 Lisboa, Portugal", lat: 38.7408, lng: -9.1706 },
+                { address: "Av. Marechal Gomes da Costa 33, 1950-081 Lisboa, Portugal", lat: 38.7578, lng: -9.1121 },
+                { address: "Parque, Largo Alm. Gago Coutinho, 2780-322 Oeiras, Portugal", lat: 38.7000, lng: -9.3130 },
+                { address: "Edifício Caleidoscópio, Jardim do Campo Grande, 1700-090 Lisboa, Portugal", lat: 38.7562, lng: -9.1566 },
+                { address: "Centro Comercial Alegro Alfragide, Loja 1422720-000, 2720-000 Lisboa, Portugal", lat: 38.7297, lng: -9.2272 },
+                { address: "Av. das Nações Unidas, 1600-528 Lisboa, Portugal", lat: 38.7592, lng: -9.1748 },
+                { address: "Praça Alvalade 14A 15D, 1700-000 Lisboa, Portugal", lat: 38.7523, lng: -9.1458 },
+                { address: "Av. de Roma 3A 3B, 1000-260 Lisboa, Portugal", lat: 38.7423, lng: -9.1424 },
+                { address: "R. Gregório Lopes, 1400-195 Lisboa, Portugal", lat: 38.7046, lng: -9.2045 },
+                { address: "Centro Comercial da Bela Vista, lj. 9 10, 1950-441 Lisboa, Portugal", lat: 38.7544, lng: -9.1188 },
+                { address: "Tv. da Praça 2-14, 1300-469 Lisboa, Portugal", lat: 38.7011, lng: -9.1812 },
+                { address: "R. Birre 581, 2750-217 Cascais, Portugal", lat: 38.7118, lng: -9.4314 }
+            ],
             cuisine: "Fast-food",
             safety: { text: "Os pães sem glúten são certificados pela APC e seguem um protocolo rigoroso com bolsas de aquecimento e luvas dedicadas.", level: "accredited" },
             price: "€",
@@ -166,7 +193,10 @@ export const restaurantData = {
         },
         {
             name: "Quase Quase",
-            addresses: ["Av. de Roma 53B, 1700-342 Lisboa, Portugal", "R. Correia Teles 22D, 1350-243 Lisboa, Portugal"],
+            addresses: [
+                { address: "Av. de Roma 53B, 1700-342 Lisboa, Portugal", lat: 38.7475923, lng: -9.1413112 },
+                { address: "R. Correia Teles 22D, 1350-243 Lisboa, Portugal", lat: 38.711500, lng: -9.172400 }
+            ],
             cuisine: "Variado",
             safety: { text: "Cozinha mista com certificação da APC.", level: "accredited" },
             price: "N/A",
@@ -176,7 +206,7 @@ export const restaurantData = {
         },
         {
             name: "Rice Me Deli",
-            addresses: ["Av. António Augusto de Aguiar 124 A, 1050-124 Lisboa, Portugal"],
+            addresses: [{ address: "Av. António Augusto de Aguiar 124 A, 1050-124 Lisboa, Portugal", lat: 38.7334939, lng: -9.1529553 }],
             cuisine: "Padaria / Café",
             safety: { text: "Ecossistema 100% sem glúten e certificado pela APC.", level: "safe" },
             price: "€€",
@@ -186,7 +216,7 @@ export const restaurantData = {
         },
         {
             name: "Rice Me",
-            addresses: ["R. Carlos Testa 18A, 1050-046 Lisboa, Portugal"],
+            addresses: [{ address: "R. Carlos Testa 18A, 1050-046 Lisboa, Portugal", lat: 38.7335122, lng: -9.1527965 }],
             cuisine: "Variado",
             safety: { text: "Ecossistema 100% sem glúten e certificado pela APC.", level: "safe" },
             price: "€€",
@@ -196,7 +226,7 @@ export const restaurantData = {
         },
         {
             name: "Sam",
-            addresses: ["R. Luís Augusto Palmeirim 1 D, 1700-272 Lisboa, Portugal"],
+            addresses: [{ address: "R. Luís Augusto Palmeirim 1 D, 1700-272 Lisboa, Portugal", lat: 38.755404, lng: -9.1416426 }],
             cuisine: "Padaria / Café",
             safety: { text: "Cozinha mista com certificação da APC.", level: "accredited" },
             price: "N/A",
@@ -206,7 +236,7 @@ export const restaurantData = {
         },
         {
             name: "Scoop Gelato",
-            addresses: ["Lgo da Princesa 26 A, 1400-303 Lisboa, Portugal"],
+            addresses: [{ address: "Lgo da Princesa 26 A, 1400-303 Lisboa, Portugal", lat: 38.6951041, lng: -9.2153774 }],
             cuisine: "Gelataria",
             safety: { text: "Cozinha mista com certificação da APC.", level: "accredited" },
             price: "N/A",
@@ -216,7 +246,12 @@ export const restaurantData = {
         },
         {
             name: "Totale Pizzeria",
-            addresses: ["Praça José Fontana 17A, 1050-129 Lisboa, Portugal", "Alameda dos Oceanos 41F, 1990-203 Lisboa, Portugal", "Largo Machado de Assis 1, 1700-116 Lisboa, Portugal", "Av. Rio de Janeiro 29, 1700-111 Lisboa, Portugal"],
+            addresses: [
+                { address: "Praça José Fontana 17A, 1050-129 Lisboa, Portugal", lat: 38.7300099, lng: -9.1445622 },
+                { address: "Alameda dos Oceanos 41F, 1990-203 Lisboa, Portugal", lat: 38.763500, lng: -9.095200 },
+                { address: "Largo Machado de Assis 1, 1700-116 Lisboa, Portugal", lat: 38.752300, lng: -9.142100 },
+                { address: "Av. Rio de Janeiro 29, 1700-111 Lisboa, Portugal", lat: 38.751100, lng: -9.141200 }
+            ],
             cuisine: "Pizza",
             safety: { text: "Cozinha mista com certificação da APC.", level: "accredited" },
             price: "N/A",
@@ -226,7 +261,7 @@ export const restaurantData = {
         },
         {
             name: "Zero Healthy Food",
-            addresses: ["R. 21 de Agosto 14D, 2530-814 Vimeiro, Portugal"],
+            addresses: [{ address: "R. 21 de Agosto 14D, 2530-814 Vimeiro, Portugal", lat: 39.1779596, lng: -9.3196062 }],
             cuisine: "Variado",
             safety: { text: "Cozinha mista com certificação da APC.", level: "accredited" },
             price: "N/A",
@@ -238,7 +273,7 @@ export const restaurantData = {
     londres: [
         {
             name: "Brigit's Bakery",
-            addresses: ["6-7 Chandos Pl, London WC2N 4HU, Reino Unido"],
+            addresses: [{ address: "6-7 Chandos Pl, London WC2N 4HU, Reino Unido", lat: 51.5100768, lng: -0.1245529 }],
             cuisine: "Padaria / Café",
             safety: { text: "Oferece chá da tarde sem glúten com protocolos bem estabelecidos.", level: "accredited" },
             price: "N/A",
@@ -248,7 +283,7 @@ export const restaurantData = {
         },
         {
             name: "Brockley's Rock",
-            addresses: ["317 Brockley Rd, London SE4 2QZ, Reino Unido"],
+            addresses: [{ address: "317 Brockley Rd, London SE4 2QZ, Reino Unido", lat: 51.4594444, lng: -0.0336111 }],
             cuisine: "Fish & Chips",
             safety: { text: "Utiliza panela, utensílios e armazenamento dedicados para alimentos sem glúten.", level: "accredited" },
             price: "N/A",
@@ -258,7 +293,7 @@ export const restaurantData = {
         },
         {
             name: "Cotto",
-            addresses: ["89 Westminster Bridge Rd, London SE1 7HR, Reino Unido"],
+            addresses: [{ address: "89 Westminster Bridge Rd, London SE1 7HR, Reino Unido", lat: 51.4988111, lng: -0.1127472 }],
             cuisine: "Italiano",
             safety: { text: "Opera com duas cozinhas completamente separadas, uma 100% dedicada ao sem glúten. O proprietário é celíaco.", level: "safe" },
             price: "££",
@@ -268,7 +303,27 @@ export const restaurantData = {
         },
         {
             name: "Côte Brasserie",
-            addresses: ["124-126 Wardour St, London W1F 0TY, Reino Unido", "7-12 Sloane Square, London SW1W 8EG, Reino Unido", "1, Hay’s Galleria, Counter St, London SE1 2HD, Reino Unido", "50-51 St Martin's Ln, London WC2N 4EA, Reino Unido", "17-21 Tavistock St, London WC2E 7PA, Reino Unido", "47 Kensington Ct, London W8 5DA, Reino Unido", "Festival Terrace, Southbank Centre, London SE1 8XX, Reino Unido", "1 St Katharine's Way, London E1W 1UN, Reino Unido", "26 Ludgate Hill, London EC4M 7DR, Reino Unido", "6-8 St Christopher's Pl, London W1U 1ND, Reino Unido", "8 High Street Wimbledon, London SW19 5DX, Reino Unido", "9 The Grn, London W5 5DA, Reino Unido", "24 Hill St, Richmond TW9 1TW, Reino Unido", "50-54 Turnham Green Terrace, Chiswick, London W4 1QP, Reino Unido", "6 Riverside Walk, London, Kingston upon Thames KT1 1QN, Reino Unido", "57 Whitecross St, London EC1Y 8AA, Reino Unido", "172 High St, Teddington TW11 8HU, Reino Unido", "102-106 High St, Esher, London KT10 9QJ, Reino Unido", "26-27 Devonshire St, London W1G 6PL, Reino Unido"],
+            addresses: [
+                { address: "124-126 Wardour St, London W1F 0TY, Reino Unido", lat: 51.5142121, lng: -0.1343703 },
+                { address: "7-12 Sloane Square, London SW1W 8EG, Reino Unido", lat: 51.4923, lng: -0.1572 },
+                { address: "1, Hay’s Galleria, Counter St, London SE1 2HD, Reino Unido", lat: 51.5061, lng: -0.0845 },
+                { address: "17-21 Tavistock St, London WC2E 7PA, Reino Unido", lat: 51.5113, lng: -0.1218 },
+                { address: "50-51 St Martin's Ln, London WC2N 4EA, Reino Unido", lat: 51.5108, lng: -0.1275 },
+                { address: "47 Kensington Ct, London W8 5DA, Reino Unido", lat: 51.5009, lng: -0.1911 },
+                { address: "Festival Terrace, Southbank Centre, London SE1 8XX, Reino Unido", lat: 51.5065, lng: -0.1166 },
+                { address: "1 St Katharine's Way, London E1W 1UN, Reino Unido", lat: 51.5065, lng: -0.0725 },
+                { address: "26 Ludgate Hill, London EC4M 7DR, Reino Unido", lat: 51.5138, lng: -0.1017 },
+                { address: "6-8 St Christopher's Pl, London W1U 1ND, Reino Unido", lat: 51.5152, lng: -0.1504 },
+                { address: "8 High Street Wimbledon, London SW19 5DX, Reino Unido", lat: 51.4215, lng: -0.2071 },
+                { address: "9 The Grn, London W5 5DA, Reino Unido", lat: 51.5126, lng: -0.3060 },
+                { address: "24 Hill St, Richmond TW9 1TW, Reino Unido", lat: 51.4621, lng: -0.3040 },
+                { address: "50-54 Turnham Green Terrace, Chiswick, London W4 1QP, Reino Unido", lat: 51.4939, lng: -0.2558 },
+                { address: "6 Riverside Walk, London, Kingston upon Thames KT1 1QN, Reino Unido", lat: 51.4101, lng: -0.3062 },
+                { address: "57 Whitecross St, London EC1Y 8AA, Reino Unido", lat: 51.5222, lng: -0.0927 },
+                { address: "172 High St, Teddington TW11 8HU, Reino Unido", lat: 51.4248, lng: -0.3347 },
+                { address: "102-106 High St, Esher, London KT10 9QJ, Reino Unido", lat: 51.3725, lng: -0.3642 },
+                { address: "26-27 Devonshire St, London W1G 6PL, Reino Unido", lat: 51.5204, lng: -0.1475 }
+            ],
             cuisine: "Francês",
             safety: { text: "Acreditada pela Coeliac UK, com menu dedicado e identificação visual para pratos GF.", level: "accredited" },
             price: "£££",
@@ -278,7 +333,7 @@ export const restaurantData = {
         },
         {
             name: "CreamDream",
-            addresses: ["46 Bedford St, London WC2E 9HA, Reino Unido"],
+            addresses: [{ address: "46 Bedford St, London WC2E 9HA, Reino Unido", lat: 51.5101008, lng: -0.1236548 }],
             cuisine: "Padaria / Café",
             safety: { text: "Padaria e café 100% sem glúten.", level: "safe" },
             price: "££",
@@ -288,7 +343,7 @@ export const restaurantData = {
         },
         {
             name: "Dendara",
-            addresses: ["43 Kensington Church St, London W8 4BA, Reino Unido"],
+            addresses: [{ address: "43 Kensington Church St, London W8 4BA, Reino Unido", lat: 51.5040308, lng: -0.1924159 }],
             cuisine: "Padaria / Café",
             safety: { text: "100% isento de glúten e laticínios.", level: "safe" },
             price: "£££",
@@ -298,7 +353,16 @@ export const restaurantData = {
         },
         {
             name: "Dishoom",
-            addresses: ["4 Derry St, London W8 5SE, Reino Unido", "22 Kingly St, Carnaby, London W1B 5QP, Reino Unido", "12 Upper St Martin's Ln, London WC2H 9FB, Reino Unido", "5 Stable St, London N1C 4AB, Reino Unido", "186 Portobello Rd, London W11 1LA, Reino Unido", "7 Boundary St, London E2 7JE, Reino Unido", "42 Electric Blvd, Nine Elms, London SW11 8AL, Reino Unido", "13 Water St, London E14 5GX, Reino Unido"],
+            addresses: [
+                { address: "4 Derry St, London W8 5SE, Reino Unido", lat: 51.5012647, lng: -0.191139 },
+                { address: "22 Kingly St, Carnaby, London W1B 5QP, Reino Unido", lat: 51.5126, lng: -0.1387 },
+                { address: "12 Upper St Martin's Ln, London WC2H 9FB, Reino Unido", lat: 51.5120, lng: -0.1281 },
+                { address: "5 Stable St, London N1C 4AB, Reino Unido", lat: 51.5348, lng: -0.1252 },
+                { address: "7 Boundary St, London E2 7JE, Reino Unido", lat: 51.5239, lng: -0.0721 },
+                { address: "13 Water St, London E14 5GX, Reino Unido", lat: 51.5050, lng: -0.0195 },
+                { address: "186 Portobello Rd, London W11 1LA, Reino Unido", lat: 51.5168, lng: -0.2052 },
+                { address: "42 Electric Blvd, Nine Elms, London SW11 8AL, Reino Unido", lat: 51.4815, lng: -0.1258 }
+            ],
             cuisine: "Asiático",
             safety: { text: "Consistentemente elogiado pela comunidade celíaca pelo seu pessoal conhecedor e menus de alergénios claros.", level: "accredited" },
             price: "£££",
@@ -308,7 +372,68 @@ export const restaurantData = {
         },
         {
             name: "Domino's",
-            addresses: ["13, To, 15 N End Parade, London W14 0SJ, Reino Unido", "138-140 King St, London W6 0QU, Reino Unido", "129 Westbourne Park Rd, London W2 5QL, Reino Unido", "378 Edgware Rd, London W2 1EB, Reino Unido", "17 Warwick Wy, Pimlico, London SW1V 1QT, Reino Unido", "37 Foley St, London W1W 7TN, Reino Unido", "244 Uxbridge Rd, London W12 7JA, Reino Unido", "613 Fulham Rd., London SW6 5UQ, Reino Unido", "178 High Holborn, London WC1V 7AA, Reino Unido", "57 Battersea Bridge Rd, London SW11 3AX, Reino Unido", "180a Wandsworth Rd, London SW8 2LA, Reino Unido", "330 Wandsworth Bridge Rd., London SW6 2TZ, Reino Unido", "120 Chippenham Rd, London W9 2AD, Reino Unido", "262 W End Ln, London NW6 1LJ, Reino Unido", "87-89 High Rd, London NW10 2SU, Reino Unido", "95 Chiswick High Rd., Chiswick, London W4 2EF, Reino Unido", "192 Victoria Rd, North Acton, London W3 6BW, Reino Unido", "38 Camden High St, London NW1 0JH, Reino Unido", "48 Battersea Rise, London SW11 1EE, Reino Unido", "145 Old Kent Rd, London SE1 5UT, Reino Unido", "166 Finchley Rd, London NW3 6BP, Reino Unido", "142 Upper Richmond Rd, London SW15 2SW, Reino Unido", "72 White Lion St, London N1 9PP, Reino Unido", "32 Highgate Hl, London N19 5NL, Reino Unido", "30 Queen St Pl, London EC4R 1BR, Reino Unido", "40 Old St, London EC1V 9AE, Reino Unido", "365 Uxbridge Rd, London W3 9RH, Reino Unido", "194 Kentish Town Rd, London NW5 2AE, Reino Unido", "328 Coldharbour Ln, London SW9 8QH, Reino Unido", "188 Upper Richmond Rd W, London SW14 8AN, Reino Unido", "146-148 Newington Butts, Elephant and Castle, London SE11 4RN, Reino Unido", "114-116 Streatham Hill, London SW2 4RS, Reino Unido", "43 Balham High Rd, London SW12 9AN, Reino Unido", "140 Broadway, London W13 0TL, Reino Unido", "418 High Rd, London HA9 6AH, Reino Unido", "50 The Hwy, London E1W 2BG, Reino Unido", "92 Hornsey Rd, London N7 7NN, Reino Unido", "124 Mitcham Rd, London SW17 9NH, Reino Unido", "617 Garratt Ln, London SW18 4SU, Reino Unido", "598-602 Holloway Rd, Archway, London N19 3PH, Reino Unido", "2, To, 8 W India Dock Rd, London E14 8JA, Reino Unido", "144 Essex Rd, London N1 8LX, Reino Unido", "34 Westow Hill, London SE19 1RX, Reino Unido", "167 Hoxton St, London N1 6PJ, Reino Unido", "222 Mare St, London E8 3RB, Reino Unido", "218 Preston Rd, London, Wembley HA9 8PB, Reino Unido", "88 Kingston Rd, London SW19 1LA, Reino Unido", "151 Tottenham Ln, London N8 9BT, Reino Unido", "269 Bethnal Grn Rd, London E2 6AH, Reino Unido", "239 Golders Green Rd, London NW11 9PN, Reino Unido", "7 Central Circus, London NW4 3JS, Reino Unido", "92 New Cross Rd, London SE14 5BA, Reino Unido", "168 Lower Rd, London SE16 2UN, Reino Unido", "201 Trafalgar Rd, London SE10 9EQ, Reino Unido", "16, Morden Court Parade, London Rd, Morden SM4 5HJ, Reino Unido", "1353 London Rd, Norbury, London SW16 4BE, Reino Unido", "8, 16 Grove Vale, London SE22 8EF, Reino Unido", "1322 Greenford Rd, Greenford UB6 0HL, Reino Unido", "234 Stamford Hill, London N16 6TT, Reino Unido", "363 High Rd, London N17 6QN, Reino Unido"],
+            addresses: [
+                { address: "178 High Holborn, London WC1V 7AA, Reino Unido", lat: 51.5160753, lng: -0.1247207 },
+                { address: "37 Foley St, London W1W 7TN, Reino Unido", lat: 51.5186, lng: -0.1415 },
+                { address: "17 Warwick Wy, Pimlico, London SW1V 1QT, Reino Unido", lat: 51.4913, lng: -0.1388 },
+                { address: "613 Fulham Rd., London SW6 5UQ, Reino Unido", lat: 51.4784, lng: -0.1982 },
+                { address: "38 Camden High St, London NW1 0JH, Reino Unido", lat: 51.5363, lng: -0.1384 },
+                { address: "13, To, 15 N End Parade, London W14 0SJ, Reino Unido", lat: 51.4947, lng: -0.2132 },
+                { address: "138-140 King St, London W6 0QU, Reino Unido", lat: 51.4925, lng: -0.2323 },
+                { address: "129 Westbourne Park Rd, London W2 5QL, Reino Unido", lat: 51.5195, lng: -0.1920 },
+                { address: "378 Edgware Rd, London W2 1EB, Reino Unido", lat: 51.5204, lng: -0.1691 },
+                { address: "244 Uxbridge Rd, London W12 7JA, Reino Unido", lat: 51.5057, lng: -0.2345 },
+                { address: "57 Battersea Bridge Rd, London SW11 3AX, Reino Unido", lat: 51.4786, lng: -0.1706 },
+                { address: "180a Wandsworth Rd, London SW8 2LA, Reino Unido", lat: 51.4741, lng: -0.1357 },
+                { address: "330 Wandsworth Bridge Rd., London SW6 2TZ, Reino Unido", lat: 51.4720, lng: -0.1918 },
+                { address: "120 Chippenham Rd, London W9 2AD, Reino Unido", lat: 51.5284, lng: -0.1936 },
+                { address: "262 W End Ln, London NW6 1LJ, Reino Unido", lat: 51.5451, lng: -0.1873 },
+                { address: "87-89 High Rd, London NW10 2SU, Reino Unido", lat: 51.5398, lng: -0.2285 },
+                { address: "95 Chiswick High Rd., Chiswick, London W4 2EF, Reino Unido", lat: 51.4930, lng: -0.2482 },
+                { address: "192 Victoria Rd, North Acton, London W3 6BW, Reino Unido", lat: 51.5200, lng: -0.2644 },
+                { address: "48 Battersea Rise, London SW11 1EE, Reino Unido", lat: 51.4623, lng: -0.1652 },
+                { address: "145 Old Kent Rd, London SE1 5UT, Reino Unido", lat: 51.4920, lng: -0.0792 },
+                { address: "166 Finchley Rd, London NW3 6BP, Reino Unido", lat: 51.5460, lng: -0.1785 },
+                { address: "142 Upper Richmond Rd, London SW15 2SW, Reino Unido", lat: 51.4630, lng: -0.2165 },
+                { address: "72 White Lion St, London N1 9PP, Reino Unido", lat: 51.5315, lng: -0.1065 },
+                { address: "32 Highgate Hl, London N19 5NL, Reino Unido", lat: 51.5645, lng: -0.1315 },
+                { address: "30 Queen St Pl, London EC4R 1BR, Reino Unido", lat: 51.5105, lng: -0.0925 },
+                { address: "40 Old St, London EC1V 9AE, Reino Unido", lat: 51.5240, lng: -0.0965 },
+                { address: "365 Uxbridge Rd, London W3 9RH, Reino Unido", lat: 51.5100, lng: -0.2855 },
+                { address: "194 Kentish Town Rd, London NW5 2AE, Reino Unido", lat: 51.5470, lng: -0.1405 },
+                { address: "328 Coldharbour Ln, London SW9 8QH, Reino Unido", lat: 51.4640, lng: -0.1085 },
+                { address: "188 Upper Richmond Rd W, London SW14 8AN, Reino Unido", lat: 51.4670, lng: -0.2605 },
+                { address: "146-148 Newington Butts, Elephant and Castle, London SE11 4RN, Reino Unido", lat: 51.4920, lng: -0.1035 },
+                { address: "114-116 Streatham Hill, London SW2 4RS, Reino Unido", lat: 51.4420, lng: -0.1255 },
+                { address: "43 Balham High Rd, London SW12 9AN, Reino Unido", lat: 51.4430, lng: -0.1505 },
+                { address: "140 Broadway, London W13 0TL, Reino Unido", lat: 51.5120, lng: -0.3105 },
+                { address: "418 High Rd, London HA9 6AH, Reino Unido", lat: 51.5610, lng: -0.2805 },
+                { address: "50 The Hwy, London E1W 2BG, Reino Unido", lat: 51.5080, lng: -0.0605 },
+                { address: "92 Hornsey Rd, London N7 7NN, Reino Unido", lat: 51.5540, lng: -0.1155 },
+                { address: "124 Mitcham Rd, London SW17 9NH, Reino Unido", lat: 51.4250, lng: -0.1605 },
+                { address: "617 Garratt Ln, London SW18 4SU, Reino Unido", lat: 51.4400, lng: -0.1855 },
+                { address: "598-602 Holloway Rd, Archway, London N19 3PH, Reino Unido", lat: 51.5650, lng: -0.1205 },
+                { address: "2, To, 8 W India Dock Rd, London E14 8JA, Reino Unido", lat: 51.5080, lng: -0.0255 },
+                { address: "144 Essex Rd, London N1 8LX, Reino Unido", lat: 51.5360, lng: -0.0955 },
+                { address: "34 Westow Hill, London SE19 1RX, Reino Unido", lat: 51.4200, lng: -0.0805 },
+                { address: "167 Hoxton St, London N1 6PJ, Reino Unido", lat: 51.5300, lng: -0.0755 },
+                { address: "222 Mare St, London E8 3RB, Reino Unido", lat: 51.5400, lng: -0.0505 },
+                { address: "218 Preston Rd, London, Wembley HA9 8PB, Reino Unido", lat: 51.5750, lng: -0.2905 },
+                { address: "88 Kingston Rd, London SW19 1LA, Reino Unido", lat: 51.4150, lng: -0.1955 },
+                { address: "151 Tottenham Ln, London N8 9BT, Reino Unido", lat: 51.5850, lng: -0.1155 },
+                { address: "269 Bethnal Grn Rd, London E2 6AH, Reino Unido", lat: 51.5260, lng: -0.0605 },
+                { address: "239 Golders Green Rd, London NW11 9PN, Reino Unido", lat: 51.5750, lng: -0.2005 },
+                { address: "7 Central Circus, London NW4 3JS, Reino Unido", lat: 51.5850, lng: -0.2305 },
+                { address: "92 New Cross Rd, London SE14 5BA, Reino Unido", lat: 51.4750, lng: -0.0405 },
+                { address: "168 Lower Rd, London SE16 2UN, Reino Unido", lat: 51.4950, lng: -0.0505 },
+                { address: "201 Trafalgar Rd, London SE10 9EQ, Reino Unido", lat: 51.4850, lng: -0.0155 },
+                { address: "16, Morden Court Parade, London Rd, Morden SM4 5HJ, Reino Unido", lat: 51.4000, lng: -0.1905 },
+                { address: "1353 London Rd, Norbury, London SW16 4BE, Reino Unido", lat: 51.4050, lng: -0.1205 },
+                { address: "8, 16 Grove Vale, London SE22 8EF, Reino Unido", lat: 51.4550, lng: -0.0705 },
+                { address: "1322 Greenford Rd, Greenford UB6 0HL, Reino Unido", lat: 51.5450, lng: -0.3405 },
+                { address: "234 Stamford Hill, London N16 6TT, Reino Unido", lat: 51.5750, lng: -0.0705 },
+                { address: "363 High Rd, London N17 6QN, Reino Unido", lat: 51.5950, lng: -0.0705 }
+            ],
             cuisine: "Pizza",
             safety: { text: "Acreditada pela Coeliac UK.", level: "accredited" },
             price: "££",
@@ -318,7 +443,10 @@ export const restaurantData = {
         },
         {
             name: "El Pollote",
-            addresses: ["13 Ganton St, Carnaby, London W1F 9BL, Reino Unido", "Camden Lock Market - Unit WY22, London NW1 8AF, Reino Unido"],
+            addresses: [
+                { address: "13 Ganton St, Carnaby, London W1F 9BL, Reino Unido", lat: 51.5130237, lng: -0.1388852 },
+                { address: "Camden Lock Market - Unit WY22, London NW1 8AF, Reino Unido", lat: 51.5415, lng: -0.1466 }
+            ],
             cuisine: "Latino",
             safety: { text: "Menu quase inteiramente sem glúten com processos amigáveis para celíacos.", level: "accredited" },
             price: "££",
@@ -328,7 +456,11 @@ export const restaurantData = {
         },
         {
             name: "Fortnum & Mason",
-            addresses: ["181 Piccadilly, London W1A 1ER, Reino Unido", "Pancras Rd, London N1C 4QP, Reino Unido", "4-7 Royal Exchange, London EC3V 3LR, Reino Unido", "181 Piccadilly, London W1A 1ER, Reino Unido"],
+            addresses: [
+                { address: "181 Piccadilly, London W1A 1ER, Reino Unido", lat: 51.5083599, lng: -0.1385439 },
+                { address: "Pancras Rd, London N1C 4QP, Reino Unido", lat: 51.5318, lng: -0.1258 },
+                { address: "4-7 Royal Exchange, London EC3V 3LR, Reino Unido", lat: 51.5135, lng: -0.0868 }
+            ],
             cuisine: "Padaria / Café",
             safety: { text: "Oferece um serviço de chá da tarde 'Feito Sem Glúten' com atenção impecável ao detalhe.", level: "accredited" },
             price: "££££",
@@ -338,7 +470,7 @@ export const restaurantData = {
         },
         {
             name: "The Free From Bakehouse",
-            addresses: ["Borough Market, 8 Southwark Street, SE1 1TL"],
+            addresses: [{ address: "Borough Market, 8 Southwark Street, SE1 1TL", lat: 51.5055, lng: -0.0912 }],
             cuisine: "Padaria / Café",
             safety: { text: "Produtor 100% isento de glúten e trigo.", level: "safe" },
             price: "££",
@@ -348,7 +480,7 @@ export const restaurantData = {
         },
         {
             name: "Guasa London",
-            addresses: ["2-10 Bethnal Green Road Unit 59, Boxpark, London E1 6GY, Reino Unido"],
+            addresses: [{ address: "2-10 Bethnal Green Road Unit 59, Boxpark, London E1 6GY, Reino Unido", lat: 51.5235, lng: -0.0722 }],
             cuisine: "Latino",
             safety: { text: "Banca totalmente sem glúten.", level: "safe" },
             price: "££",
@@ -358,7 +490,11 @@ export const restaurantData = {
         },
         {
             name: "Hobson's Fish & Chips",
-            addresses: ["27 St Anne's Ct, London W1F 0BN, Reino Unido", "9 Porchester Rd, London W2 5DP, Reino Unido", "15 Villiers St, London WC2N 6ND, Reino Unido"],
+            addresses: [
+                { address: "27 St Anne's Ct, London W1F 0BN, Reino Unido", lat: 51.5146041, lng: -0.1334935 },
+                { address: "9 Porchester Rd, London W2 5DP, Reino Unido", lat: 51.5165, lng: -0.1878 },
+                { address: "15 Villiers St, London WC2N 6ND, Reino Unido", lat: 51.5076, lng: -0.1242 }
+            ],
             cuisine: "Fish & Chips",
             safety: { text: "Afirma usar fritadeiras dedicadas, mas o seu próprio menu adverte sobre possível contaminação cruzada, exigindo vigilância.", level: "caution" },
             price: "££",
@@ -368,7 +504,39 @@ export const restaurantData = {
         },
         {
             name: "Honest Burgers",
-            addresses: ["84 Brewer St, London W1F 9UB, Reino Unido", "4a Meard St, London W1F 0EF, Reino Unido", "4 Market Pl, London W1W 8AD, Reino Unido", "24 Thurloe St, South Kensington, London SW7 2LT, Reino Unido", "9 Festival Terrace, London SE1 8XX, Reino Unido", "251 Pentonville Rd, London N1 9NG, Reino Unido", "17 Garrick St, London WC2E 9AX, Reino Unido", "31 Paddington St, London W1U 4HD, Reino Unido", "6 Great Queen St, London WC2B 5DH, Reino Unido", "117 Tottenham Ct Rd, London W1T 5AL, Reino Unido", "189 Portobello Rd, London W11 2ED, Reino Unido", "33 Southampton St, London WC2E 7HE, Reino Unido", "39 The Cut, London SE1 8LF, Reino Unido", "24 Fulham Palace Rd, London W6 9PH, Reino Unido", "5-7 Southwark St, London SE1 1RQ, Reino Unido", "Unit 34a Camden Lock Pl, London NW1 8AF, Reino Unido", "4, off Change Alley, Lombard St, London EC3V 9AZ, Reino Unido", "95 Mortimer St, London W1W 7GB, Reino Unido", "148 Chiswick High Rd., Chiswick, London W4 1PR, Reino Unido", "6 Bermondsey St, London SE1 2TF, Reino Unido", "6 Baldwin St, London EC1V 9NU, Reino Unido", "12 Widegate St, London E1 7HP, Reino Unido", "1 Commodity Quay, London E1W 1AZ, Reino Unido", "13, Well's Terrace, City N Pl, Finsbury Park, London N4 3FP, Reino Unido", "75 Venn St, London SW4 0BD, Reino Unido", "Unit 12, Brixton Village, London SW9 8PR, Reino Unido", "53 New Broadway, London W5 5AH, Reino Unido", "14-16 Bradbury St, London N16 8JN, Reino Unido", "12-16 Blenheim Grove, London SE15 4QL, Reino Unido", "8 Nelson Rd., London SE10 9JB, Reino Unido", "72 Tooting High St, London SW17 0RN, Reino Unido"],
+            addresses: [
+                { address: "84 Brewer St, London W1F 9UB, Reino Unido", lat: 51.5107583, lng: -0.137213 },
+                { address: "4a Meard St, London W1F 0EF, Reino Unido", lat: 51.5139, lng: -0.1338 },
+                { address: "24 Thurloe St, South Kensington, London SW7 2LT, Reino Unido", lat: 51.4941, lng: -0.1751 },
+                { address: "9 Festival Terrace, London SE1 8XX, Reino Unido", lat: 51.5057, lng: -0.1163 },
+                { address: "17 Garrick St, London WC2E 9AX, Reino Unido", lat: 51.5118, lng: -0.1252 },
+                { address: "5-7 Southwark St, London SE1 1RQ, Reino Unido", lat: 51.5059, lng: -0.0911 },
+                { address: "Unit 34a Camden Lock Pl, London NW1 8AF, Reino Unido", lat: 51.5414, lng: -0.1467 },
+                { address: "4 Market Pl, London W1W 8AD, Reino Unido", lat: 51.5169, lng: -0.1408 },
+                { address: "251 Pentonville Rd, London N1 9NG, Reino Unido", lat: 51.5312, lng: -0.1189 },
+                { address: "31 Paddington St, London W1U 4HD, Reino Unido", lat: 51.5186, lng: -0.1557 },
+                { address: "6 Great Queen St, London WC2B 5DH, Reino Unido", lat: 51.5152, lng: -0.1215 },
+                { address: "117 Tottenham Ct Rd, London W1T 5AL, Reino Unido", lat: 51.5204, lng: -0.1360 },
+                { address: "189 Portobello Rd, London W11 2ED, Reino Unido", lat: 51.5169, lng: -0.2052 },
+                { address: "33 Southampton St, London WC2E 7HE, Reino Unido", lat: 51.5105, lng: -0.1215 },
+                { address: "39 The Cut, London SE1 8LF, Reino Unido", lat: 51.5028, lng: -0.1084 },
+                { address: "24 Fulham Palace Rd, London W6 9PH, Reino Unido", lat: 51.4930, lng: -0.2255 },
+                { address: "4, off Change Alley, Lombard St, London EC3V 9AZ, Reino Unido", lat: 51.5126, lng: -0.0864 },
+                { address: "95 Mortimer St, London W1W 7GB, Reino Unido", lat: 51.5173, lng: -0.1423 },
+                { address: "148 Chiswick High Rd., Chiswick, London W4 1PR, Reino Unido", lat: 51.4933, lng: -0.2526 },
+                { address: "6 Bermondsey St, London SE1 2TF, Reino Unido", lat: 51.5034, lng: -0.0831 },
+                { address: "6 Baldwin St, London EC1V 9NU, Reino Unido", lat: 51.5255, lng: -0.0991 },
+                { address: "12 Widegate St, London E1 7HP, Reino Unido", lat: 51.5178, lng: -0.0768 },
+                { address: "1 Commodity Quay, London E1W 1AZ, Reino Unido", lat: 51.5068, lng: -0.0711 },
+                { address: "13, Well's Terrace, City N Pl, Finsbury Park, London N4 3FP, Reino Unido", lat: 51.5647, lng: -0.1068 },
+                { address: "75 Venn St, London SW4 0BD, Reino Unido", lat: 51.4623, lng: -0.1322 },
+                { address: "Unit 12, Brixton Village, London SW9 8PR, Reino Unido", lat: 51.4622, lng: -0.1136 },
+                { address: "53 New Broadway, London W5 5AH, Reino Unido", lat: 51.5134, lng: -0.3023 },
+                { address: "14-16 Bradbury St, London N16 8JN, Reino Unido", lat: 51.5473, lng: -0.0784 },
+                { address: "12-16 Blenheim Grove, London SE15 4QL, Reino Unido", lat: 51.4691, lng: -0.0691 },
+                { address: "8 Nelson Rd., London SE10 9JB, Reino Unido", lat: 51.4812, lng: -0.0105 },
+                { address: "72 Tooting High St, London SW17 0RN, Reino Unido", lat: 51.4281, lng: -0.1680 }
+            ],
             cuisine: "Hambúrguer",
             safety: { text: "Fritadeiras dedicadas para batatas fritas e anéis de cebola, tornando todos os acompanhamentos fritos seguros.", level: "accredited" },
             price: "££",
@@ -378,7 +546,10 @@ export const restaurantData = {
         },
         {
             name: "Horn OK Please",
-            addresses: ["Unit 55, Borough Market Kitchen, Jubilee Pl, Winchester Walk, London SE1 9AG, Reino Unido", "Royal Festival Hall, Southbank Centre Food Market, Belvedere Rd, London SE1 8XX, Reino Unido"],
+            addresses: [
+                { address: "Unit 55, Borough Market Kitchen, Jubilee Pl, Winchester Walk, London SE1 9AG, Reino Unido", lat: 51.5059943, lng: -0.0909201 },
+                { address: "Royal Festival Hall, Southbank Centre Food Market, Belvedere Rd, London SE1 8XX, Reino Unido", lat: 51.5061, lng: -0.1165 }
+            ],
             cuisine: "Asiático",
             safety: { text: "Banca de mercado maioritariamente sem glúten.", level: "accredited" },
             price: "££",
@@ -388,7 +559,7 @@ export const restaurantData = {
         },
         {
             name: "Indigo at One Aldwych",
-            addresses: ["1 Aldwych, London WC2B 4BZ, Reino Unido"],
+            addresses: [{ address: "1 Aldwych, London WC2B 4BZ, Reino Unido", lat: 51.5118556, lng: -0.1194135 }],
             cuisine: "Britânico",
             safety: { text: "Cozinha 100% isenta de glúten e laticínios, e acreditada pela Coeliac UK.", level: "safe" },
             price: "££££",
@@ -398,7 +569,7 @@ export const restaurantData = {
         },
         {
             name: "Lahpet",
-            addresses: ["58 Bethnal Grn Rd, London E1 6JW, Reino Unido"],
+            addresses: [{ address: "58 Bethnal Grn Rd, London E1 6JW, Reino Unido", lat: 51.5241411, lng: -0.072992 }],
             cuisine: "Asiático",
             safety: { text: "Menu maioritariamente sem glúten; a localização de Shoreditch tem uma fritadeira dedicada.", level: "accredited" },
             price: "£££",
@@ -408,7 +579,7 @@ export const restaurantData = {
         },
         {
             name: "La Pepia",
-            addresses: ["Borough Market, Bedale St, London SE1 9AL, Reino Unido"],
+            addresses: [{ address: "Borough Market, Bedale St, London SE1 9AL, Reino Unido", lat: 51.5054894, lng: -0.0907299 }],
             cuisine: "Latino",
             safety: { text: "Banca totalmente sem glúten.", level: "safe" },
             price: "££",
@@ -418,7 +589,7 @@ export const restaurantData = {
         },
         {
             name: "Libby's Gluten Free Bakery",
-            addresses: ["61a Ledbury Rd, London W11 2AA, Reino Unido"],
+            addresses: [{ address: "61a Ledbury Rd, London W11 2AA, Reino Unido", lat: 51.5141921, lng: -0.1992556 }],
             cuisine: "Padaria / Café",
             safety: { text: "Padaria familiar 100% isenta de glúten.", level: "safe" },
             price: "£££",
@@ -428,7 +599,10 @@ export const restaurantData = {
         },
         {
             name: "Los Mochis",
-            addresses: ["2-4 Farmer St, London W8 7SN, Reino Unido", "100 Liverpool St, London EC2M 2AT, Reino Unido"],
+            addresses: [
+                { address: "2-4 Farmer St, London W8 7SN, Reino Unido", lat: 51.5090, lng: -0.1972 },
+                { address: "100 Liverpool St, London EC2M 2AT, Reino Unido", lat: 51.5178082, lng: -0.083777 }
+            ],
             cuisine: "Fusion",
             safety: { text: "Menu 100% isento de glúten, nozes e aipo.", level: "safe" },
             price: "££££",
@@ -438,7 +612,7 @@ export const restaurantData = {
         },
         {
             name: "Ma La Sichuan",
-            addresses: ["37 Monck St, London SW1P 2BL, Reino Unido"],
+            addresses: [{ address: "37 Monck St, London SW1P 2BL, Reino Unido", lat: 51.4967139, lng: -0.130643 }],
             cuisine: "Asiático",
             safety: { text: "Um achado raro: um restaurante chinês com um menu dedicado sem glúten.", level: "accredited" },
             price: "£££",
@@ -448,7 +622,7 @@ export const restaurantData = {
         },
         {
             name: "MaMa Boutique Gluten Free Bakery",
-            addresses: ["30 Chiswick High Rd., Chiswick, London W4 1TE, Reino Unido"],
+            addresses: [{ address: "30 Chiswick High Rd., Chiswick, London W4 1TE, Reino Unido", lat: 51.4934933, lng: -0.2467987 }],
             cuisine: "Padaria / Café",
             safety: { text: "Padaria 100% sem glúten.", level: "safe" },
             price: "££",
@@ -458,7 +632,7 @@ export const restaurantData = {
         },
         {
             name: "MannaDew",
-            addresses: ["Galapagos Foods, Battersea High St, Battersea Park, London SW11 3JS, Reino Unido"],
+            addresses: [{ address: "Galapagos Foods, Battersea High St, Battersea Park, London SW11 3JS, Reino Unido", lat: 51.4705147, lng: -0.1719813 }],
             cuisine: "Padaria / Café",
             safety: { text: "100% sem glúten, com produtos testados em laboratório para <5ppm de glúten.", level: "safe" },
             price: "£££",
@@ -468,7 +642,10 @@ export const restaurantData = {
         },
         {
             name: "The Mayfair Chippy",
-            addresses: ["14 N Audley St, London W1K 6WE, Reino Unido", "138 Brompton Rd, London SW3 1HY, Reino Unido"],
+            addresses: [
+                { address: "14 N Audley St, London W1K 6WE, Reino Unido", lat: 51.5131708, lng: -0.1532625 },
+                { address: "138 Brompton Rd, London SW3 1HY, Reino Unido", lat: 51.5003, lng: -0.1666 }
+            ],
             cuisine: "Fish & Chips",
             safety: { text: "Opção sofisticada com protocolos para celíacos e fritadeiras dedicadas.", level: "accredited" },
             price: "£££",
@@ -478,7 +655,7 @@ export const restaurantData = {
         },
         {
             name: "Niche Gluten-Free Dining",
-            addresses: ["197-199 Rosebery Ave, London EC1R 4TJ, Reino Unido"],
+            addresses: [{ address: "197-199 Rosebery Ave, London EC1R 4TJ, Reino Unido", lat: 51.5299631, lng: -0.1054636 }],
             cuisine: "Britânico",
             safety: { text: "O primeiro restaurante 100% livre de glúten de Londres e acreditado pela Coeliac UK.", level: "safe" },
             price: "££",
@@ -488,7 +665,10 @@ export const restaurantData = {
         },
         {
             name: "Nopi / Rovi (Ottolenghi)",
-            addresses: ["21-22 Warwick St, London W1F 9LD, Reino Unido", "59 Wells Street, Fitzrovia, 59-65 Wells St, London W1A 3AE, Reino Unido"],
+            addresses: [
+                { address: "21-22 Warwick St, London W1F 9LD, Reino Unido", lat: 51.5115, lng: -0.1385 },
+                { address: "59 Wells Street, Fitzrovia, 59-65 Wells St, London W1A 3AE, Reino Unido", lat: 51.5176218, lng: -0.1386031 }
+            ],
             cuisine: "Contemporâneo",
             safety: { text: "Conhecidos pela sua capacidade de atender de forma excelente e segura aos clientes sem glúten.", level: "accredited" },
             price: "££££",
@@ -498,7 +678,7 @@ export const restaurantData = {
         },
         {
             name: "Olley's Fish Experience",
-            addresses: ["65 Norwood Rd, London SE24 9AA, Reino Unido"],
+            addresses: [{ address: "65 Norwood Rd, London SE24 9AA, Reino Unido", lat: 51.4510559, lng: -0.1005426 }],
             cuisine: "Fish & Chips",
             safety: { text: "Acreditado pela Coeliac UK, com processos rigorosamente auditados.", level: "accredited" },
             price: "££",
@@ -508,7 +688,7 @@ export const restaurantData = {
         },
         {
             name: "Oliver's Fish & Chips",
-            addresses: ["95 Haverstock Hill, London NW3 4RL, Reino Unido"],
+            addresses: [{ address: "95 Haverstock Hill, London NW3 4RL, Reino Unido", lat: 51.5467771, lng: -0.1587588 }],
             cuisine: "Fish & Chips",
             safety: { text: "Oferece opções sem glúten em todos os dias, exceto às sextas-feiras.", level: "accredited" },
             price: "££",
@@ -518,7 +698,7 @@ export const restaurantData = {
         },
         {
             name: "Paladar",
-            addresses: ["4-5 London Rd, London SE1 6JZ, Reino Unido"],
+            addresses: [{ address: "4-5 London Rd, London SE1 6JZ, Reino Unido", lat: 51.4981401, lng: -0.104369 }],
             cuisine: "Latino",
             safety: { text: "Menu totalmente 100% isento de glúten.", level: "safe" },
             price: "£££",
@@ -528,7 +708,20 @@ export const restaurantData = {
         },
         {
             name: "Pho",
-            addresses: ["48 Brushfield St, London E1 6AG, Reino Unido", "63 Commercial St, London E1 6BD, Reino Unido", "11 Great Russell St, London WC1B 3NH, Reino Unido", "102 Baker St, London W1U 6TL, Reino Unido", "184 Grays Inn Rd, London WC1X 8EW, Reino Unido", "59 Brushfield St, London E1 6AA, Reino Unido", "Unit 21, Jubilee Place, 45 Bank St, London E14 5NY, Reino Unido", "9 Southwark St, London SE1 1RQ, Reino Unido", "76 Shaftesbury Ave, London W1D 6ND, Reino Unido", "65A Long Acre, London WC2E 9JD, Reino Unido", "163-165 Wardour St, London W1F 8WN, Reino Unido", "10 Little Turnstile, London WC1V 7DX, Reino Unido"],
+            addresses: [
+                { address: "48 Brushfield St, London E1 6AG, Reino Unido", lat: 51.5195, lng: -0.0754 },
+                { address: "11 Great Russell St, London WC1B 3NH, Reino Unido", lat: 51.5173, lng: -0.1281 },
+                { address: "102 Baker St, London W1U 6TL, Reino Unido", lat: 51.5198, lng: -0.1561 },
+                { address: "9 Southwark St, London SE1 1RQ, Reino Unido", lat: 51.5046038, lng: -0.0912226 },
+                { address: "63 Commercial St, London E1 6BD, Reino Unido", lat: 51.5179, lng: -0.0735 },
+                { address: "163-165 Wardour St, London W1F 8WN, Reino Unido", lat: 51.5152, lng: -0.1354 },
+                { address: "184 Grays Inn Rd, London WC1X 8EW, Reino Unido", lat: 51.5235, lng: -0.1171 },
+                { address: "76 Shaftesbury Ave, London W1D 6ND, Reino Unido", lat: 51.5121, lng: -0.1328 },
+                { address: "59 Brushfield St, London E1 6AA, Reino Unido", lat: 51.5196, lng: -0.0751 },
+                { address: "Unit 21, Jubilee Place, 45 Bank St, London E14 5NY, Reino Unido", lat: 51.5033, lng: -0.0201 },
+                { address: "65A Long Acre, London WC2E 9JD, Reino Unido", lat: 51.5126, lng: -0.1240 },
+                { address: "10 Little Turnstile, London WC1V 7DX, Reino Unido", lat: 51.5167, lng: -0.1221 }
+            ],
             cuisine: "Asiático",
             safety: { text: "Acreditado pela Coeliac UK; o menu é ~98% isento de glúten por natureza.", level: "accredited" },
             price: "££",
@@ -538,7 +731,38 @@ export const restaurantData = {
         },
         {
             name: "Pizza Express",
-            addresses: ["21‑22 Barrett Street, St Christopher’s Place, London W1U 1BF", "39 Abbey Road, St John’s Wood, London NW8 0AA", "Unit 99 (W07), London Designer Outlet, Wembley Park, HA9 0FD", "230‑236 Lavender Hill, Battersea, London SW11 1LE", "198 Trinity Road, Wandsworth, London SW17 7HR", "20‑22 Leadenhall Market, London EC3V 1LR", "Unit S1, Brent Cross Shopping Centre, Prince Charles Drive, Hendon, NW4 3FP", "1 Clerkenwell Road, Clerkenwell, London EC1M 5PA", "Unit 3, The White House, 9c Belvedere Road, Lambeth/Waterloo, London SE1 8YP", "85 Victoria Street, Westminster, London SW1H 0HW", "137 Notting Hill Gate, Notting Hill, London W11 3LB", "7 Rockley Road, Brook Green, London W14 0DJ", "895‑896 Fulham Road, Fulham, London SW6 5HU", "46 Moreton Street, Pimlico, London SW1V 2PB", "9 Bow Street, Covent Garden, London WC2E 7AH", "152‑154 King’s Road, Chelsea, London SW3 4UT", "80 St Martin’s Lane, Covent Garden, London WC2N 4AA", "133 Baker Street, Marylebone, London W1U 6SF", "30 Coptic Street, Bloomsbury, London WC1A 1NS", "21 Barrett Street, Marylebone, London W1U 1BD", "187 Kentish Town Road, Camden, London NW1 8PD", "4 Borough High Street (Bridge House), Southwark, SE1 9QQ", "Cardamom Building, 31 Shad Thames, Bermondsey, London SE1 2YR", "194A Haverstock Hill, Belsize Park, London NW3 2AJ", "144 Upper Richmond Road, Putney, London SW15 2SW", "335 Upper Street, Islington, London N1 0PB", "85–87 Parkway, Camden Town, London NW1 7PP", "14‑15 Barnes High Street, Barnes, London SW13 9LW", "316 Kennington Road, Kennington, London SE11 4LD", "99 High Holborn, Holborn, London WC1V 6LF", "Bridge House – 4 Borough High Street, Southwark, SE1 9QQ"],
+            addresses: [
+                { address: "9 Bow Street, Covent Garden, London WC2E 7AH", lat: 51.5126, lng: -0.1223 },
+                { address: "30 Coptic Street, Bloomsbury, London WC1A 1NS", lat: 51.5180, lng: -0.1272 },
+                { address: "133 Baker Street, Marylebone, London W1U 6SF", lat: 51.5209, lng: -0.1569 },
+                { address: "4 Borough High Street (Bridge House), Southwark, SE1 9QQ", lat: 51.5050, lng: -0.0906 },
+                { address: "85-87 Parkway, Camden Town, London NW1 7PP", lat: 51.5383, lng: -0.1430 },
+                { address: "21-22 Barrett Street, St Christopher’s Place, London W1U 1BF", lat: 51.5148, lng: -0.1509 },
+                { address: "39 Abbey Road, St John’s Wood, London NW8 0AA", lat: 51.5350, lng: -0.1852 },
+                { address: "85 Victoria Street, Westminster, London SW1H 0HW", lat: 51.4981, lng: -0.1347 },
+                { address: "137 Notting Hill Gate, Notting Hill, London W11 3LB", lat: 51.5093, lng: -0.1970 },
+                { address: "7 Rockley Road, Brook Green, London W14 0DJ", lat: 51.4998, lng: -0.2211 },
+                { address: "895-896 Fulham Road, Fulham, London SW6 5HU", lat: 51.4770, lng: -0.2014 },
+                { address: "46 Moreton Street, Pimlico, London SW1V 2PB", lat: 51.4883, lng: -0.1360 },
+                { address: "152-154 King’s Road, Chelsea, London SW3 4UT", lat: 51.4887, lng: -0.1652 },
+                { address: "80 St Martin’s Lane, Covent Garden, London WC2N 4AA", lat: 51.5110, lng: -0.1278 },
+                { address: "187 Kentish Town Road, Camden, London NW1 8PD", lat: 51.5458, lng: -0.1408 },
+                { address: "Cardamom Building, 31 Shad Thames, Bermondsey, London SE1 2YR", lat: 51.5034, lng: -0.0728 },
+                { address: "194A Haverstock Hill, Belsize Park, London NW3 2AJ", lat: 51.5492, lng: -0.1653 },
+                { address: "144 Upper Richmond Road, Putney, London SW15 2SW", lat: 51.4628, lng: -0.2173 },
+                { address: "335 Upper Street, Islington, London N1 0PB", lat: 51.5356, lng: -0.1042 },
+                { address: "14-15 Barnes High Street, Barnes, London SW13 9LW", lat: 51.4716, lng: -0.2458 },
+                { address: "316 Kennington Road, Kennington, London SE11 4LD", lat: 51.4878, lng: -0.1084 },
+                { address: "99 High Holborn, Holborn, London WC1V 6LF", lat: 51.5173, lng: -0.1192 },
+                { address: "Unit 99 (W07), London Designer Outlet, Wembley Park, HA9 0FD", lat: 51.5573, lng: -0.2798 },
+                { address: "230-236 Lavender Hill, Battersea, London SW11 1LE", lat: 51.4623, lng: -0.1652 },
+                { address: "198 Trinity Road, Wandsworth, London SW17 7HR", lat: 51.4423, lng: -0.1752 },
+                { address: "20-22 Leadenhall Market, London EC3V 1LR", lat: 51.5126, lng: -0.0827 },
+                { address: "Unit S1, Brent Cross Shopping Centre, Prince Charles Drive, Hendon, NW4 3FP", lat: 51.5753, lng: -0.2227 },
+                { address: "1 Clerkenwell Road, Clerkenwell, London EC1M 5PA", lat: 51.5233, lng: -0.1027 },
+                { address: "Unit 3, The White House, 9c Belvedere Road, Lambeth/Waterloo, London SE1 8YP", lat: 51.5053, lng: -0.1177 },
+                { address: "363 Fulham Road, Chelsea, London SW10 9TN", lat: 51.4843, lng: -0.1807 }
+            ],
             cuisine: "Pizza",
             safety: { text: "Acreditada pela Coeliac UK, com protocolos específicos.", level: "accredited" },
             price: "££",
@@ -548,7 +772,35 @@ export const restaurantData = {
         },
         {
             name: "Zizzi",
-            addresses: ["Mezzanine Level, Riverside House, Southwark Bridge Road, London SE1 9HA", "20 Bow Street, London WC2E 7AW", "Atrium Kitchen, Upper Level, Cabot Place, London E14 4QT", "8 Central St Giles Plaza, London WC2H 8AB", "194 Earls Court Road, London SW5 9QF", "Greenwich Promenade (Pier), Cutty Sark Gardens, London SE10 9HT", "Unit Su46, One New Change, London EC4M 9AF", "17 Sheldon Square, London W2 6EP", "12 Ivory Street, St Katharine's Dock, London E1W 1AT", "The O2, London SE10 0UZ", "73 The Strand, London WC2R 0DE", "Plaza Level West, Tower Place, London EC3R 5BU", "15 Cardinal Walk, Victoria, London SW1E 5JE", "London Designer Outlet, Wembley, HA9 0FD", "313 The Loft, The Gallery, Westfield Stratford City, London E20 1ET", "Westfield White City, London W12 7GB", "110 Wigmore Street, London W1U 3RD", "4 Kings Street, Richmond, London TW9 1ND", "1 High Street, Banstead, London SM7 2NE", "157 High Street, Beckenham, London BR3 1AE", "11 Widmore Road, Bromley, London BR1 1RL", "235 Chiswick High Road, London W4 4PU", "1 Bridge Road, East Molesey (surrounding Londres) KT8 9EU", "41 Station Lane, Hornchurch, London RM12 6JT", "43 Market Place, Kingston, London KT1 1ET", "Tilly’s Lane, Two Rivers, Staines‑upon‑Thames TW18 4BL", "13 High Street, Sutton, London SM1 1DF"],
+            addresses: [
+                { address: "20 Bow Street, London WC2E 7AW", lat: 51.513713, lng: -0.1226246 },
+                { address: "73 The Strand, London WC2R 0DE", lat: 51.5106, lng: -0.1224 },
+                { address: "194 Earls Court Road, London SW5 9QF", lat: 51.4920, lng: -0.1941 },
+                { address: "8 Central St Giles Plaza, London WC2H 8AB", lat: 51.5159, lng: -0.1287 },
+                { address: "110 Wigmore Street, London W1U 3RD", lat: 51.5152, lng: -0.1534 },
+                { address: "The O2, London SE10 0UZ", lat: 51.5029, lng: 0.0032 },
+                { address: "17 Sheldon Square, London W2 6EP", lat: 51.5186, lng: -0.1779 },
+                { address: "Mezzanine Level, Riverside House, Southwark Bridge Road, London SE1 9HA", lat: 51.5074, lng: -0.0963 },
+                { address: "Atrium Kitchen, Upper Level, Cabot Place, London E14 4QT", lat: 51.5050, lng: -0.0203 },
+                { address: "Greenwich Promenade (Pier), Cutty Sark Gardens, London SE10 9HT", lat: 51.4828, lng: -0.0101 },
+                { address: "Unit Su46, One New Change, London EC4M 9AF", lat: 51.5142, lng: -0.0957 },
+                { address: "12 Ivory Street, St Katharine's Dock, London E1W 1AT", lat: 51.5076, lng: -0.0716 },
+                { address: "Plaza Level West, Tower Place, London EC3R 5BU", lat: 51.5095, lng: -0.0792 },
+                { address: "15 Cardinal Walk, Victoria, London SW1E 5JE", lat: 51.4962, lng: -0.1415 },
+                { address: "London Designer Outlet, Wembley, HA9 0FD", lat: 51.5573, lng: -0.2798 },
+                { address: "313 The Loft, The Gallery, Westfield Stratford City, London E20 1ET", lat: 51.5453, lng: -0.0076 },
+                { address: "Westfield White City, London W12 7GB", lat: 51.5075, lng: -0.2217 },
+                { address: "4 Kings Street, Richmond, London TW9 1ND", lat: 51.4616, lng: -0.3060 },
+                { address: "1 High Street, Banstead, London SM7 2NE", lat: 51.3225, lng: -0.2023 },
+                { address: "157 High Street, Beckenham, London BR3 1AE", lat: 51.4087, lng: -0.0248 },
+                { address: "11 Widmore Road, Bromley, London BR1 1RL", lat: 51.4042, lng: 0.0152 },
+                { address: "235 Chiswick High Road, London W4 4PU", lat: 51.4937, lng: -0.2625 },
+                { address: "1 Bridge Road, East Molesey (surrounding Londres) KT8 9EU", lat: 51.4014, lng: -0.3423 },
+                { address: "41 Station Lane, Hornchurch, London RM12 6JT", lat: 51.5598, lng: 0.2202 },
+                { address: "43 Market Place, Kingston, London KT1 1ET", lat: 51.4093, lng: -0.3052 },
+                { address: "Tilly’s Lane, Two Rivers, Staines‑upon‑Thames TW18 4BL", lat: 51.4357, lng: -0.5132 },
+                { address: "13 High Street, Sutton, London SM1 1DF", lat: 51.3615, lng: -0.1932 }
+            ],
             cuisine: "Italiano",
             safety: { text: "Acreditada pela Coeliac UK, com protocolos específicos.", level: "accredited" },
             price: "££",
@@ -558,7 +810,15 @@ export const restaurantData = {
         },
         {
             name: "Prezzo",
-            addresses: ["116 Saint Martin’s Lane, London, WC2N 4BD", "31–32 Northumberland Avenue, London, WC2N 5BW", "163 Euston Road, London, NW1 2BH", "35A Kensington High Street, London, W8 5BA", "Unit M4, Mezzanine Level, King’s Cross Station, London, N1C 4AH", "36 Glasshouse St, London, W1B 5DL", "115 Buckingham Palace Rd, London, SW1W 9SJ"],
+            addresses: [
+                { address: "116 Saint Martin’s Lane, London, WC2N 4BD", lat: 51.5112, lng: -0.1278 },
+                { address: "31–32 Northumberland Avenue, London, WC2N 5BW", lat: 51.5074879, lng: -0.1265314 },
+                { address: "35A Kensington High Street, London, W8 5BA", lat: 51.5011, lng: -0.1912 },
+                { address: "163 Euston Road, London, NW1 2BH", lat: 51.5262, lng: -0.1332 },
+                { address: "Unit M4, Mezzanine Level, King’s Cross Station, London, N1C 4AH", lat: 51.5318, lng: -0.1237 },
+                { address: "36 Glasshouse St, London, W1B 5DL", lat: 51.5104, lng: -0.1362 },
+                { address: "115 Buckingham Palace Rd, London, SW1W 9SJ", lat: 51.4947, lng: -0.1458 }
+            ],
             cuisine: "Italiano",
             safety: { text: "Oferece opções acreditadas pela Coeliac UK.", level: "accredited" },
             price: "££",
@@ -568,7 +828,7 @@ export const restaurantData = {
         },
         {
             name: "Sambal Shiok",
-            addresses: ["171 Holloway Rd, London N7 8LX, Reino Unido"],
+            addresses: [{ address: "171 Holloway Rd, London N7 8LX, Reino Unido", lat: 51.5498748, lng: -0.1089933 }],
             cuisine: "Asiático",
             safety: { text: "Oferece caldo perfumado e noodles sem glúten.", level: "accredited" },
             price: "££",
@@ -578,7 +838,7 @@ export const restaurantData = {
         },
         {
             name: "Wicked Fish",
-            addresses: ["2b Lamb St, London E1 6ED, Reino Unido"],
+            addresses: [{ address: "2b Lamb St, London E1 6ED, Reino Unido", lat: 51.5203364, lng: -0.0766339 }],
             cuisine: "Fish & Chips",
             safety: { text: "Localização totalmente dedicada a ser 100% isenta de glúten.", level: "safe" },
             price: "££",
@@ -590,7 +850,7 @@ export const restaurantData = {
     oxford: [
         {
             name: "Bbuona",
-            addresses: ["102 Gloucester Grn, Oxford OX1 2DF, Reino Unido"],
+            addresses: [{ address: "102 Gloucester Grn, Oxford OX1 2DF, Reino Unido", lat: 51.7543119, lng: -1.2612759 }],
             cuisine: "Italiano",
             safety: { text: "A 'pinsa' sem glúten é cozinhada num forno separado.", level: "accredited" },
             price: "££",
@@ -600,7 +860,7 @@ export const restaurantData = {
         },
         {
             name: "Browns Oxford",
-            addresses: ["5-11 Woodstock Rd, Oxford OX2 6HA, Reino Unido"],
+            addresses: [{ address: "5-11 Woodstock Rd, Oxford OX2 6HA, Reino Unido", lat: 51.7590727, lng: -1.2610921 }],
             cuisine: "Britânico",
             safety: { text: "Acreditado pela Coeliac UK com menus dedicados e extensos.", level: "accredited" },
             price: "£££",
@@ -610,7 +870,7 @@ export const restaurantData = {
         },
         {
             name: "The Coconut Tree",
-            addresses: ["76 St Clement's St, Oxford OX4 1AH, Reino Unido"],
+            addresses: [{ address: "76 St Clement's St, Oxford OX4 1AH, Reino Unido", lat: 51.750992, lng: -1.2387484 }],
             cuisine: "Asiático",
             safety: { text: "Quase todo o menu é isento de glúten por natureza.", level: "accredited" },
             price: "££",
@@ -620,7 +880,7 @@ export const restaurantData = {
         },
         {
             name: "La Smorfia",
-            addresses: ["247 Cowley Rd, Oxford OX4 1XG, Reino Unido"],
+            addresses: [{ address: "247 Cowley Rd, Oxford OX4 1XG, Reino Unido", lat: 51.7453539, lng: -1.2300644 }],
             cuisine: "Italiano",
             safety: { text: "Possui uma cozinha dedicada e separada exclusivamente para pratos sem glúten.", level: "safe" },
             price: "££",
@@ -630,7 +890,7 @@ export const restaurantData = {
         },
         {
             name: "Organic Deli Cafe",
-            addresses: ["24 Friars Entry, Oxford OX1 2BY, Reino Unido"],
+            addresses: [{ address: "24 Friars Entry, Oxford OX1 2BY, Reino Unido", lat: 51.7544306, lng: -1.2602506 }],
             cuisine: "Padaria / Café",
             safety: { text: "Equipa excecionalmente bem informada; a maioria dos produtos é ou pode ser feita sem glúten.", level: "accredited" },
             price: "£",
@@ -640,7 +900,7 @@ export const restaurantData = {
         },
         {
             name: "Pho",
-            addresses: ["305 The Westgate, Queen St, Oxford OX1 1PG, Reino Unido"],
+            addresses: [{ address: "305 The Westgate, Queen St, Oxford OX1 1PG, Reino Unido", lat: 51.7490457, lng: -1.2614439 }],
             cuisine: "Asiático",
             safety: { text: "Acreditado pela Coeliac UK; 98% do menu é naturalmente isento de glúten.", level: "accredited" },
             price: "££",
@@ -650,7 +910,7 @@ export const restaurantData = {
         },
         {
             name: "The White Rabbit",
-            addresses: ["21 Friars Entry, Oxford OX1 2BY, Reino Unido"],
+            addresses: [{ address: "21 Friars Entry, Oxford OX1 2BY, Reino Unido", lat: 51.7544476, lng: -1.2607207 }],
             cuisine: "Pub",
             safety: { text: "Utiliza um forno separado para a confeção de pizzas sem glúten.", level: "accredited" },
             price: "££",
@@ -662,7 +922,18 @@ export const restaurantData = {
     paris: [
         {
             name: "Breizh Café",
-            addresses: ["1 Rue de l’Odéon, 75006 Paris", "109 Rue Vieille du Temple, 75003 Paris", "14 Rue des Petits Carreaux, 75002 Paris", "4 Impasse des Carrières, 75016 Paris", "112 Quai de Jemmapes, 75010 Paris", "23 Rue Paul Bert, 75011 Paris", "3 Place Charles Michels, 75015 Paris", "31 Rue des Batignolles, 75017 Paris", "93 Rue des Martyrs, 75018 Paris", "3 Rue des Martyrs, 75018 Paris", "111 Rue Vieille du Temple, 75003 Paris"],
+            addresses: [
+                { address: "1 Rue de l’Odéon, 75006 Paris", lat: 48.8524, lng: 2.3395 },
+                { address: "109 Rue Vieille du Temple, 75003 Paris", lat: 48.8606206, lng: 2.3618066 },
+                { address: "14 Rue des Petits Carreaux, 75002 Paris", lat: 48.8681, lng: 2.3468 },
+                { address: "93 Rue des Martyrs, 75018 Paris", lat: 48.8837, lng: 2.3418 },
+                { address: "4 Impasse des Carrières, 75016 Paris", lat: 48.8596, lng: 2.2789 },
+                { address: "112 Quai de Jemmapes, 75010 Paris", lat: 48.8722, lng: 2.3653 },
+                { address: "23 Rue Paul Bert, 75011 Paris", lat: 48.8517, lng: 2.3895 },
+                { address: "3 Place Charles Michels, 75015 Paris", lat: 48.8480, lng: 2.2858 },
+                { address: "31 Rue des Batignolles, 75017 Paris", lat: 48.8856, lng: 2.3228 },
+                { address: "111 Rue Vieille du Temple, 75003 Paris", lat: 48.8609, lng: 2.3621 }
+            ],
             cuisine: "Crêperie",
             safety: { text: "Utiliza farinha de trigo sarraceno certificada sem glúten. É imperativo verificar pessoalmente se usam chapas e utensílios separados.", level: "caution" },
             price: "€€€",
@@ -672,7 +943,7 @@ export const restaurantData = {
         },
         {
             name: "Café Mareva",
-            addresses: ["27 Rue de Clignancourt, 75018 Paris, França"],
+            addresses: [{ address: "27 Rue de Clignancourt, 75018 Paris, França", lat: 48.885559, lng: 2.3471914 }],
             cuisine: "Padaria / Café",
             safety: { text: "Menu totalmente sem glúten e sem lactose.", level: "safe" },
             price: "€€",
@@ -682,7 +953,7 @@ export const restaurantData = {
         },
         {
             name: "Caramel Sarrasin",
-            addresses: ["47 Rue du Faubourg Montmartre, 75009 Paris, França"],
+            addresses: [{ address: "47 Rue du Faubourg Montmartre, 75009 Paris, França", lat: 48.8746888, lng: 2.3412773 }],
             cuisine: "Crêperie",
             safety: { text: "Aparece em guias sem glúten, mas a mesma advertência rigorosa de verificar os protocolos de contaminação cruzada se aplica.", level: "caution" },
             price: "N/A",
@@ -692,7 +963,10 @@ export const restaurantData = {
         },
         {
             name: "Chambelland",
-            addresses: ["43 Rue Brochant, 75017 Paris, França", "14 Rue Ternaux, 75011 Paris, França"],
+            addresses: [
+                { address: "43 Rue Brochant, 75017 Paris, França", lat: 48.8903767, lng: 2.3195918 },
+                { address: "14 Rue Ternaux, 75011 Paris, França", lat: 48.8640, lng: 2.3712 }
+            ],
             cuisine: "Padaria / Café",
             safety: { text: "100% sem glúten, com moinho de farinha próprio.", level: "safe" },
             price: "€€",
@@ -702,7 +976,7 @@ export const restaurantData = {
         },
         {
             name: "Cococo",
-            addresses: ["35 Rue Coquillière, 75001 Paris, França"],
+            addresses: [{ address: "35 Rue Coquillière, 75001 Paris, França", lat: 48.8643242, lng: 2.3410183 }],
             cuisine: "Asiático",
             safety: { text: "100% sem glúten, sem lactose e sem açúcar refinado.", level: "safe" },
             price: "€€€",
@@ -712,7 +986,17 @@ export const restaurantData = {
         },
         {
             name: "Copains",
-            addresses: ["9 Avenue de l’Opéra, 75001 Paris", "62 Rue Montorgueil, 75002 Paris", "60 Rue Tiquetonne, 75002 Paris", "68 Rue des Saints‑Pères, 75006 Paris", "29 Rue des Blancs‑Manteaux, 75004 Paris", "26 Rue Linois, 75015 Paris", "90 Avenue Victor Hugo, 75016 Paris", "61 Rue Legendre, 75017 Paris", "8 Rue des Abbesses, 75018 Paris", "61 Rue Legendre, 75017 Paris"],
+            addresses: [
+                { address: "60 Rue Tiquetonne, 75002 Paris", lat: 48.8648592, lng: 2.3459945 },
+                { address: "29 Rue des Blancs‑Manteaux, 75004 Paris", lat: 48.8591, lng: 2.3562 },
+                { address: "8 Rue des Abbesses, 75018 Paris", lat: 48.8851, lng: 2.3385 },
+                { address: "62 Rue Montorgueil, 75002 Paris", lat: 48.8659, lng: 2.3475 },
+                { address: "68 Rue des Saints‑Pères, 75006 Paris", lat: 48.8541, lng: 2.3308 },
+                { address: "9 Avenue de l’Opéra, 75001 Paris", lat: 48.8659, lng: 2.3340 },
+                { address: "26 Rue Linois, 75015 Paris", lat: 48.8496, lng: 2.2820 },
+                { address: "90 Avenue Victor Hugo, 75016 Paris", lat: 48.8710, lng: 2.2861 },
+                { address: "61 Rue Legendre, 75017 Paris", lat: 48.8872, lng: 2.3168 }
+            ],
             cuisine: "Padaria / Café",
             safety: { text: "Numerosas localizações 100% sem glúten.", level: "safe" },
             price: "€€",
@@ -722,7 +1006,10 @@ export const restaurantData = {
         },
         {
             name: "La Crème de Paris",
-            addresses: ["4 Rue du Faubourg Montmartre, 75009 Paris, França", "1 Quai Saint-Michel, 75005 Paris, França"],
+            addresses: [
+                { address: "4 Rue du Faubourg Montmartre, 75009 Paris, França", lat: 48.8727, lng: 2.3421 },
+                { address: "1 Quai Saint-Michel, 75005 Paris, França", lat: 48.8530548, lng: 2.3465361 }
+            ],
             cuisine: "Crêperie",
             safety: { text: "Indica que todos os waffles são sem glúten, mas a verificação de contaminação cruzada é essencial.", level: "caution" },
             price: "€€",
@@ -732,7 +1019,7 @@ export const restaurantData = {
         },
         {
             name: "Grom",
-            addresses: ["81 Rue de Seine, 75006 Paris, França"],
+            addresses: [{ address: "81 Rue de Seine, 75006 Paris, França", lat: 48.8533728, lng: 2.3371026 }],
             cuisine: "Gelataria",
             safety: { text: "100% sem glúten, incluindo os cones.", level: "safe" },
             price: "€€",
@@ -742,7 +1029,10 @@ export const restaurantData = {
         },
         {
             name: "Judy, Cantine Qualitarienne",
-            addresses: ["14 Rue Jean-Jacques Rousseau, 75001 Paris, França", "18 Rue de Fleurus, 75006 Paris, França"],
+            addresses: [
+                { address: "14 Rue Jean-Jacques Rousseau, 75001 Paris, França", lat: 48.862383, lng: 2.3405099 },
+                { address: "18 Rue de Fleurus, 75006 Paris, França", lat: 48.8471, lng: 2.3290 }
+            ],
             cuisine: "Padaria / Café",
             safety: { text: "Café 100% sem glúten.", level: "safe" },
             price: "€€",
@@ -752,7 +1042,7 @@ export const restaurantData = {
         },
         {
             name: "Kapunka",
-            addresses: ["51 Rue Saint-Sauveur, 75002 Paris, França"],
+            addresses: [{ address: "51 Rue Saint-Sauveur, 75002 Paris, França", lat: 48.866174, lng: 2.347699 }],
             cuisine: "Asiático",
             safety: { text: "Menu completamente sem glúten.", level: "safe" },
             price: "€€",
@@ -762,7 +1052,7 @@ export const restaurantData = {
         },
         {
             name: "Ladurée / Pierre Hermé",
-            addresses: ["75 Av. des Champs-Élysées, 75008 Paris, França"],
+            addresses: [{ address: "75 Av. des Champs-Élysées, 75008 Paris, França", lat: 48.870839, lng: 2.30319 }],
             cuisine: "Padaria / Café",
             safety: { text: "Os macarons são naturalmente isentos de glúten, mas são produzidos em ambiente misto com baixo risco de contaminação cruzada.", level: "caution" },
             price: "€€€",
@@ -772,7 +1062,7 @@ export const restaurantData = {
         },
         {
             name: "La Manufacture du Sans Gluten",
-            addresses: ["2 Rue Androuet, 75018 Paris, França"],
+            addresses: [{ address: "2 Rue Androuet, 75018 Paris, França", lat: 48.8855741, lng: 2.3386361 }],
             cuisine: "Padaria / Café",
             safety: { text: "Padaria 100% sem glúten.", level: "safe" },
             price: "€€€",
@@ -782,7 +1072,7 @@ export const restaurantData = {
         },
         {
             name: "Little Nonna",
-            addresses: ["12 Av. Niel, 75017 Paris, França"],
+            addresses: [{ address: "12 Av. Niel, 75017 Paris, França", lat: 48.879706, lng: 2.2949484 }],
             cuisine: "Italiano",
             safety: { text: "100% sem glúten, com forno a lenha.", level: "safe" },
             price: "€€",
@@ -792,7 +1082,7 @@ export const restaurantData = {
         },
         {
             name: "Maison Plume",
-            addresses: ["61 Rue Charlot, 75003 Paris, França"],
+            addresses: [{ address: "61 Rue Charlot, 75003 Paris, França", lat: 48.8637665, lng: 2.3633781 }],
             cuisine: "Padaria / Café",
             safety: { text: "100% sem glúten e sem açúcar.", level: "safe" },
             price: "€€€",
@@ -802,7 +1092,10 @@ export const restaurantData = {
         },
         {
             name: "Noglu",
-            addresses: ["15 Rue Basfroi, 75011 Paris, França", "69 Rue de Grenelle, 75007 Paris, França"],
+            addresses: [
+                { address: "15 Rue Basfroi, 75011 Paris, França", lat: 48.8544251, lng: 2.3796045 },
+                { address: "69 Rue de Grenelle, 75007 Paris, França", lat: 48.8550, lng: 2.3245 }
+            ],
             cuisine: "Padaria / Café",
             safety: { text: "Estabelecimento 100% sem glúten.", level: "safe" },
             price: "€€",
@@ -812,7 +1105,7 @@ export const restaurantData = {
         },
         {
             name: "RizRiz",
-            addresses: ["221 Rue Saint-Martin, 75003 Paris, França"],
+            addresses: [{ address: "221 Rue Saint-Martin, 75003 Paris, França", lat: 48.8642661, lng: 2.3528279 }],
             cuisine: "Asiático",
             safety: { text: "Estabelecimento 100% sem glúten.", level: "safe" },
             price: "€€",
@@ -822,7 +1115,7 @@ export const restaurantData = {
         },
         {
             name: "Tasca",
-            addresses: ["46 Av. de Suffren, 75015 Paris, França"],
+            addresses: [{ address: "46 Av. de Suffren, 75015 Paris, França", lat: 48.8537008, lng: 2.2966014 }],
             cuisine: "Italiano",
             safety: { text: "Restaurante totalmente sem glúten.", level: "safe" },
             price: "€€€",

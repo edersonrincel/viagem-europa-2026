@@ -1,6 +1,9 @@
 // js/modules/sabores.js
 
 import { restaurantData } from './data.js';
+import { initializeMap, destroyMap } from './map.js';
+
+let currentView = 'list'; // 'list' or 'map'
 
 /**
  * Converte uma string para um formato "slug" (ex: "Italiano / Pizza" -> "italiano-pizza").
@@ -36,7 +39,6 @@ function createRestaurantCard(restaurant) {
     let addressListHtml = '';
     let seeMoreButtonHtml = '';
 
-    // CORREÇÃO: Acessa a propriedade 'address' do objeto de endereço (addr.address)
     const createLinkedListItem = (addrObj, isHidden = false) => {
         const encodedAddr = encodeURIComponent(addrObj.address);
         const hiddenClass = isHidden ? 'hidden extra-address' : '';
@@ -56,12 +58,12 @@ function createRestaurantCard(restaurant) {
         addressListHtml = addresses.map(addrObj => createLinkedListItem(addrObj)).join('');
     }
 
-    // Adiciona atributos de dados para todos os filtros
     const cuisineSlug = slugify(restaurant.cuisine);
     const priceSlug = slugify(restaurant.price);
+    const nameSlug = slugify(restaurant.name);
 
     return `
-        <div class="food-card p-4 rounded-lg border bg-slate-50 flex flex-col h-full" 
+        <div id="restaurant-${nameSlug}" class="food-card p-4 rounded-lg border bg-slate-50 flex flex-col h-full scroll-target" 
              data-safety-level="${restaurant.safety.level}" 
              data-cuisine="${cuisineSlug}" 
              data-price="${priceSlug}">
@@ -111,7 +113,6 @@ function applyFilters(city) {
     const grid = document.getElementById(`content-food-${city}-grid`);
     if (!grid) return;
 
-    // Obtém os valores de todos os filtros para a cidade especificada
     const safetyFilter = document.querySelector(`.filter-btn[data-city='${city}'].active`).dataset.filter;
     const cuisineFilter = document.getElementById(`filter-cuisine-${city}`).value;
     const priceFilter = document.getElementById(`filter-price-${city}`).value;
@@ -124,7 +125,6 @@ function applyFilters(city) {
         const cuisineMatch = cuisineFilter === 'all' || card.dataset.cuisine === cuisineFilter;
         const priceMatch = priceFilter === 'all' || card.dataset.price === priceFilter;
 
-        // O card só é visível se corresponder a TODOS os filtros ativos
         if (safetyMatch && cuisineMatch && priceMatch) {
             card.style.display = 'flex';
             hasVisibleCards = true;
@@ -133,7 +133,6 @@ function applyFilters(city) {
         }
     });
 
-    // Mostra ou esconde a mensagem de "nenhum resultado"
     let noResultsMsg = grid.querySelector('.no-results-message');
     if (!noResultsMsg) {
         noResultsMsg = document.createElement('p');
@@ -149,21 +148,16 @@ function applyFilters(city) {
  * Adiciona os event listeners aos botões e seletores de filtro.
  */
 function setupFilterListeners() {
-    // Botões de segurança
     const filterButtons = document.querySelectorAll('.filter-btn');
     filterButtons.forEach(button => {
         button.addEventListener('click', () => {
             const city = button.dataset.city;
-            const filter = button.dataset.filter;
-
             document.querySelectorAll(`.filter-btn[data-city='${city}']`).forEach(btn => btn.classList.remove('active'));
             button.classList.add('active');
-
             applyFilters(city);
         });
     });
 
-    // Seletores de Cozinha e Preço
     const filterSelects = document.querySelectorAll('.filter-select');
     filterSelects.forEach(select => {
         select.addEventListener('change', () => {
@@ -184,7 +178,7 @@ function setupAddressToggles() {
             if (!target.classList.contains('show-more-addresses')) return;
             
             event.preventDefault();
-            const addressContainer = target.parentElement;
+            const addressContainer = target.closest('div');
             const addressList = addressContainer.querySelector('ul');
             if (!addressList) return;
 
@@ -259,13 +253,52 @@ function generateRestaurantList(cityKey, containerId) {
 }
 
 /**
+ * Alterna a visualização entre lista e mapa.
+ * @param {'list' | 'map'} view - A visualização a ser exibida.
+ */
+function switchView(view) {
+    const listView = document.getElementById('list-view');
+    const mapView = document.getElementById('map-view');
+    const listToggle = document.getElementById('view-toggle-list');
+    const mapToggle = document.getElementById('view-toggle-map');
+
+    if (!listView || !mapView || !listToggle || !mapToggle) return;
+
+    currentView = view;
+
+    if (view === 'list') {
+        listView.style.display = 'block';
+        mapView.style.display = 'none';
+        listToggle.classList.add('bg-white', 'text-sky-600', 'shadow');
+        mapToggle.classList.remove('bg-white', 'text-sky-600', 'shadow');
+        destroyMap();
+    } else {
+        listView.style.display = 'none';
+        mapView.style.display = 'block';
+        mapToggle.classList.add('bg-white', 'text-sky-600', 'shadow');
+        listToggle.classList.remove('bg-white', 'text-sky-600', 'shadow');
+        initializeMap();
+    }
+}
+
+/**
+ * Configura os listeners para o seletor de visualização (lista/mapa).
+ */
+function setupViewToggler() {
+    const listToggle = document.getElementById('view-toggle-list');
+    const mapToggle = document.getElementById('view-toggle-map');
+
+    listToggle?.addEventListener('click', () => switchView('list'));
+    mapToggle?.addEventListener('click', () => switchView('map'));
+}
+
+/**
  * Inicializa a página de sabores, gerando listas, populando filtros e configurando listeners.
  */
 export function initializeSaboresPage() {
-    const cities = ['londres', 'oxford', 'paris', 'lisboa'];
+    const cities = ['londres', 'oxford', 'lisboa'];
     
     cities.forEach(city => {
-        // Verifica se o container da cidade existe na página antes de processar
         if (document.getElementById(`content-food-${city}`)) {
             generateRestaurantList(city, `content-food-${city}-grid`);
             populateFilters(city);
@@ -274,4 +307,39 @@ export function initializeSaboresPage() {
 
     setupFilterListeners();
     setupAddressToggles();
+    setupViewToggler();
+    
+    // Garante que a visualização de lista seja a padrão na inicialização
+    switchView('list');
+}
+
+/**
+ * Navega para um restaurante específico na visualização de lista.
+ * @param {string} restaurantNameSlug - O slug do nome do restaurante.
+ */
+export function navigateToRestaurant(restaurantNameSlug) {
+    switchView('list');
+    
+    setTimeout(() => {
+        const restaurantCard = document.getElementById(`restaurant-${restaurantNameSlug}`);
+        if (restaurantCard) {
+            // Encontra o botão expansível pai e o expande se necessário
+            const collapsibleContent = restaurantCard.closest('.collapsible-content');
+            if (collapsibleContent && collapsibleContent.classList.contains('hidden')) {
+                const trigger = document.querySelector(`[aria-controls='${collapsibleContent.id}']`);
+                trigger?.click();
+            }
+
+            // Rola para o card após a expansão
+            setTimeout(() => {
+                restaurantCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                // Adiciona um destaque temporário
+                restaurantCard.style.transition = 'background-color 0.3s';
+                restaurantCard.style.backgroundColor = '#e0f2fe'; // Cor de destaque
+                setTimeout(() => {
+                    restaurantCard.style.backgroundColor = ''; // Remove o destaque
+                }, 2000);
+            }, 300);
+        }
+    }, 100);
 }

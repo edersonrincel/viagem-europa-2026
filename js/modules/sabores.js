@@ -36,23 +36,24 @@ function createRestaurantCard(restaurant) {
     let addressListHtml = '';
     let seeMoreButtonHtml = '';
 
-    const createLinkedListItem = (addr, isHidden = false) => {
-        const encodedAddr = encodeURIComponent(addr);
+    // CORREÇÃO: Acessa a propriedade 'address' do objeto de endereço (addr.address)
+    const createLinkedListItem = (addrObj, isHidden = false) => {
+        const encodedAddr = encodeURIComponent(addrObj.address);
         const hiddenClass = isHidden ? 'hidden extra-address' : '';
         return `<li class="${hiddenClass}">
                     <a href="https://www.google.com/maps?q=${encodedAddr}" target="_blank" class="inline-flex items-start text-slate-600 hover:text-orange-500 transition-colors">
                         <i class="fas fa-map-marked-alt fa-fw w-4 text-center mr-1.5 text-slate-400 pt-0.5"></i>
-                        <span class="underline text-[11px] leading-tight">${addr}</span>
+                        <span class="underline text-[11px] leading-tight">${addrObj.address}</span>
                     </a>
                 </li>`;
     };
 
     if (addresses.length > 3) {
-        addressListHtml += addresses.slice(0, 3).map(addr => createLinkedListItem(addr)).join('');
-        addressListHtml += addresses.slice(3).map(addr => createLinkedListItem(addr, true)).join('');
+        addressListHtml += addresses.slice(0, 3).map(addrObj => createLinkedListItem(addrObj)).join('');
+        addressListHtml += addresses.slice(3).map(addrObj => createLinkedListItem(addrObj, true)).join('');
         seeMoreButtonHtml = `<button class="text-xs text-sky-600 hover:underline mt-2 ml-6 show-more-addresses">Veja mais...</button>`;
     } else {
-        addressListHtml = addresses.map(addr => createLinkedListItem(addr)).join('');
+        addressListHtml = addresses.map(addrObj => createLinkedListItem(addrObj)).join('');
     }
 
     // Adiciona atributos de dados para todos os filtros

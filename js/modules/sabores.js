@@ -59,7 +59,6 @@ function createRestaurantCard(restaurant) {
     }
 
     const cuisineSlug = slugify(restaurant.cuisine);
-    // CORREÇÃO: Usa o valor de preço bruto em vez de "slugify"
     const priceValue = restaurant.price; 
     const nameSlug = slugify(restaurant.name);
 
@@ -106,11 +105,63 @@ function createRestaurantCard(restaurant) {
     `;
 }
 
+
 /**
- * Aplica os filtros de segurança, cozinha e preço aos cards de uma cidade.
+ * Popula e atualiza dinamicamente os filtros de cozinha e preço com base nos restaurantes visíveis.
+ * @param {string} cityKey - A chave da cidade.
+ * @param {Array<object>} visibleRestaurants - A lista de restaurantes atualmente visíveis.
+ */
+function updateAvailableFilters(cityKey, visibleRestaurants) {
+    const cuisineSet = new Set();
+    const priceSet = new Set();
+
+    visibleRestaurants.forEach(r => {
+        if (r.cuisine) cuisineSet.add(r.cuisine);
+        if (r.price) priceSet.add(r.price);
+    });
+
+    const cuisineSelect = document.getElementById(`filter-cuisine-${cityKey}`);
+    const priceSelect = document.getElementById(`filter-price-${cityKey}`);
+
+    // Salva a seleção atual antes de limpar
+    const currentCuisine = cuisineSelect.value;
+    const currentPrice = priceSelect.value;
+
+    if (cuisineSelect) {
+        cuisineSelect.innerHTML = '<option value="all">Todos os Tipos</option>';
+        [...cuisineSet].sort().forEach(cuisine => {
+            const option = document.createElement('option');
+            option.value = slugify(cuisine);
+            option.textContent = cuisine;
+            cuisineSelect.appendChild(option);
+        });
+        // Restaura a seleção se ainda for válida
+        if (cuisineSelect.querySelector(`option[value="${currentCuisine}"]`)) {
+            cuisineSelect.value = currentCuisine;
+        }
+    }
+
+    if (priceSelect) {
+        priceSelect.innerHTML = '<option value="all">Todas as Faixas</option>';
+        [...priceSet].sort().forEach(price => {
+            const option = document.createElement('option');
+            option.value = price;
+            option.textContent = price;
+            priceSelect.appendChild(option);
+        });
+        // Restaura a seleção se ainda for válida
+        if (priceSelect.querySelector(`option[value="${currentPrice}"]`)) {
+            priceSelect.value = currentPrice;
+        }
+    }
+}
+
+
+/**
+ * Aplica os filtros e atualiza os filtros secundários (cozinha, preço).
  * @param {string} city - A chave da cidade (ex: 'londres').
  */
-function applyFilters(city) {
+function applyAndRefreshFilters(city) {
     const grid = document.getElementById(`content-food-${city}-grid`);
     if (!grid) return;
 
@@ -118,21 +169,40 @@ function applyFilters(city) {
     const cuisineFilter = document.getElementById(`filter-cuisine-${city}`).value;
     const priceFilter = document.getElementById(`filter-price-${city}`).value;
 
+    const allRestaurantsInCity = restaurantData[city] || [];
+    let visibleRestaurants = [];
+
+    // Primeiro, filtra por segurança para atualizar os outros filtros
+    const restaurantsFilteredBySafety = allRestaurantsInCity.filter(r => safetyFilter === 'all' || r.safety.level === safetyFilter);
+    updateAvailableFilters(city, restaurantsFilteredBySafety);
+
+    // Agora, aplica todos os filtros para exibir os cards
     const cards = grid.querySelectorAll('.food-card');
     let hasVisibleCards = false;
 
     cards.forEach(card => {
         const safetyMatch = safetyFilter === 'all' || card.dataset.safetyLevel === safetyFilter;
-        const cuisineMatch = cuisineFilter === 'all' || card.dataset.cuisine === cuisineFilter;
-        const priceMatch = priceFilter === 'all' || card.dataset.price === priceFilter;
+        // Re-lê os valores dos selects, pois podem ter sido resetados
+        const updatedCuisineFilter = document.getElementById(`filter-cuisine-${city}`).value;
+        const updatedPriceFilter = document.getElementById(`filter-price-${city}`).value;
+        
+        const cuisineMatch = updatedCuisineFilter === 'all' || card.dataset.cuisine === updatedCuisineFilter;
+        const priceMatch = updatedPriceFilter === 'all' || card.dataset.price === updatedPriceFilter;
 
         if (safetyMatch && cuisineMatch && priceMatch) {
             card.style.display = 'flex';
             hasVisibleCards = true;
+            // Adiciona à lista de visíveis para a próxima atualização de filtro
+            const restaurantName = card.id.replace('restaurant-', '');
+            const originalRestaurant = allRestaurantsInCity.find(r => slugify(r.name) === restaurantName);
+            if(originalRestaurant) visibleRestaurants.push(originalRestaurant);
         } else {
             card.style.display = 'none';
         }
     });
+
+    // Atualiza os filtros de cozinha e preço com base nos restaurantes que estão visíveis
+    updateAvailableFilters(city, visibleRestaurants);
 
     let noResultsMsg = grid.querySelector('.no-results-message');
     if (!noResultsMsg) {
@@ -145,6 +215,7 @@ function applyFilters(city) {
     noResultsMsg.style.display = hasVisibleCards ? 'none' : 'block';
 }
 
+
 /**
  * Adiciona os event listeners aos botões e seletores de filtro.
  */
@@ -155,7 +226,7 @@ function setupFilterListeners() {
             const city = button.dataset.city;
             document.querySelectorAll(`.filter-btn[data-city='${city}']`).forEach(btn => btn.classList.remove('active'));
             button.classList.add('active');
-            applyFilters(city);
+            applyAndRefreshFilters(city);
         });
     });
 
@@ -163,7 +234,7 @@ function setupFilterListeners() {
     filterSelects.forEach(select => {
         select.addEventListener('change', () => {
             const city = select.dataset.city;
-            applyFilters(city);
+            applyAndRefreshFilters(city);
         });
     });
 }
@@ -190,47 +261,6 @@ function setupAddressToggles() {
             target.textContent = isHidden ? 'Veja menos' : 'Veja mais...';
         });
     });
-}
-
-/**
- * Popula dinamicamente os filtros de cozinha e preço para uma cidade.
- * @param {string} cityKey - A chave da cidade.
- */
-function populateFilters(cityKey) {
-    const restaurants = restaurantData[cityKey] || [];
-    if (restaurants.length === 0) return;
-
-    const cuisineSet = new Set();
-    const priceSet = new Set();
-
-    restaurants.forEach(r => {
-        if (r.cuisine) cuisineSet.add(r.cuisine);
-        if (r.price) priceSet.add(r.price);
-    });
-
-    const cuisineSelect = document.getElementById(`filter-cuisine-${cityKey}`);
-    const priceSelect = document.getElementById(`filter-price-${cityKey}`);
-
-    if (cuisineSelect) {
-        cuisineSelect.innerHTML = '<option value="all">Todos os Tipos</option>';
-        [...cuisineSet].sort().forEach(cuisine => {
-            const option = document.createElement('option');
-            option.value = slugify(cuisine);
-            option.textContent = cuisine;
-            cuisineSelect.appendChild(option);
-        });
-    }
-
-    if (priceSelect) {
-        priceSelect.innerHTML = '<option value="all">Todas as Faixas</option>';
-        [...priceSet].sort().forEach(price => {
-            const option = document.createElement('option');
-            // CORREÇÃO: Usa o valor de preço bruto para o valor da opção
-            option.value = price;
-            option.textContent = price;
-            priceSelect.appendChild(option);
-        });
-    }
 }
 
 /**
@@ -303,7 +333,9 @@ export function initializeSaboresPage() {
     cities.forEach(city => {
         if (document.getElementById(`content-food-${city}`)) {
             generateRestaurantList(city, `content-food-${city}-grid`);
-            populateFilters(city);
+            // População inicial dos filtros
+            const allRestaurantsInCity = restaurantData[city] || [];
+            updateAvailableFilters(city, allRestaurantsInCity);
         }
     });
 

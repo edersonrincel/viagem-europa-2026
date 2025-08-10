@@ -5,6 +5,7 @@ import { navigateToRestaurant } from './sabores.js';
 
 let map = null;
 let markers = null;
+const resizeObserver = new ResizeObserver(() => adjustMapHeight());
 
 // --- FUNÇÕES HELPER ---
 
@@ -17,6 +18,42 @@ function slugify(text) {
         .replace(/\-\-+/g, '-')
         .replace(/^-+/, '')
         .replace(/-+$/, '');
+}
+
+// --- AJUSTE DINÂMICO DA ALTURA DO MAPA ---
+
+function adjustMapHeight() {
+    if (!map) return;
+    const mapContainer = document.getElementById('map-container');
+    const topNav = document.querySelector('.top-nav');
+    const mainContent = document.getElementById('main-content');
+    const viewToggler = document.getElementById('view-toggle-list')?.parentElement.parentElement; // Pega o container do toggler
+    const mapFilters = document.getElementById('map-filters');
+
+    if (!mapContainer || !topNav || !mainContent || !viewToggler || !mapFilters) return;
+
+    // Calcula a altura dos elementos acima do mapa
+    const topNavHeight = topNav.offsetHeight;
+    const viewTogglerHeight = viewToggler.offsetHeight;
+    const mapFiltersHeight = mapFilters.offsetHeight;
+    const mainContentPaddingTop = parseFloat(window.getComputedStyle(mainContent).paddingTop);
+    const mainContentPaddingBottom = parseFloat(window.getComputedStyle(mainContent).paddingBottom);
+    
+    // Margem entre os elementos
+    const margin = 16; // 1rem
+
+    // Altura total dos elementos fixos e de conteúdo acima do mapa
+    const totalOffset = topNavHeight + mainContentPaddingTop + viewTogglerHeight + mapFiltersHeight + (margin * 3);
+    
+    // Calcula a altura disponível
+    const availableHeight = window.innerHeight - totalOffset - mainContentPaddingBottom;
+
+    // Define uma altura mínima para evitar que o mapa desapareça
+    const minHeight = 300; 
+    mapContainer.style.height = `${Math.max(availableHeight, minHeight)}px`;
+
+    // Informa ao Leaflet que o tamanho do container mudou
+    map.invalidateSize();
 }
 
 // --- DEFINIÇÕES E CRIAÇÃO DO MAPA ---
@@ -90,12 +127,38 @@ function createPopupContent(restaurant, address) {
     `;
 }
 
+function updateMapSafetyFilters(city) {
+    const restaurantsInCity = restaurantData[city] || [];
+    const availableLevels = new Set(restaurantsInCity.map(r => r.safety.level));
+    
+    const safetyButtons = document.querySelectorAll('.map-filter-btn');
+    safetyButtons.forEach(button => {
+        const filterLevel = button.dataset.filter;
+        if (filterLevel === 'all') {
+            button.style.display = 'inline-flex';
+        } else {
+            button.style.display = availableLevels.has(filterLevel) ? 'inline-flex' : 'none';
+        }
+    });
+
+    // Se o filtro ativo foi escondido, reseta para "Todos"
+    const activeButton = document.querySelector('.map-filter-btn.active');
+    if (activeButton && activeButton.style.display === 'none') {
+        document.querySelector('.map-filter-btn[data-filter="all"]').click();
+    }
+}
+
+
 function updateMapMarkers() {
     if (!map || !markers) return;
 
+    const city = document.getElementById('map-filter-city').value;
+    
+    // Atualiza a visibilidade dos botões de filtro de segurança
+    updateMapSafetyFilters(city);
+
     markers.clearLayers();
     const icons = createCustomIcons();
-    const city = document.getElementById('map-filter-city').value;
     const safety = document.querySelector('.map-filter-btn.active').dataset.filter;
 
     const locations = [];
@@ -116,7 +179,7 @@ function updateMapMarkers() {
     });
 
     if (locations.length > 0) {
-        map.fitBounds(locations, { padding: [50, 50] });
+        map.fitBounds(locations, { padding: [50, 50], maxZoom: 15 });
     } else {
         // Padrão para o centro da cidade se não houver marcadores
         const cityCenters = {
@@ -161,29 +224,29 @@ export function initializeMap() {
     const mapContainer = document.getElementById('map-container');
     if (!mapContainer) return;
 
-    map = L.map(mapContainer);
+    map = L.map(mapContainer, {
+        // Desativa o zoom com o scroll do mouse para evitar zoom acidental ao rolar a página
+        scrollWheelZoom: false 
+    });
 
-    /* Estilo detalhado */
-    //L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    //    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-    //}).addTo(map);
-
-    /* Estilo claro */
     L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
         attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">CartoDB Positron</a> contributors'
     }).addTo(map);
-
-    /* Imagem de satélite */
-    //L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
-    //  attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">CartoDB Positron</a> contributors'
-    //}).addTo(map);
 
     markers = L.markerClusterGroup();
     map.addLayer(markers);
 
     setupPopupDetailButtons();
     setupMapFilters();
-    updateMapMarkers(); // Initial population
+    updateMapMarkers(); // População inicial
+
+    // Configura o ajuste dinâmico da altura
+    adjustMapHeight();
+    const mainContent = document.getElementById('main-content');
+    if(mainContent) {
+        resizeObserver.observe(mainContent);
+    }
+    window.addEventListener('resize', adjustMapHeight);
 }
 
 export function destroyMap() {
@@ -192,4 +255,7 @@ export function destroyMap() {
         map = null;
         markers = null;
     }
+    // Para de observar as mudanças de tamanho e remove o listener
+    resizeObserver.disconnect();
+    window.removeEventListener('resize', adjustMapHeight);
 }

@@ -59,14 +59,15 @@ function createRestaurantCard(restaurant) {
     }
 
     const cuisineSlug = slugify(restaurant.cuisine);
-    const priceSlug = slugify(restaurant.price);
+    // CORREÇÃO: Usa o valor de preço bruto em vez de "slugify"
+    const priceValue = restaurant.price; 
     const nameSlug = slugify(restaurant.name);
 
     return `
         <div id="restaurant-${nameSlug}" class="food-card p-4 rounded-lg border bg-slate-50 flex flex-col h-full scroll-target" 
              data-safety-level="${restaurant.safety.level}" 
              data-cuisine="${cuisineSlug}" 
-             data-price="${priceSlug}">
+             data-price="${priceValue}">
             
             <h4 class="food-card-title text-base font-bold text-slate-800 mb-2">${restaurant.name}</h4>
             
@@ -224,7 +225,8 @@ function populateFilters(cityKey) {
         priceSelect.innerHTML = '<option value="all">Todas as Faixas</option>';
         [...priceSet].sort().forEach(price => {
             const option = document.createElement('option');
-            option.value = slugify(price);
+            // CORREÇÃO: Usa o valor de preço bruto para o valor da opção
+            option.value = price;
             option.textContent = price;
             priceSelect.appendChild(option);
         });

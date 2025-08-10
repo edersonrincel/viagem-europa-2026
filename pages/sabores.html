@@ -169,37 +169,41 @@
 
         <!-- Map View -->
         <div id="map-view" class="hidden">
-            <!-- Map Filter Toggle Button -->
-            <button class="filter-toggle-button flex items-center justify-between w-full p-3 bg-white rounded-lg shadow-md mb-4 text-sm font-semibold text-slate-700 hover:bg-slate-100 transition-colors">
-                <span><i class="fas fa-filter mr-2"></i>Filtros do Mapa</span>
-                <i class="fas fa-chevron-down filter-toggle-icon transition-transform"></i>
-            </button>
-            <!-- Map Filters Container (collapsible) -->
-            <div id="map-filters" class="hidden p-4 bg-white rounded-lg shadow-md mb-4 space-y-4">
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                        <label for="map-filter-city" class="filter-label">Cidade:</label>
-                        <select id="map-filter-city" class="filter-select">
-                            <option value="londres">Londres</option>
-                            <option value="oxford">Oxford</option>
-                            <option value="lisboa">Lisboa</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label class="filter-label">Segurança:</label>
-                        <div class="flex flex-wrap gap-2 items-center justify-start">
-                            <button data-filter="all" class="map-filter-btn active">Todos</button>
-                            <button data-filter="safe" class="map-filter-btn"><i class="fas fa-check-circle text-green-500"></i>Seguro</button>
-                            <button data-filter="accredited" class="map-filter-btn"><i class="fas fa-shield-alt text-sky-500"></i>Acreditado</button>
-                            <button data-filter="caution" class="map-filter-btn"><i class="fas fa-exclamation-triangle text-amber-500"></i>Cautela</button>
-                        </div>
-                    </div>
+            <!-- Main container for ALL map filters -->
+            <div id="map-filters" class="bg-white rounded-lg shadow-md mb-4">
+                <!-- Always visible city filter -->
+                <div class="p-4 border-b border-slate-200">
+                    <label for="map-filter-city" class="filter-label">Cidade:</label>
+                    <select id="map-filter-city" class="filter-select">
+                        <option value="londres">Londres</option>
+                        <option value="oxford">Oxford</option>
+                        <option value="lisboa">Lisboa</option>
+                    </select>
                 </div>
-                <div class="filter-group">
-                    <label for="map-filter-name" class="filter-label">Buscar por nome:</label>
-                    <div class="relative">
-                        <i class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"></i>
-                        <input type="text" id="map-filter-name" class="filter-input w-full p-2 pl-10 border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-sky-500" placeholder="Buscar restaurante no mapa...">
+                <!-- Collapsible part trigger -->
+                <button class="filter-toggle-button flex items-center justify-between w-full p-3 text-sm font-semibold text-slate-700 hover:bg-slate-50 transition-colors">
+                    <span><i class="fas fa-filter mr-2"></i>Filtros Adicionais</span>
+                    <i class="fas fa-chevron-down filter-toggle-icon transition-transform"></i>
+                </button>
+                <!-- Collapsible part content -->
+                <div class="filter-controls-container hidden">
+                    <div class="p-4 pt-0 space-y-4">
+                        <div>
+                            <label class="filter-label">Segurança:</label>
+                            <div class="flex flex-wrap gap-2 items-center justify-start">
+                                <button data-filter="all" class="map-filter-btn active">Todos</button>
+                                <button data-filter="safe" class="map-filter-btn"><i class="fas fa-check-circle text-green-500"></i>Seguro</button>
+                                <button data-filter="accredited" class="map-filter-btn"><i class="fas fa-shield-alt text-sky-500"></i>Acreditado</button>
+                                <button data-filter="caution" class="map-filter-btn"><i class="fas fa-exclamation-triangle text-amber-500"></i>Cautela</button>
+                            </div>
+                        </div>
+                        <div class="filter-group">
+                            <label for="map-filter-name" class="filter-label">Buscar por nome:</label>
+                            <div class="relative">
+                                <i class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"></i>
+                                <input type="text" id="map-filter-name" class="filter-input w-full p-2 pl-10 border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-sky-500" placeholder="Buscar restaurante no mapa...">
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

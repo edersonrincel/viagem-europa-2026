@@ -200,7 +200,7 @@ function updateMapMarkers() {
             londres: [51.5074, -0.1278],
             oxford: [51.7520, -1.2577],
             lisboa: [38.7223, -9.1393],
-            paris: [48.8566, 2.3522]
+            //paris: [48.8566, 2.3522]
         };
         map.setView(cityCenters[city] || [51.5074, -0.1278], 12);
     }

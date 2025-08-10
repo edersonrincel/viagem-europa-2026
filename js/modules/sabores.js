@@ -215,6 +215,28 @@ function applyAndRefreshFilters(city) {
     noResultsMsg.style.display = hasVisibleCards ? 'none' : 'block';
 }
 
+/**
+ * Reseta os controles de filtro de uma cidade para o estado padrão.
+ * @param {string} cityKey A chave da cidade.
+ */
+function resetFiltersForCity(cityKey) {
+    // Reseta botões de segurança
+    const safetyButtons = document.querySelectorAll(`.filter-btn[data-city='${cityKey}']`);
+    safetyButtons.forEach(btn => btn.classList.remove('active'));
+    const allButton = document.querySelector(`.filter-btn[data-city='${cityKey}'][data-filter='all']`);
+    if (allButton) allButton.classList.add('active');
+
+    // Reseta selects de cozinha e preço
+    const cuisineSelect = document.getElementById(`filter-cuisine-${cityKey}`);
+    if (cuisineSelect) cuisineSelect.value = 'all';
+    
+    const priceSelect = document.getElementById(`filter-price-${cityKey}`);
+    if (priceSelect) priceSelect.value = 'all';
+
+    // Aplica os filtros resetados para garantir que todos os cards sejam exibidos
+    applyAndRefreshFilters(cityKey);
+}
+
 
 /**
  * Adiciona os event listeners aos botões e seletores de filtro.
@@ -352,9 +374,25 @@ export function initializeSaboresPage() {
  * @param {string} restaurantNameSlug - O slug do nome do restaurante.
  */
 export function navigateToRestaurant(restaurantNameSlug) {
+    let targetCity = null;
+
+    // Encontra a cidade do restaurante
+    for (const city in restaurantData) {
+        if (restaurantData[city].some(r => slugify(r.name) === restaurantNameSlug)) {
+            targetCity = city;
+            break;
+        }
+    }
+
+    if (!targetCity) return;
+
+    // Muda para a visualização de lista
     switchView('list');
     
     setTimeout(() => {
+        // Reseta os filtros da cidade de destino para garantir que o card esteja visível
+        resetFiltersForCity(targetCity);
+
         const restaurantCard = document.getElementById(`restaurant-${restaurantNameSlug}`);
         if (restaurantCard) {
             // Encontra o botão expansível pai e o expande se necessário

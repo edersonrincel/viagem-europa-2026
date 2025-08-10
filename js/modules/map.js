@@ -152,7 +152,7 @@ function updateMapSafetyFilters(city) {
 function updateMapMarkers() {
     if (!map || !markers) return;
 
-    const city = document.getElementById('map-filter-city').value;
+    const city = document.querySelector('.map-city-btn.active').dataset.city;
     const nameFilter = document.getElementById('map-filter-name').value.toLowerCase().trim();
     
     // Atualiza a visibilidade dos botões de filtro de segurança
@@ -200,7 +200,6 @@ function updateMapMarkers() {
             londres: [51.5074, -0.1278],
             oxford: [51.7520, -1.2577],
             lisboa: [38.7223, -9.1393],
-            //paris: [48.8566, 2.3522]
         };
         map.setView(cityCenters[city] || [51.5074, -0.1278], 12);
     }
@@ -219,11 +218,18 @@ function setupPopupDetailButtons() {
 }
 
 function setupMapFilters() {
-    const citySelect = document.getElementById('map-filter-city');
+    const cityButtons = document.querySelectorAll('.map-city-btn');
     const safetyButtons = document.querySelectorAll('.map-filter-btn');
     const nameInput = document.getElementById('map-filter-name');
 
-    citySelect?.addEventListener('change', updateMapMarkers);
+    cityButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            cityButtons.forEach(btn => btn.classList.remove('active'));
+            button.classList.add('active');
+            updateMapMarkers();
+        });
+    });
+
     nameInput?.addEventListener('input', updateMapMarkers);
 
     safetyButtons.forEach(button => {
@@ -262,13 +268,10 @@ export function initializeMap() {
     }
 
     map = L.map(mapContainer, {
-        // Desativa o zoom com o scroll do mouse para evitar zoom acidental ao rolar a página
         scrollWheelZoom: false,
-        // Remove o controle de zoom da posição padrão (topleft)
         zoomControl: false 
     });
 
-    // Adiciona o controle de zoom na nova posição (bottomleft)
     L.control.zoom({ position: 'bottomleft' }).addTo(map);
 
     L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
@@ -281,7 +284,6 @@ export function initializeMap() {
     setupPopupDetailButtons();
     setupMapFilters();
     
-    // CORREÇÃO: Ajusta a altura PRIMEIRO, para que o mapa saiba seu tamanho antes de enquadrar os pontos.
     adjustMapHeight();
     const mainContent = document.getElementById('main-content');
     if(mainContent) {
@@ -289,7 +291,6 @@ export function initializeMap() {
     }
     window.addEventListener('resize', adjustMapHeight);
 
-    // Popula os marcadores e enquadra no mapa DEPOIS que o mapa tem o tamanho correto.
     updateMapMarkers(); 
 }
 
@@ -299,7 +300,6 @@ export function destroyMap() {
         map = null;
         markers = null;
     }
-    // Para de observar as mudanças de tamanho e remove o listener
     resizeObserver.disconnect();
     window.removeEventListener('resize', adjustMapHeight);
 }

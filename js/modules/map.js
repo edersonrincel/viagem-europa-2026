@@ -247,17 +247,15 @@ export function initializeMap() {
         style.id = 'map-label-styles';
         style.innerHTML = `
             .map-label {
-                background-color: transparent;
-                border: none;
-                box-shadow: none;
+                background-color: rgba(255, 255, 255, 0.85); /* Fundo branco semitransparente */
+                border: 1px solid rgba(0, 0, 0, 0.1); /* Borda sutil */
+                border-radius: 4px; /* Cantos arredondados */
+                box-shadow: 0 1px 3px rgba(0,0,0,0.1); /* Sombra suave */
                 color: #1e293b; /* Cor de texto escura para contraste */
                 font-size: 10px;
-                font-weight: bold;
-                text-shadow: 
-                    -1px -1px 0 #FFF,  
-                     1px -1px 0 #FFF,
-                    -1px  1px 0 #FFF,
-                     1px  1px 0 #FFF; /* Contorno branco para legibilidade */
+                font-weight: 600; /* Um pouco mais de peso na fonte */
+                padding: 2px 6px; /* Preenchimento interno */
+                white-space: nowrap; /* Evita quebra de linha */
             }
         `;
         document.head.appendChild(style);

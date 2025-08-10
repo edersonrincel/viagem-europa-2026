@@ -179,7 +179,7 @@ function updateMapMarkers() {
     });
 
     if (locations.length > 0) {
-        map.fitBounds(locations, { padding: [50, 50], maxZoom: 15 });
+        map.fitBounds(locations, { padding: [50, 50] });
     } else {
         // Padrão para o centro da cidade se não houver marcadores
         const cityCenters = {
@@ -238,15 +238,17 @@ export function initializeMap() {
 
     setupPopupDetailButtons();
     setupMapFilters();
-    updateMapMarkers(); // População inicial
-
-    // Configura o ajuste dinâmico da altura
+    
+    // CORREÇÃO: Ajusta a altura PRIMEIRO, para que o mapa saiba seu tamanho antes de enquadrar os pontos.
     adjustMapHeight();
     const mainContent = document.getElementById('main-content');
     if(mainContent) {
         resizeObserver.observe(mainContent);
     }
     window.addEventListener('resize', adjustMapHeight);
+
+    // Popula os marcadores e enquadra no mapa DEPOIS que o mapa tem o tamanho correto.
+    updateMapMarkers(); 
 }
 
 export function destroyMap() {

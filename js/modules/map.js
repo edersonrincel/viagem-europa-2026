@@ -226,8 +226,13 @@ export function initializeMap() {
 
     map = L.map(mapContainer, {
         // Desativa o zoom com o scroll do mouse para evitar zoom acidental ao rolar a página
-        scrollWheelZoom: false 
+        scrollWheelZoom: false,
+        // Remove o controle de zoom da posição padrão (topleft)
+        zoomControl: false 
     });
+
+    // Adiciona o controle de zoom na nova posição (bottomleft)
+    L.control.zoom({ position: 'bottomleft' }).addTo(map);
 
     L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
         attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">CartoDB Positron</a> contributors'

@@ -176,6 +176,15 @@ function updateMapMarkers() {
             if (address.lat && address.lng) {
                 const icon = icons[restaurant.safety.level] || icons.caution;
                 const marker = L.marker([address.lat, address.lng], { icon: icon });
+
+                // Adiciona o rótulo (tooltip) permanente acima do ícone
+                marker.bindTooltip(restaurant.name, {
+                    permanent: true,
+                    direction: 'top',
+                    offset: [0, -35], // Posição acima do ícone
+                    className: 'map-label' // Classe CSS para estilização
+                });
+
                 marker.bindPopup(createPopupContent(restaurant, address));
                 markers.addLayer(marker);
                 locations.push([address.lat, address.lng]);
@@ -231,6 +240,28 @@ export function initializeMap() {
 
     const mapContainer = document.getElementById('map-container');
     if (!mapContainer) return;
+
+    // Injeta o CSS customizado para os rótulos do mapa
+    if (!document.getElementById('map-label-styles')) {
+        const style = document.createElement('style');
+        style.id = 'map-label-styles';
+        style.innerHTML = `
+            .map-label {
+                background-color: transparent;
+                border: none;
+                box-shadow: none;
+                color: #1e293b; /* Cor de texto escura para contraste */
+                font-size: 10px;
+                font-weight: bold;
+                text-shadow: 
+                    -1px -1px 0 #FFF,  
+                     1px -1px 0 #FFF,
+                    -1px  1px 0 #FFF,
+                     1px  1px 0 #FFF; /* Contorno branco para legibilidade */
+            }
+        `;
+        document.head.appendChild(style);
+    }
 
     map = L.map(mapContainer, {
         // Desativa o zoom com o scroll do mouse para evitar zoom acidental ao rolar a página

@@ -164,8 +164,13 @@ export function initializeMap() {
     map = L.map(mapContainer);
 
     /* Estilo detalhado */
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    /*L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    }).addTo(map);*/
+
+    /* Estilo claro */
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">CartoDB Positron</a> contributors'
     }).addTo(map);
 
     markers = L.markerClusterGroup();

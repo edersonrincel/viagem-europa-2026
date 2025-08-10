@@ -364,15 +364,33 @@ function setupViewToggler() {
 }
 
 /**
+ * Configura os botões que mostram/escondem os painéis de filtro.
+ */
+function setupFilterCollapsibles() {
+    const toggles = document.querySelectorAll('.filter-toggle-button');
+    toggles.forEach(toggle => {
+        const content = toggle.nextElementSibling;
+        const icon = toggle.querySelector('.filter-toggle-icon');
+
+        if (content) {
+            toggle.addEventListener('click', () => {
+                content.classList.toggle('hidden');
+                icon.classList.toggle('rotate-180');
+            });
+        }
+    });
+}
+
+/**
  * Inicializa a página de sabores, gerando listas, populando filtros e configurando listeners.
  */
 export function initializeSaboresPage() {
     const cities = ['londres', 'oxford', 'lisboa', 'paris'];
     
     cities.forEach(city => {
-        if (document.getElementById(`content-food-${city}`)) {
+        const cityContent = document.getElementById(`content-food-${city}`);
+        if (cityContent) {
             generateRestaurantList(city, `content-food-${city}-grid`);
-            // População inicial dos filtros
             const allRestaurantsInCity = restaurantData[city] || [];
             updateAvailableFilters(city, allRestaurantsInCity);
         }
@@ -381,8 +399,8 @@ export function initializeSaboresPage() {
     setupFilterListeners();
     setupAddressToggles();
     setupViewToggler();
+    setupFilterCollapsibles(); // Adiciona o listener para os novos botões
     
-    // Garante que a visualização de lista seja a padrão na inicialização
     switchView('list');
 }
 
@@ -412,21 +430,18 @@ export function navigateToRestaurant(restaurantNameSlug) {
 
         const restaurantCard = document.getElementById(`restaurant-${restaurantNameSlug}`);
         if (restaurantCard) {
-            // Encontra o botão expansível pai e o expande se necessário
             const collapsibleContent = restaurantCard.closest('.collapsible-content');
             if (collapsibleContent && collapsibleContent.classList.contains('hidden')) {
                 const trigger = document.querySelector(`[aria-controls='${collapsibleContent.id}']`);
                 trigger?.click();
             }
 
-            // Rola para o card após a expansão
             setTimeout(() => {
                 restaurantCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                // Adiciona um destaque temporário
                 restaurantCard.style.transition = 'background-color 0.3s';
-                restaurantCard.style.backgroundColor = '#e0f2fe'; // Cor de destaque
+                restaurantCard.style.backgroundColor = '#e0f2fe';
                 setTimeout(() => {
-                    restaurantCard.style.backgroundColor = ''; // Remove o destaque
+                    restaurantCard.style.backgroundColor = '';
                 }, 2000);
             }, 300);
         }

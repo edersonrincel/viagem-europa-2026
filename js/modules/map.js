@@ -169,14 +169,14 @@ export function initializeMap() {
     //}).addTo(map);
 
     /* Estilo claro */
-    //L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
-    //    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">CartoDB Positron</a> contributors'
-    //}).addTo(map);
-
-    /* Imagem de satélite */
-    L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
         attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">CartoDB Positron</a> contributors'
     }).addTo(map);
+
+    /* Imagem de satélite */
+    //L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+    //  attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">CartoDB Positron</a> contributors'
+    //}).addTo(map);
 
     markers = L.markerClusterGroup();
     map.addLayer(markers);

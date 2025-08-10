@@ -168,40 +168,45 @@ function applyAndRefreshFilters(city) {
     const safetyFilter = document.querySelector(`.filter-btn[data-city='${city}'].active`).dataset.filter;
     const cuisineFilter = document.getElementById(`filter-cuisine-${city}`).value;
     const priceFilter = document.getElementById(`filter-price-${city}`).value;
+    const nameFilter = document.getElementById(`filter-name-${city}`).value.toLowerCase().trim();
 
     const allRestaurantsInCity = restaurantData[city] || [];
     let visibleRestaurants = [];
 
-    // Primeiro, filtra por segurança para atualizar os outros filtros
-    const restaurantsFilteredBySafety = allRestaurantsInCity.filter(r => safetyFilter === 'all' || r.safety.level === safetyFilter);
-    updateAvailableFilters(city, restaurantsFilteredBySafety);
+    // Primeiro, filtra por segurança e nome para atualizar os outros filtros
+    const restaurantsFilteredByPrimary = allRestaurantsInCity.filter(r => {
+        const safetyMatch = safetyFilter === 'all' || r.safety.level === safetyFilter;
+        const nameMatch = nameFilter === '' || r.name.toLowerCase().includes(nameFilter);
+        return safetyMatch && nameMatch;
+    });
+    updateAvailableFilters(city, restaurantsFilteredByPrimary);
 
     // Agora, aplica todos os filtros para exibir os cards
     const cards = grid.querySelectorAll('.food-card');
     let hasVisibleCards = false;
 
     cards.forEach(card => {
+        const restaurantName = card.querySelector('.food-card-title').textContent.toLowerCase();
+        const nameMatch = nameFilter === '' || restaurantName.includes(nameFilter);
         const safetyMatch = safetyFilter === 'all' || card.dataset.safetyLevel === safetyFilter;
-        // Re-lê os valores dos selects, pois podem ter sido resetados
+        
         const updatedCuisineFilter = document.getElementById(`filter-cuisine-${city}`).value;
         const updatedPriceFilter = document.getElementById(`filter-price-${city}`).value;
         
         const cuisineMatch = updatedCuisineFilter === 'all' || card.dataset.cuisine === updatedCuisineFilter;
         const priceMatch = updatedPriceFilter === 'all' || card.dataset.price === updatedPriceFilter;
 
-        if (safetyMatch && cuisineMatch && priceMatch) {
+        if (nameMatch && safetyMatch && cuisineMatch && priceMatch) {
             card.style.display = 'flex';
             hasVisibleCards = true;
-            // Adiciona à lista de visíveis para a próxima atualização de filtro
-            const restaurantName = card.id.replace('restaurant-', '');
-            const originalRestaurant = allRestaurantsInCity.find(r => slugify(r.name) === restaurantName);
+            const slug = card.id.replace('restaurant-', '');
+            const originalRestaurant = allRestaurantsInCity.find(r => slugify(r.name) === slug);
             if(originalRestaurant) visibleRestaurants.push(originalRestaurant);
         } else {
             card.style.display = 'none';
         }
     });
 
-    // Atualiza os filtros de cozinha e preço com base nos restaurantes que estão visíveis
     updateAvailableFilters(city, visibleRestaurants);
 
     let noResultsMsg = grid.querySelector('.no-results-message');
@@ -220,6 +225,10 @@ function applyAndRefreshFilters(city) {
  * @param {string} cityKey A chave da cidade.
  */
 function resetFiltersForCity(cityKey) {
+    // Reseta campo de busca
+    const nameInput = document.getElementById(`filter-name-${cityKey}`);
+    if (nameInput) nameInput.value = '';
+
     // Reseta botões de segurança
     const safetyButtons = document.querySelectorAll(`.filter-btn[data-city='${cityKey}']`);
     safetyButtons.forEach(btn => btn.classList.remove('active'));
@@ -256,6 +265,14 @@ function setupFilterListeners() {
     filterSelects.forEach(select => {
         select.addEventListener('change', () => {
             const city = select.dataset.city;
+            applyAndRefreshFilters(city);
+        });
+    });
+
+    const searchInputs = document.querySelectorAll('.filter-input');
+    searchInputs.forEach(input => {
+        input.addEventListener('input', () => {
+            const city = input.dataset.city;
             applyAndRefreshFilters(city);
         });
     });

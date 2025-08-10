@@ -153,6 +153,7 @@ function updateMapMarkers() {
     if (!map || !markers) return;
 
     const city = document.getElementById('map-filter-city').value;
+    const nameFilter = document.getElementById('map-filter-name').value.toLowerCase().trim();
     
     // Atualiza a visibilidade dos botões de filtro de segurança
     updateMapSafetyFilters(city);
@@ -164,7 +165,11 @@ function updateMapMarkers() {
     const locations = [];
     const restaurantsInCity = restaurantData[city] || [];
 
-    const filteredRestaurants = restaurantsInCity.filter(r => safety === 'all' || r.safety.level === safety);
+    const filteredRestaurants = restaurantsInCity.filter(r => {
+        const safetyMatch = safety === 'all' || r.safety.level === safety;
+        const nameMatch = nameFilter === '' || r.name.toLowerCase().includes(nameFilter);
+        return safetyMatch && nameMatch;
+    });
 
     filteredRestaurants.forEach(restaurant => {
         restaurant.addresses.forEach(address => {
@@ -207,8 +212,11 @@ function setupPopupDetailButtons() {
 function setupMapFilters() {
     const citySelect = document.getElementById('map-filter-city');
     const safetyButtons = document.querySelectorAll('.map-filter-btn');
+    const nameInput = document.getElementById('map-filter-name');
 
     citySelect?.addEventListener('change', updateMapMarkers);
+    nameInput?.addEventListener('input', updateMapMarkers);
+
     safetyButtons.forEach(button => {
         button.addEventListener('click', () => {
             safetyButtons.forEach(btn => btn.classList.remove('active'));

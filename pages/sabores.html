@@ -22,13 +22,21 @@
         <!-- List View -->
         <div id="list-view">
             <div class="card">
-                <button class="collapsible-trigger original-collapsible" aria-expanded="true" aria-controls="content-food-londres">
+                <button class="collapsible-trigger original-collapsible" aria-expanded="false" aria-controls="content-food-londres">
                     <h3 class="text-lg"><i class="fas fa-utensils mr-2 text-sky-500"></i>Londres 🇬🇧</h3>
                     <i class="fas fa-chevron-down collapsible-icon"></i>
                 </button>
-                <div id="content-food-londres" class="collapsible-content">
+                <div id="content-food-londres" class="collapsible-content hidden">
                     <!-- Filter Controls -->
                     <div class="filter-controls mb-6 p-4 bg-slate-50 rounded-lg border space-y-4">
+                        <!-- Name Search Filter -->
+                        <div class="filter-group">
+                            <label for="filter-name-londres" class="filter-label">Buscar por nome:</label>
+                            <div class="relative">
+                                <i class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"></i>
+                                <input type="text" id="filter-name-londres" data-city="londres" class="filter-input w-full p-2 pl-10 border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-sky-500" placeholder="Ex: Honest Burgers">
+                            </div>
+                        </div>
                         <!-- Safety Filter -->
                         <div class="filter-group">
                             <label class="filter-label">Segurança:</label>
@@ -65,6 +73,14 @@
                 <div id="content-food-oxford" class="collapsible-content hidden">
                     <!-- Filter Controls -->
                     <div class="filter-controls mb-6 p-4 bg-slate-50 rounded-lg border space-y-4">
+                        <!-- Name Search Filter -->
+                         <div class="filter-group">
+                            <label for="filter-name-oxford" class="filter-label">Buscar por nome:</label>
+                             <div class="relative">
+                                <i class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"></i>
+                                <input type="text" id="filter-name-oxford" data-city="oxford" class="filter-input w-full p-2 pl-10 border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-sky-500" placeholder="Ex: The White Rabbit">
+                            </div>
+                        </div>
                         <!-- Safety Filter -->
                         <div class="filter-group">
                             <label class="filter-label">Segurança:</label>
@@ -100,6 +116,14 @@
                 <div id="content-food-lisboa" class="collapsible-content hidden">
                     <!-- Filter Controls -->
                     <div class="filter-controls mb-6 p-4 bg-slate-50 rounded-lg border space-y-4">
+                        <!-- Name Search Filter -->
+                         <div class="filter-group">
+                            <label for="filter-name-lisboa" class="filter-label">Buscar por nome:</label>
+                             <div class="relative">
+                                <i class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"></i>
+                                <input type="text" id="filter-name-lisboa" data-city="lisboa" class="filter-input w-full p-2 pl-10 border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-sky-500" placeholder="Ex: GROM">
+                            </div>
+                        </div>
                         <!-- Safety Filter -->
                         <div class="filter-group">
                             <label class="filter-label">Segurança:</label>
@@ -153,6 +177,14 @@
                             <button data-filter="accredited" class="map-filter-btn"><i class="fas fa-shield-alt text-sky-500"></i>Acreditado</button>
                             <button data-filter="caution" class="map-filter-btn"><i class="fas fa-exclamation-triangle text-amber-500"></i>Cautela</button>
                         </div>
+                    </div>
+                </div>
+                 <!-- Name Search Filter for Map -->
+                <div class="filter-group">
+                    <label for="map-filter-name" class="filter-label">Buscar por nome:</label>
+                    <div class="relative">
+                        <i class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"></i>
+                        <input type="text" id="map-filter-name" class="filter-input w-full p-2 pl-10 border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-sky-500" placeholder="Buscar restaurante no mapa...">
                     </div>
                 </div>
             </div>

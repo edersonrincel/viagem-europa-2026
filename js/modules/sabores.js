@@ -24,9 +24,10 @@ function slugify(text) {
 /**
  * Cria o HTML para um único card de restaurante com a nova estrutura de dados.
  * @param {object} restaurant - O objeto do restaurante.
+ * @param {string} cityKey - A chave da cidade para adicionar aos data attributes.
  * @returns {string} - O HTML do card.
  */
-function createRestaurantCard(restaurant) {
+function createRestaurantCard(restaurant, cityKey) {
     // Mapeia o nível de segurança para classes CSS e ícones
     const safetyInfo = {
         safe: { icon: 'fa-check-circle', color: 'text-green-600', text: 'Seguro' },
@@ -43,9 +44,9 @@ function createRestaurantCard(restaurant) {
         const encodedAddr = encodeURIComponent(addrObj.address);
         const hiddenClass = isHidden ? 'hidden extra-address' : '';
         
-        // NOVO: Adiciona um botão para ver no mapa do app, se tiver coordenadas
+        // Adiciona um botão para ver no mapa do app, se tiver coordenadas
         const viewOnMapBtn = addrObj.lat && addrObj.lng ?
-            `<a href="#" class="view-on-map-btn ml-2 text-sky-500 hover:text-orange-500 transition-colors" data-lat="${addrObj.lat}" data-lng="${addrObj.lng}" title="Ver no mapa do app">
+            `<a href="#" class="view-on-map-btn ml-2 text-sky-500 hover:text-orange-500 transition-colors" data-lat="${addrObj.lat}" data-lng="${addrObj.lng}" data-city="${cityKey}" title="Ver no mapa do app">
                 <i class="fas fa-crosshairs"></i>
             </a>` : '';
 
@@ -311,13 +312,14 @@ function setupCardInteractions() {
             showMoreBtn.textContent = isHidden ? 'Veja menos' : 'Veja mais...';
         }
 
-        // NOVO: Lógica para o botão "Ver no mapa"
+        // Lógica para o botão "Ver no mapa"
         if (viewOnMapBtn) {
             event.preventDefault();
             const lat = viewOnMapBtn.dataset.lat;
             const lng = viewOnMapBtn.dataset.lng;
-            if (lat && lng) {
-                showAddressOnMap(parseFloat(lat), parseFloat(lng));
+            const city = viewOnMapBtn.dataset.city;
+            if (lat && lng && city) {
+                showAddressOnMap(parseFloat(lat), parseFloat(lng), city);
             }
         }
     });
@@ -339,7 +341,7 @@ function generateRestaurantList(cityKey, containerId) {
     const restaurants = restaurantData[cityKey] || [];
     if (restaurants.length > 0) {
         const sortedRestaurants = restaurants.sort((a, b) => a.name.localeCompare(b.name));
-        container.innerHTML = sortedRestaurants.map(createRestaurantCard).join('');
+        container.innerHTML = sortedRestaurants.map(r => createRestaurantCard(r, cityKey)).join('');
     } else {
         container.innerHTML = '<p class="text-center text-slate-500 col-span-full">Nenhum restaurante encontrado.</p>';
     }
@@ -404,13 +406,20 @@ function setupFilterCollapsibles() {
 }
 
 /**
- * NOVO: Muda para a visualização de mapa e foca em um endereço específico.
+ * Muda para a visualização de mapa e foca em um endereço específico.
  * @param {number} lat - Latitude do endereço.
  * @param {number} lng - Longitude do endereço.
+ * @param {string} city - A chave da cidade do endereço.
  */
-function showAddressOnMap(lat, lng) {
-    // Primeiro, muda para a visualização de mapa.
-    // A função switchView já chama initializeMap().
+function showAddressOnMap(lat, lng, city) {
+    // AJUSTE: Antes de mudar a visão, define qual cidade deve estar ativa no mapa.
+    const mapCityButtons = document.querySelectorAll('#map-view .map-city-btn');
+    mapCityButtons.forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.city === city);
+    });
+
+    // Agora, muda para a visualização de mapa. A função initializeMap será chamada
+    // e lerá o botão de cidade ativo para carregar os marcadores corretos.
     switchView('map');
 
     // Espera um curto período para garantir que o mapa e os marcadores sejam inicializados.

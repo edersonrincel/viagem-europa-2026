@@ -41,22 +41,26 @@ function createRestaurantCard(restaurant, cityKey) {
     let seeMoreButtonHtml = '';
 
     const createLinkedListItem = (addrObj, isHidden = false) => {
-        const encodedAddr = encodeURIComponent(addrObj.address);
         const hiddenClass = isHidden ? 'hidden extra-address' : '';
         
-        // Adiciona um botão para ver no mapa do app, se tiver coordenadas
-        const viewOnMapBtn = addrObj.lat && addrObj.lng ?
-            `<a href="#" class="view-on-map-btn ml-2 text-sky-500 hover:text-orange-500 transition-colors" data-lat="${addrObj.lat}" data-lng="${addrObj.lng}" data-city="${cityKey}" title="Ver no mapa do app">
-                <i class="fas fa-crosshairs"></i>
-            </a>` : '';
-
-        return `<li class="${hiddenClass} flex justify-between items-center">
-                    <a href="https://www.google.com/maps?q=${encodedAddr}" target="_blank" class="flex-grow inline-flex items-start text-slate-600 hover:text-orange-500 transition-colors">
-                        <i class="fas fa-map-marked-alt fa-fw w-4 text-center mr-1.5 text-slate-400 pt-0.5"></i>
-                        <span class="underline text-[11px] leading-tight">${addrObj.address}</span>
-                    </a>
-                    ${viewOnMapBtn}
-                </li>`;
+        // Se o endereço tiver coordenadas, transforma o texto em um link para o mapa interno.
+        if (addrObj.lat && addrObj.lng) {
+            return `<li class="${hiddenClass}">
+                        <a href="#" class="view-on-map-btn inline-flex items-start text-slate-600 hover:text-orange-500 transition-colors" data-lat="${addrObj.lat}" data-lng="${addrObj.lng}" data-city="${cityKey}" title="Ver no mapa do app">
+                            <i class="fas fa-map-marked-alt fa-fw w-4 text-center mr-1.5 text-slate-400 pt-0.5"></i>
+                            <span class="underline text-[11px] leading-tight">${addrObj.address}</span>
+                        </a>
+                    </li>`;
+        } 
+        // Caso contrário, exibe o endereço como texto simples, não clicável.
+        else {
+            return `<li class="${hiddenClass}">
+                        <div class="inline-flex items-start text-slate-600">
+                            <i class="fas fa-map-marked-alt fa-fw w-4 text-center mr-1.5 text-slate-400 pt-0.5"></i>
+                            <span class="text-[11px] leading-tight">${addrObj.address}</span>
+                        </div>
+                    </li>`;
+        }
     };
 
     if (addresses.length > 3) {
@@ -312,7 +316,7 @@ function setupCardInteractions() {
             showMoreBtn.textContent = isHidden ? 'Veja menos' : 'Veja mais...';
         }
 
-        // Lógica para o botão "Ver no mapa"
+        // Lógica para o link do endereço que leva ao mapa
         if (viewOnMapBtn) {
             event.preventDefault();
             const lat = viewOnMapBtn.dataset.lat;
@@ -412,7 +416,7 @@ function setupFilterCollapsibles() {
  * @param {string} city - A chave da cidade do endereço.
  */
 function showAddressOnMap(lat, lng, city) {
-    // AJUSTE: Antes de mudar a visão, define qual cidade deve estar ativa no mapa.
+    // Antes de mudar a visão, define qual cidade deve estar ativa no mapa.
     const mapCityButtons = document.querySelectorAll('#map-view .map-city-btn');
     mapCityButtons.forEach(btn => {
         btn.classList.toggle('active', btn.dataset.city === city);

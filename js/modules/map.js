@@ -177,14 +177,6 @@ function updateMapMarkers() {
                 const icon = icons[restaurant.safety.level] || icons.caution;
                 const marker = L.marker([address.lat, address.lng], { icon: icon });
 
-                // Adiciona o rótulo (tooltip) permanente acima do ícone
-                marker.bindTooltip(restaurant.name, {
-                    permanent: true,
-                    direction: 'top',
-                    offset: [0, -35], // Posição acima do ícone
-                    className: 'map-label' // Classe CSS para estilização
-                });
-
                 marker.bindPopup(createPopupContent(restaurant, address));
                 markers.addLayer(marker);
                 locations.push([address.lat, address.lng]);
@@ -247,26 +239,6 @@ export function initializeMap() {
     const mapContainer = document.getElementById('map-container');
     if (!mapContainer) return;
 
-    // Injeta o CSS customizado para os rótulos do mapa
-    if (!document.getElementById('map-label-styles')) {
-        const style = document.createElement('style');
-        style.id = 'map-label-styles';
-        style.innerHTML = `
-            .map-label {
-                background-color: rgba(255, 255, 255, 0.85); /* Fundo branco semitransparente */
-                border: 1px solid rgba(0, 0, 0, 0.1); /* Borda sutil */
-                border-radius: 4px; /* Cantos arredondados */
-                box-shadow: 0 1px 3px rgba(0,0,0,0.1); /* Sombra suave */
-                color: #1e293b; /* Cor de texto escura para contraste */
-                font-size: 10px;
-                font-weight: 600; /* Um pouco mais de peso na fonte */
-                padding: 2px 6px; /* Preenchimento interno */
-                white-space: nowrap; /* Evita quebra de linha */
-            }
-        `;
-        document.head.appendChild(style);
-    }
-
     map = L.map(mapContainer, {
         scrollWheelZoom: false,
         zoomControl: false 
@@ -302,4 +274,35 @@ export function destroyMap() {
     }
     resizeObserver.disconnect();
     window.removeEventListener('resize', adjustMapHeight);
+}
+
+
+/**
+ * NOVO: Centraliza o mapa em uma coordenada e abre o pop-up do marcador correspondente.
+ * @param {number} lat - Latitude do marcador.
+ * @param {number} lng - Longitude do marcador.
+ */
+export function panToAndOpenPopup(lat, lng) {
+    if (!map || !markers) return;
+
+    let targetLayer = null;
+    
+    // Itera sobre todos os marcadores individuais dentro do grupo de clusters
+    markers.eachLayer(layer => {
+        const layerLatLng = layer.getLatLng();
+        // Compara as coordenadas para encontrar o marcador exato
+        if (layerLatLng.lat === lat && layerLatLng.lng === lng) {
+            targetLayer = layer;
+        }
+    });
+
+    if (targetLayer) {
+        // A função zoomToShowLayer do MarkerCluster cuida de desagrupar (se necessário)
+        // e centralizar a visão no marcador. O callback é executado após a animação.
+        markers.zoomToShowLayer(targetLayer, () => {
+            targetLayer.openPopup();
+        });
+    } else {
+        console.warn(`Marcador com coordenadas ${lat}, ${lng} não encontrado.`);
+    }
 }

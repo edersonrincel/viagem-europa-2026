@@ -1,7 +1,7 @@
 // js/modules/sabores.js
 
 import { restaurantData } from './data.js';
-import { initializeMap, destroyMap } from './map.js';
+import { initializeMap, destroyMap, panToAndOpenPopup } from './map.js';
 
 let currentView = 'list'; // 'list' or 'map'
 
@@ -42,11 +42,19 @@ function createRestaurantCard(restaurant) {
     const createLinkedListItem = (addrObj, isHidden = false) => {
         const encodedAddr = encodeURIComponent(addrObj.address);
         const hiddenClass = isHidden ? 'hidden extra-address' : '';
-        return `<li class="${hiddenClass}">
-                    <a href="https://www.google.com/maps?q=${encodedAddr}" target="_blank" class="inline-flex items-start text-slate-600 hover:text-orange-500 transition-colors">
+        
+        // NOVO: Adiciona um botão para ver no mapa do app, se tiver coordenadas
+        const viewOnMapBtn = addrObj.lat && addrObj.lng ?
+            `<a href="#" class="view-on-map-btn ml-2 text-sky-500 hover:text-orange-500 transition-colors" data-lat="${addrObj.lat}" data-lng="${addrObj.lng}" title="Ver no mapa do app">
+                <i class="fas fa-crosshairs"></i>
+            </a>` : '';
+
+        return `<li class="${hiddenClass} flex justify-between items-center">
+                    <a href="https://www.google.com/maps?q=${encodedAddr}" target="_blank" class="flex-grow inline-flex items-start text-slate-600 hover:text-orange-500 transition-colors">
                         <i class="fas fa-map-marked-alt fa-fw w-4 text-center mr-1.5 text-slate-400 pt-0.5"></i>
                         <span class="underline text-[11px] leading-tight">${addrObj.address}</span>
                     </a>
+                    ${viewOnMapBtn}
                 </li>`;
     };
 
@@ -279,28 +287,42 @@ function setupFilterListeners() {
 }
 
 /**
- * Configura os event listeners para os botões "Veja mais" dos endereços.
+ * Configura os event listeners para os botões "Veja mais" dos endereços e para os novos botões "Ver no mapa".
  */
-function setupAddressToggles() {
-    const grids = document.querySelectorAll('[id^="content-food-"][id$="-grid"]');
-    grids.forEach(grid => {
-        grid.addEventListener('click', function(event) {
-            const target = event.target;
-            if (!target.classList.contains('show-more-addresses')) return;
-            
+function setupCardInteractions() {
+    const listView = document.getElementById('list-view');
+    if (!listView) return;
+
+    listView.addEventListener('click', function(event) {
+        const showMoreBtn = event.target.closest('.show-more-addresses');
+        const viewOnMapBtn = event.target.closest('.view-on-map-btn');
+
+        // Lógica para "Veja mais..."
+        if (showMoreBtn) {
             event.preventDefault();
-            const addressContainer = target.closest('div');
+            const addressContainer = showMoreBtn.closest('div');
             const addressList = addressContainer.querySelector('ul');
             if (!addressList) return;
 
             const extraAddresses = addressList.querySelectorAll('.extra-address');
-            const isHidden = target.textContent.includes('Veja mais');
+            const isHidden = showMoreBtn.textContent.includes('Veja mais');
             
             extraAddresses.forEach(addr => addr.classList.toggle('hidden'));
-            target.textContent = isHidden ? 'Veja menos' : 'Veja mais...';
-        });
+            showMoreBtn.textContent = isHidden ? 'Veja menos' : 'Veja mais...';
+        }
+
+        // NOVO: Lógica para o botão "Ver no mapa"
+        if (viewOnMapBtn) {
+            event.preventDefault();
+            const lat = viewOnMapBtn.dataset.lat;
+            const lng = viewOnMapBtn.dataset.lng;
+            if (lat && lng) {
+                showAddressOnMap(parseFloat(lat), parseFloat(lng));
+            }
+        }
     });
 }
+
 
 /**
  * Gera a lista de restaurantes para uma cidade específica.
@@ -382,6 +404,23 @@ function setupFilterCollapsibles() {
 }
 
 /**
+ * NOVO: Muda para a visualização de mapa e foca em um endereço específico.
+ * @param {number} lat - Latitude do endereço.
+ * @param {number} lng - Longitude do endereço.
+ */
+function showAddressOnMap(lat, lng) {
+    // Primeiro, muda para a visualização de mapa.
+    // A função switchView já chama initializeMap().
+    switchView('map');
+
+    // Espera um curto período para garantir que o mapa e os marcadores sejam inicializados.
+    setTimeout(() => {
+        panToAndOpenPopup(lat, lng);
+    }, 300); // 300ms é um tempo seguro para a inicialização.
+}
+
+
+/**
  * Inicializa a página de sabores, gerando listas, populando filtros e configurando listeners.
  */
 export function initializeSaboresPage() {
@@ -397,9 +436,9 @@ export function initializeSaboresPage() {
     });
 
     setupFilterListeners();
-    setupAddressToggles();
+    setupCardInteractions(); // Função unificada para interações de card
     setupViewToggler();
-    setupFilterCollapsibles(); // Adiciona o listener para os novos botões
+    setupFilterCollapsibles();
     
     switchView('list');
 }

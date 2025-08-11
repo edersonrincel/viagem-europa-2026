@@ -128,8 +128,12 @@ export const restaurantData = {
             link: "https://maps.app.goo.gl/SNY8rDyJnCmzmpK77"
         },
         {
-            name: "GROM (Chiado)",
-            addresses: [{ address: "R. Garrett 42, 1200-204 Lisboa, Portugal", lat: 38.710925, lng: -9.1405719 }],
+            name: "GROM",
+            addresses: [
+                { address: "R. Garrett 42, 1200-204 Lisboa, Portugal", lat: 38.710925, lng: -9.1405719 },
+                {"address": "Av. Brasília 7, 1300-472 Lisboa", "lat": 38.7002455, "lng": -9.1758213},
+                {"address": "Largo de São Miguel 3, 1100-117 Lisboa", "lat": 38.7109117, "lng": -9.129093}
+            ],
             cuisine: "Gelataria",
             safety: { text: "100% sem glúten, incluindo cones, e certificada pela APC.", level: "safe" },
             price: "€€",
@@ -258,7 +262,7 @@ export const restaurantData = {
             link: "https://www.google.com.br/maps/place/Rice+Me/@38.7335122,-9.1527965,17z/data=!4m7!3m6!1s0xd19330cc94a941f:0xf9c368e6ddb11397!8m2!3d38.7335122!4d-9.1527965!10e9!16s%2Fg%2F11ck6t93mp?authuser=0&hl=pt-BR&entry=ttu&g_ep=EgoyMDI1MDczMC4wIKXMDSoASAFQAw%3D%3D"
         },
         {
-            name: "Sam",
+            name: "Sam Pastelaria Saudável",
             addresses: [{ address: "R. Luís Augusto Palmeirim 1 D, 1700-272 Lisboa, Portugal", lat: 38.755404, lng: -9.1416426 }],
             cuisine: "Padaria / Café",
             safety: { text: "Cozinha mista com certificação da APC.", level: "accredited" },
@@ -301,6 +305,98 @@ export const restaurantData = {
             recommendation: "Não especificada",
             mustTry: "Não especificados",
             link: "https://www.google.com.br/maps/place/ZERO+-+Healthy+Food+.+Gluten+free+.+Dairy+free+.+Sugar+free/@39.1779596,-9.3196062,17z/data=!4m7!3m6!1s0xd1f3152d81a1a3b:0x24e2324de19fe116!8m2!3d39.1779596!4d-9.3196062!10e9!16s%2Fg%2F11x9306x0m?authuser=0&hl=pt-BR&entry=ttu&g_ep=EgoyMDI1MDczMC4wIKXMDSoASAFQAw%3D%3D"
+        },
+        // --aqui começa dados do glutenfreemap.org
+        {
+            name: "Telepizza",
+            addresses: [
+                {address: "R Cesaltina Fialho Gouveia 35, 2645-038 Alcabideche", lat: 38.7333, lng: -9.40984},
+                {address: "Ubr Varzea Do Brejo Lt N Loja Lj R/C, 2615 Alverca Do Ribatejo", lat: 38.90421, lng: -9.03923},
+                {address: "Pr Francisco Sa Carneiro 4-A, 1000-159 Lisboa", lat: 38.74204, lng: -9.13393},
+                {address: "Arruda dos Vinhos Intermarche, 2630-358 Arruda dos Vinhos", lat: 38.99809, lng: -9.08473},
+                {address: "Rua Da Junqueira 470, 1300-341 Lisboa", lat: 38.69749, lng: -9.19834},
+                {address: "Pcta Jose Regio 7, 2695-050 Bobadela", lat: 38.80881, lng: -9.0996},
+                {address: "Outlet Campera - 1º Lojas 1,2,3, 2580 Carregado", lat: 39.02824, lng: -8.96688},
+                {address: "Qt Colonia Ed Intermache, Lt 2, 2580-491 Carregado", lat: 39.02855, lng: -8.98089},
+                {address: "En 247 Km 49,4, 2655-319 Ericeira", lat: 38.97742, lng: -9.41807},
+                {address: "Rua Pedro Alvares Cabral 6-A, 2670-391 Infantado", lat: 38.8410946, lng: -9.1614909},
+                {address: "Pq Varzea Ed V Park, 2530-921 Lourinhã", lat: 39.24501, lng: -9.31209},
+                {address: "Intermarché, Estrada Nacional 8, Alto da Lagoa, 2665-297 Malveira", lat: 38.9405975, lng: -9.2517925},
+                {address: "Rua Machado Dos Santos 482-D, 2775-236 Parede", lat: 38.69049, lng: -9.35157},
+                {address: "Av Gen Humberto Delgado 12 E 12-A, 2560-272 Torres Vedras", lat: 39.08952, lng: -9.25337},
+                {address: "Est Dos Canicos 253 Intermarche, 2625-253 Vila Franca de Xira", lat: 38.87653, lng: -9.06993},
+                {address: "R. 1º de Dezembro 59, 2600-135 Vila Franca de Xira", lat: 38.9529561, lng: -8.9882112}
+            ],
+            cuisine: "Pizza",
+            safety: {text: "Apesar de ser acreditada APC e oferecer uma base de pizza sem glúten certificada, é preparada no mesmo ambiente que as pizzas com glúten. O risco de contaminação cruzada é muito elevado.", level: "caution"},
+            price: "€€",
+            recommendation: "Não recomendado para celíacos devido ao alto risco de contaminação cruzada. Apenas para pessoas com sensibilidade leve ao glúten que se sintam confortáveis com o risco.",
+            mustTry: "Pizza em base sem glúten (com cautela)",
+            link: "https://www.telepizza.pt/"
+        },
+        {
+            name: "Pans & Company",
+            addresses: [
+                {address: "IC19 Alto do Forte, Loja 2.07, 2635-018 Rio de Mouro", lat: 38.7751032, lng: -9.3401132192272},
+                {address: "Estrada Nacional 9, Loja 5B, 2645-543 Alcabideche", lat: 38.7379624, lng: -9.399246670568445},
+                {address: "C. C. Colombo, Loja 2113, Av. Lusíada – Letras CC, 1500-392 Lisboa", lat: 38.75461195, lng: -9.1888489345051},
+                {address: "Av. António Augusto de Aguiar 31, 1069-413 Lisboa", lat: 38.7335417, lng: -9.1536869},
+                {address: "Arena Shopping, Loja 2,016 Rua António Alves Ferreira, 2, 2560-256 Torres Vedras", lat: 39.10159915, lng: -9.253036403956163},
+                {address: "C. C. UBBO, Lj. 1,057 Avenida Cruzeiro Seixas, 5 e 7, 2650-504 Amadora", lat: 38.77708, lng: -9.220195377272727},
+                {address: "C. C. Vasco da Gama, Loja 2.007 Av. D. João II, Lote 1.05.02, 1990-094 Lisboa", lat: 38.7676497, lng: -9.09688076106504},
+                {address: "Av. dos Cavaleiros, loja 140, 2794-971 Carnaxide", lat: 38.72798225, lng: -9.219515046207267}
+            ],
+            cuisine: "Sanduíches",
+            safety: {text: "Apesar de ser acreditada APC e oferecer pão sem glúten para as sanduíches, a preparação é feita na mesma linha de montagem dos produtos com glúten. O risco de contaminação cruzada é extremamente elevado.", level: "caution"},
+            price: "€",
+            recommendation: "Não recomendado para celíacos. A partilha de superfícies, utensílios e ingredientes torna o risco de contaminação cruzada inevitável.",
+            mustTry: "Sanduíche em pão sem glúten (com extrema cautela)",
+            link: "https://www.pansandcompany.pt/"
+        },
+        {
+            name: "Burger King",
+            addresses: [
+                {address: "Av. Lusíada, Centro Comercial Colombo Loja 2023/2023A, 1500-392 Lisboa", lat: 38.7558, lng: -9.1885},
+                {address: "Av. Cidade do Porto, Area Serviço Galp Sentido Sul/Norte, 1800-111 Lisboa", lat: 38.779886, lng: -9.122606},
+                {address: "CC Strada outlet – loja 2044, Estrada da Paiã, 1107, 2675-626 Odivelas", lat: 38.781911, lng: -9.192041},
+                {address: "CC Loures Shopping, Av. Descobertas 93, 2670-390 Loures", lat: 38.834901, lng: -9.156534},
+                {address: "Centro de Lazer Campo Pequeno, Loja 146, 1000-082 Lisboa", lat: 38.743005, lng: -9.145221},
+                {address: "Avenida D. João II, nº40 – Centro Comercial Vasco da Gama nº2041, 1990-094 Lisboa", lat: 38.77081, lng: -9.09767},
+                {address: "CC Dolce Vita Tejo, Avenida José Garces, 2650-435 Amadora", lat: 38.777409, lng: -9.220741},
+                {address: "Rua das tulipas nº26, 2750-272 Cascais", lat: 38.716334, lng: -9.439989},
+                {address: "Rua António Feijó, Edificio Burger King, 2635-198 Rio de Mouro", lat: 38.786409, lng: -9.340295},
+                {address: "Av Salgueiro Maia 1139 B Abóboda, 2785-501 S. Domingos de Rana", lat: 38.724019, lng: -9.336324},
+                {address: "Rua Almirante gago Coutinho, 2660-000 Loures", lat: 38.8101, lng: -9.1574},
+                {address: "Avenida Fontes Pereira de Melo N6A, 1050-121 Lisboa", lat: 38.726733, lng: -9.148874},
+                {address: "Rua do Carmo N 97, 1200-093 Lisboa", lat: 38.712648, lng: -9.139744},
+                {address: "Rua Coro de Santo Amaro de Oeiras - Lote E, 2780-379 Oeiras", lat: 38.700912, lng: -9.305131},
+                {address: "Rua da Ilha Terceira, IC19 Saída Cacém Poente / Paiões, 2735-479 Cacém", lat: 38.769581, lng: -9.313531},
+                {address: "Alameda Hermano Patrone N 5, 1495-064 Algés", lat: 38.69908, lng: -9.232885},
+                {address: "Rua Visconde da Luz N 17, 2750-415 Cascais", lat: 38.698947, lng: -9.421099},
+                {address: "Rua Ferreira Borges, 75, 1350-266 Lisboa", lat: 38.717157, lng: -9.164177},
+                {address: "Avenida de Roma, 74B, 1700-333 Lisboa", lat: 38.751153, lng: -9.142677},
+                {address: "Rua General Joaquim Filipe Nery Delgado, 2735-582 Cacem", lat: 38.774653, lng: -9.282167},
+                {address: "CC Alvaláxia, Rua Prof. Fernando Da Fonseca, Loja FAN LAB Piso 0, 1600-617 Lisboa", lat: 38.761158, lng: -9.159411},
+                {address: "Avenida Professor Egas Moniz N 16, 1649-035 Lisboa", lat: 38.750424, lng: -9.164885},
+                {address: "Aeroporto de Lisboa (antes da Segurança - T1), 1700-111 Lisboa", lat: 38.770243, lng: -9.138115},
+                {address: "Rua Frederico Jorge Eixo Norte Sul Area de serviço Galp sentido Norte, 1600-468 Lisboa", lat: 38.767902, lng: -9.170707},
+                {address: "R. Hermínio da Palma Inácio Lote 29.02, 1750-224 Lisboa", lat: 38.788583, lng: -9.14665},
+                {address: "Rua Norton de Matos Quinta do Marquês Continente Bom dia, 2780-155 Oeiras", lat: 38.691051, lng: -9.31085},
+                {address: "Rua Quinta do Paizinho 18, 2790-237 Alfragide", lat: 38.722161, lng: -9.218396},
+                {address: "Avenida Comandante Paiva Couceiro, 2745-190 Queluz", lat: 38.75469, lng: -9.254489},
+                {address: "Estrada de São Marcos 1, Agualva-Cacém, 2735-307 Agualva-Cacém", lat: 38.750996, lng: -9.305212},
+                {address: "Rua de Belem 10 a 16, 1300-044 Lisboa", lat: 38.697339, lng: -9.20207},
+                {address: "Rua da pimenta 115, 1990-048 Lisboa", lat: 38.77358, lng: -9.092132},
+                {address: "R. Pulido Valente Nr 1 Loja 2, 2675-670 Odivelas", lat: 38.78838, lng: -9.19065},
+                {address: "Largo das Fontaínhas 7, 1300-113 Lisboa", lat: 38.704371, lng: -9.176739},
+                {address: "Avenida Almirante Reis 86-B, 1170-096 Lisboa", lat: 38.729169, lng: -9.13452}
+            ],
+            cuisine: "Fast-food",
+            safety: {text: "Apesar de ser certificado APC e oferecer opções de hambúrgueres sem pão (em prato) e saladas, o risco de contaminação cruzada é elevado devido ao ambiente de fast-food.", level: "caution"},
+            price: "€",
+            recommendation: "Apenas como última opção e com comunicação muito clara. Apenas os itens naturalmente sem glúten (carne, salada) devem ser considerados. Batatas fritas são cozinhadas com outros produtos e não são seguras.",
+            mustTry: "Hambúrguer sem pão (em prato), Salada",
+            link: "https://www.burgerking.pt/"
         }
     ],
     londres: [

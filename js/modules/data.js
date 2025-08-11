@@ -974,8 +974,77 @@ export const restaurantData = {
             recommendation: "O auge da segurança para quem anseia por fish and chips. A escolha ideal para o cliente mais ansioso.",
             mustTry: "Fish & chips",
             link: "https://www.google.com.br/maps/place/Wicked+Fish+Spitalfields/@51.5203364,-0.0766339,17z/data=!4m7!3m6!1s0x48761d1bcad85253:0x18bab1476010c9cb!8m2!3d51.5203364!4d-0.0766339!10e9!16s%2Fg%2F11kp_1dj4h?authuser=0&hl=pt-BR&entry=ttu&g_ep=EgoyMDI1MDgwNC4wIKXMDSoASAFQAw%3D%3D"
+        },
+        /* Adição de campos 11/08 */
+        {
+            name: "Bill's",
+            addresses: [
+                { address: "119-121 Baker St, London, W1U 6RY", lat: 51.5205, lng: -0.1565 },
+                { address: "St Martin's Courtyard, Slingsby Pl, London, WC2E 9AB", lat: 51.5123, lng: -0.1265 },
+                { address: "13 Nelson Rd, London, SE10 9JB", lat: 51.4819, lng: -0.0116 },
+                { address: "10 Hammersmith Grove, London, W6 7AP", lat: 51.4939, lng: -0.2245 },
+                { address: "2 Riverside Walk, Kingston upon Thames, KT1 1QN", lat: 51.4095, lng: -0.3075 },
+                { address: "10, One Tower Bridge, London, SE1 2AA", lat: 51.5053, lng: -0.0815 },
+                { address: "1-3 Hill Rise, Richmond, TW10 6UQ", lat: 51.4611, lng: -0.3045 },
+                { address: "36-44 Brewer St, London, W1F 9TB", lat: 51.5119, lng: -0.1357 },
+                { address: "6 Cathedral Walk, London, SW1E 5JE", lat: 51.4968, lng: -0.1424 },
+                { address: "Unit 1028, Southern Terrace, Westfield London, Ariel Way, London, W12 7GA", lat: 51.5065, lng: -0.2223 },
+                { address: "20 Hartfield Rd, London, SW19 3TA", lat: 51.4214, lng: -0.2057 }
+            ],
+            cuisine: "Britânico",
+            safety: { text: "Certificado pela Coeliac UK.", level: "accredited" },
+            price: "££",
+            recommendation: "Possui um menu sem glúten dedicado e variado, com opções para todas as refeições. O ambiente é descontraído e ideal para um brunch ou jantar casual.",
+            mustTry: "Bill's Classic Burger (em pão sem glúten), Brownie de chocolate, Salada de abacate e bacon.",
+            link: "https://www.google.com/maps/place/Bill's+Soho+Restaurant/@51.5118615,-0.1351843,17z/data=!4m7!3m6!1s0x487604d470b388d7:0xd9b0dbe68445a4fc!8m2!3d51.5118615!4d-0.1351843!10e9!16s%2Fg%2F11gztqk6b?authuser=0&hl=pt-BR&entry=ttu&g_ep=EgoyMDI1MDgwNi4wIKXMDSoASAFQAw%3D%3D"
+        },
+        {
+           name: "Browns Brasserie & Bar",
+           addresses: [
+               { address: "82-84 St Martin's Ln, London WC2N 4AG", lat: 51.511, lng: -0.127275 },
+               { address: "3 Butler's Wharf, Shad Thames, London SE1 2AP", lat: 51.5037033, lng: -0.0743749 },
+               { address: "2 Cardinal Walk, Greater, London SW1E 5JE, Reino Unido", lat: 51.4972257, lng: -0.1413823 },
+               { address: "West India Quay, Unit A Hertsmere Rd, London E14 4AY, Reino Unido", lat: 51.5072949, lng: -0.02186 },
+	           { address: "5-11 Woodstock Rd, Oxford OX2 6HA", lat: 51.759, lng: -1.2612 }
+          ],
+          cuisine: "Britânico",
+          safety: { text: "Certificado pela Coeliac UK.", level: "accredited" },
+          price: "£££",
+          recommendation: "Oferece um menu sem glúten sofisticado e acreditado, incluindo uma opção de Chá da Tarde (Afternoon Tea) sem glúten. Ótimo para uma refeição mais formal ou celebração.",
+          mustTry: "Bifes (Steaks), Peixe fresco do dia, Crumble de maçã e ruibarbo.",
+          link: "https://www.google.com/maps/place/Browns+Covent+Garden/@51.511314,-0.127275,702m/data=!3m2!1e3!5s0x487604cdb95ea53f:0xaf032b64772997f9!4m7!3m6!1s0x487604cdb9636291:0xa0d5a3dd7d1fbda8!8m2!3d51.511314!4d-0.127275!10e9!16s%2Fg%2F1tl4chmb?authuser=0&hl=pt-BR&entry=ttu&g_ep=EgoyMDI1MDgwNi4wIKXMDSoASAFQAw%3D%3D"
+        },
+        {
+          name: "Hard Rock Cafe",
+          addresses: [
+            { address: "Building 225, Criterion, 229 Piccadilly, London W1J 9HR", lat: 51.5097, lng: -0.1345 },
+            { address: "150 Old Park Ln, London W1K 1QZ", lat: 51.5038, lng: -0.149 }
+          ],
+          cuisine: "Americano",
+          safety: { text: "Certificado pela Coeliac UK.", level: "accredited" },
+          price: "£££",
+          recommendation: "Para uma refeição divertida com tema de rock. Oferecem um menu sem glúten com os clássicos americanos, incluindo hambúrgueres em pão apropriado.",
+          mustTry: "Original Legendary® Burger (em pão sem glúten), Hot Fudge Brownie.",
+          link: "https://www.google.com/maps/place/Hard+Rock+Cafe+Piccadilly+Circus/@51.5099503,-0.1337223,702m/data=!3m1!1e3!4m7!3m6!1s0x4876058dacbf712f:0x2c9dde025b6a50f4!8m2!3d51.5099503!4d-0.1337223!10e9!16s%2Fg%2F11hync2356?authuser=0&hl=pt-BR&entry=ttu&g_ep=EgoyMDI1MDgwNi4wIKXMDSoASAFQAw%3D%3D"
+        },
+        {
+            name: "Pizza Hut",
+            addresses: [
+              { address: "29-31 Piccadilly Circus, Regent St., London SW1Y 4NQ, Reino Unido", lat: 51.5095748, lng: -0.1346293 },
+    	      { address: "56/59 Strand, London WC2N 5LR, Reino Unido", lat: 51.5094204, lng: -0.1259833 },
+    	      { address: "150 Southampton Row, London WC1B 5AL, Reino Unido", lat: 51.5212697, lng: -0.1261459 },
+    	      { address: "523 Oxford St, London W1C 2QJ, Reino Unido", lat: 51.5135152, lng: -0.1575241 },
+    	      { address: "454 Edgware Rd, Paddington Green, London W2 1EJ, Reino Unido", lat: 51.5234981, lng: -0.1937953 },
+    	      { address: "19 Leicester Square, London, WC2H 7LE", lat: 51.5097734, lng: -0.1332889 }
+            ],
+            cuisine: "Pizza",
+            safety: { text: "Certificado pela Coeliac UK.", level: "accredited" },
+            price: "££",
+            recommendation: "Outra opção confiável de fast-food para pizza, com bases quadradas sem glúten certificadas pela Coeliac UK.",
+            mustTry: "Qualquer pizza clássica na base quadrada sem glúten.",
+            link: "https://www.google.com/maps/place/Pizza+Hut/@51.5234981,-0.1747409,17z/data=!4m7!3m6!1s0x48761ab42ba6558d:0x9c2def3b574f2d10!8m2!3d51.5234981!4d-0.1747409!10e9!16s%2Fg%2F1tkf0f_t?authuser=0&hl=pt-BR&entry=ttu&g_ep=EgoyMDI1MDgwNi4wIKXMDSoASAFQAw%3D%3D"
         }
-    ],
+        ],
     oxford: [
         {
             name: "Bbuona",
@@ -1046,7 +1115,56 @@ export const restaurantData = {
             recommendation: "Uma verdadeira instituição em Oxford, famosa pelas suas premiadas pizzas sem glúten e uma das opções mais seguras da cidade para os amantes de pizza.",
             mustTry: "Qualquer pizza da ementa em base sem glúten",
             link: "https://www.google.com.br/maps/place/The+White+Rabbit/@51.7544476,-1.2632956,17z/data=!4m7!3m6!1s0x4876c6af823e8251:0xec5c61f5d31b0dca!8m2!3d51.7544476!4d-1.2607207!10e9!16s%2Fg%2F11_s78_f5?hl=pt-BR&entry=ttu&g_ep=EgoyMDI1MDgwNC4wIKXMDSoASAFQAw%3D%3D"
-        }
+        },
+        /* Adição locais 11/08 */
+        {
+      name: "Côte Brasserie",
+      addresses: [
+        { address: "41-47 George St, Oxford OX1 2BE", lat: 51.7534155, lng: -1.2644236 }
+      ],
+      cuisine: "Francês",
+      safety: { text: "Acreditada pela Coeliac UK, com menu dedicado e identificação visual para pratos GF.", level: "accredited" },
+      price: "£££",
+      recommendation: "Uma escolha fiável e sofisticada para uma refeição sentada, com a garantia de segurança da acreditação.",
+      mustTry: "Menu sem glúten dedicado",
+      link: "https://www.google.com/maps/place/C%C3%B4te+Oxford/@51.7534155,-1.2644236,17z/data=!4m7!3m6!1s0x4876c6a450b7927f:0x843c8e8d48c9a2e0!8m2!3d51.7534122!4d-1.2618487!10e9!16s%2Fg%2F1hhw6k3mk?entry=ttu&g_ep=EgoyMDI1MDgwNi4wIKXMDSoASAFQAw%3D%3D"
+    },
+    {
+      name: "PizzaExpress",
+      addresses: [
+        { address: "8 Golden Cross, Cornmarket St, Oxford OX1 3EX", lat: 51.7529, lng: -1.2575 }
+      ],
+      cuisine: "Pizza",
+      safety: { text: "Acreditada pela Coeliac UK, com protocolos específicos.", level: "accredited" },
+      price: "££",
+      recommendation: "Torna a pizza, um prato de alto risco, acessível e seguro para celíacos em toda a cidade.",
+      mustTry: "Pizza em base sem glúten",
+      link: "https://www.google.com/maps/place/Pizza+Express/@51.75247,-1.2572825,698m/data=!3m1!1e3!4m7!3m6!1s0x4876c6af907d051d:0x52f1b17a3af04e6d!8m2!3d51.75247!4d-1.2572825!10e9!16s%2Fg%2F1tvq3mk4?authuser=0&hl=pt-BR&entry=ttu&g_ep=EgoyMDI1MDgwNi4wIKXMDSoASAFQAw%3D%3D"
+    },
+    {
+      name: "Prezzo",
+      addresses: [
+        { address: "Oxford Castle, 3 Oxford Castle, Oxford OX1 1AY", lat: 51.751, lng: -1.2625 }
+      ],
+      cuisine: "Italiano",
+      safety: { text: "Oferece opções acreditadas pela Coeliac UK.", level: "accredited" },
+      price: "££",
+      recommendation: "Outra cadeia fiável para comida italiana segura.",
+      mustTry: "Pratos do menu sem glúten acreditado",
+      link: "https://www.google.com/maps/place/Prezzo+Italian+Restaurant+London+Glasshouse+St+Soho/@51.5106061,-0.136827,702m/data=!3m2!1e3!5s0x487604d43c6b155f:0xf3630e03c6f376ec!4m7!3m6!1s0x487604cdd7f7d6c3:0x8726d17d87d43dfc!8m2!3d51.5106061!4d-0.136827!10e9!16s%2Fg%2F11h1mtqp7?authuser=0&hl=pt-BR&entry=ttu&g_ep=EgoyMDI1MDgwNi4wIKXMDSoASAFQAw%3D%3D"
+    },
+    {
+        name: "Pizza Hut",
+        addresses: [
+          { address: "61, 63 George St, Oxford OX1 2BQ, Reino Unido", lat: 51.7537236, lng: -1.272311 }
+    	],
+        cuisine: "Pizza",
+        safety: { text: "Certificado pela Coeliac UK.", level: "accredited" },
+        price: "££",
+        recommendation: "Outra opção confiável de fast-food para pizza, com bases quadradas sem glúten certificadas pela Coeliac UK.",
+        mustTry: "Qualquer pizza clássica na base quadrada sem glúten.",
+        link: "https://www.google.com/maps/place/Pizza+Hut/@51.5234981,-0.1747409,17z/data=!4m7!3m6!1s0x48761ab42ba6558d:0x9c2def3b574f2d10!8m2!3d51.5234981!4d-0.1747409!10e9!16s%2Fg%2F1tkf0f_t?authuser=0&hl=pt-BR&entry=ttu&g_ep=EgoyMDI1MDgwNi4wIKXMDSoASAFQAw%3D%3D"
+    }
     ],
     paris: [
         {

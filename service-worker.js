@@ -41,7 +41,7 @@ try {
     });
 
     // --- Lógica de Caching e Ciclo de Vida ---
-    const CACHE_NAME = 'viagem-app-cache-v1.87'; 
+    const CACHE_NAME = 'viagem-app-cache-v2.0'; 
     const URLS_TO_CACHE = [
         '/',
         '/index.html',
@@ -66,13 +66,15 @@ try {
         // Páginas HTML
         '/pages/geral.html',
         '/pages/logistica.html',
+        '/pages/roteiro.html', 
         '/pages/custos.html',
         '/pages/sabores.html',
         '/pages/dicas.html',
-        // Ícones principais
+        // Ícones e Imagens principais
         '/images/icons/icon-192x192.png',
         '/images/icons/icon-512x512.png',
-        '/images/icons/icon-40x40.png'
+        '/images/icons/icon-40x40.png',
+        '/images/pagina-em-construcao.png' 
     ];
 
     self.addEventListener('install', (event) => {

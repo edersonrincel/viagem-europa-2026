@@ -1004,8 +1004,7 @@ export const restaurantData = {
                { address: "82-84 St Martin's Ln, London WC2N 4AG", lat: 51.511, lng: -0.127275 },
                { address: "3 Butler's Wharf, Shad Thames, London SE1 2AP", lat: 51.5037033, lng: -0.0743749 },
                { address: "2 Cardinal Walk, Greater, London SW1E 5JE, Reino Unido", lat: 51.4972257, lng: -0.1413823 },
-               { address: "West India Quay, Unit A Hertsmere Rd, London E14 4AY, Reino Unido", lat: 51.5072949, lng: -0.02186 },
-	           { address: "5-11 Woodstock Rd, Oxford OX2 6HA", lat: 51.759, lng: -1.2612 }
+               { address: "West India Quay, Unit A Hertsmere Rd, London E14 4AY, Reino Unido", lat: 51.5072949, lng: -0.02186 }
           ],
           cuisine: "Britânico",
           safety: { text: "Certificado pela Coeliac UK.", level: "accredited" },

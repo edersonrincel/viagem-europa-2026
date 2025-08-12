@@ -4,7 +4,7 @@
  * @file Gerencia toda a lógica para criar, atualizar e destruir os gráficos (Chart.js).
  */
 
-import * as appData from './data.js';
+import * as appData from './data/financial-data.js';
 
 // Instâncias dos gráficos para que possam ser destruídas e recriadas
 let appCustoTotalChartInstance = null;

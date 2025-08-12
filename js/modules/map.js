@@ -1,7 +1,17 @@
 // js/modules/map.js
 
-import { restaurantData } from './data.js';
+import { lisbonRestaurants } from '../data/restaurants-lisbon.js';
+import { londonRestaurants } from '../data/restaurants-london.js';
+import { oxfordRestaurants } from '../data/restaurants-oxford.js';
+import { parisRestaurants } from '../data/restaurants-paris.js';
 import { navigateToRestaurant } from './sabores.js';
+
+const restaurantData = {
+    lisboa: lisbonRestaurants,
+    londres: londonRestaurants,
+    oxford: oxfordRestaurants,
+    paris: parisRestaurants
+};
 
 let map = null;
 let markers = null;

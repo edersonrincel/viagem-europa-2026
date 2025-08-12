@@ -4,7 +4,7 @@
  * @file Gerencia a lógica do podcast: exibe a lista, controla o player e verifica se há novos episódios.
  */
 
-import { podcastEpisodes } from './data/podcast-data.js';
+import { podcastEpisodes } from '../data/podcast-data.js';
 
 let toastDismissedThisSession = false;
 

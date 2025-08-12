@@ -8,7 +8,6 @@
 import { generateEpisodeList, checkAndShowNewEpisodeToast, dismissToast } from './podcast.js';
 import * as charts from './charts.js';
 import { initializeSaboresPage } from './sabores.js';
-import { initializeRoteiroPage } from './roteiro.js'; // Importa a nova função
 
 // --- SELETORES DE ELEMENTOS DOM ---
 const mainContent = document.getElementById('main-content');
@@ -127,10 +126,6 @@ function initializePageComponents(pageName) {
         checkAndShowNewEpisodeToast();
     }
     
-    if (pageName === 'roteiro') { // Adiciona a inicialização da página de roteiro
-        initializeRoteiroPage();
-    }
-
     if (pageName === 'custos') {
         const btnPorPessoa = document.getElementById('btnPorPessoa');
         const btnPeloGrupo = document.getElementById('btnPeloGrupo');

@@ -39,7 +39,7 @@ export const itineraryData = [
             {
                 time: "21:30",
                 title: "Jantar Leve (?)",
-                description: "Encontrar um local próximo para um jantar rápido após o check-in.",
+                description: "Local a definir em conjunto com a Gio.",
                 type: "refeicao",
                 icon: "fas fa-utensils"
             },
@@ -64,7 +64,7 @@ export const itineraryData = [
             {
                 time: "08:30",
                 title: "Café da Manhã (?)",
-                description: "Café da manhã nas proximidades do hotel para começar o dia.",
+                description: "Local a definir em conjunto com a Gio.",
                 type: "refeicao",
                 icon: "fas fa-coffee"
             },
@@ -99,7 +99,7 @@ export const itineraryData = [
             {
                 time: "13:30",
                 title: "Almoço na Região (?)",
-                description: "Pausa para o almoço na área de Westminster ou South Bank.",
+                description: "Local a definir em conjunto com a Gio, na área de Westminster ou South Bank.",
                 type: "refeicao",
                 icon: "fas fa-utensils"
             },
@@ -113,7 +113,7 @@ export const itineraryData = [
             {
                 time: "19:00",
                 title: "Jantar (?)",
-                description: "Jantar em um restaurante a ser definido na volta para o hotel.",
+                description: "Local a definir em conjunto com a Gio.",
                 type: "refeicao",
                 icon: "fas fa-utensils"
             }
@@ -145,7 +145,7 @@ export const itineraryData = [
             {
                 time: "12:00",
                 title: "Almoço em Covent Garden (?)",
-                description: "Almoçar na região de Covent Garden.",
+                description: "Local a definir em conjunto com a Gio, na região de Covent Garden.",
                 type: "refeicao",
                 icon: "fas fa-utensils"
             },
@@ -166,7 +166,7 @@ export const itineraryData = [
             {
                 time: "19:00",
                 title: "Jantar no Soho (?)",
-                description: "Explorar as diversas opções de restaurantes no Soho.",
+                description: "Local a definir em conjunto com a Gio, na região do Soho",
                 type: "refeicao",
                 icon: "fas fa-utensils"
             }
@@ -184,7 +184,7 @@ export const itineraryData = [
             {
                 time: "07:30",
                 title: "Café da Manhã Rápido (?)",
-                description: "Café da manhã em Londres antes de pegar o trem.",
+                description: "Local a definir em conjunto com a Gio.",
                 type: "refeicao",
                 icon: "fas fa-coffee"
             },
@@ -205,7 +205,7 @@ export const itineraryData = [
             {
                 time: "13:00",
                 title: "Almoço em Oxford (?)",
-                description: "Almoçar em um pub ou café local.",
+                description: "Local a definir em conjunto com a Gio.",
                 type: "refeicao",
                 icon: "fas fa-utensils"
             },
@@ -226,7 +226,7 @@ export const itineraryData = [
             {
                 time: "19:30",
                 title: "Jantar em Londres (?)",
-                description: "Jantar próximo ao hotel após o retorno de Oxford.",
+                description: "Local a definir em conjunto com a Gio, na região de King's Cross.",
                 type: "refeicao",
                 icon: "fas fa-utensils"
             }
@@ -244,7 +244,7 @@ export const itineraryData = [
             {
                 time: "09:00",
                 title: "Café da Manhã (?)",
-                description: "Café da manhã antes de iniciar o dia.",
+                description: "Local a definir em conjunto com a Gio.",
                 type: "refeicao",
                 icon: "fas fa-coffee"
             },
@@ -265,7 +265,7 @@ export const itineraryData = [
             {
                 time: "13:00",
                 title: "Almoço no Borough Market (?)",
-                description: "Explorar a atmosfera e as cores do mercado. Almoço na região.",
+                description: "Local a definir em conjunto com a Gio, na região do Borough Market.",
                 type: "refeicao",
                 icon: "fas fa-utensils"
             },
@@ -279,25 +279,25 @@ export const itineraryData = [
             {
                 time: "19:00",
                 title: "Jantar (?)",
-                description: "Jantar em um restaurante na região da South Bank.",
+                description: "Local a definir em conjunto com a Gio, na região da South Bank.",
                 type: "refeicao",
                 icon: "fas fa-utensils"
             }
         ]
     },
-    // Dia 6: Mercados e Música
+    // Dia 6: Mercados e Bairros
     {
         day: 6,
         date: "28/Jan (Qua)",
-        title: "Mercados, Música e Modernidade",
+        title: "Mercados, Música e Bairros Icônicos",
         city: "Londres",
         countryFlag: "🇬🇧",
-        objective: "Explorar o lado alternativo e criativo de Londres.",
+        objective: "Explorar o lado alternativo e charmoso de Londres através de seus mercados e bairros famosos.",
         events: [
             {
                 time: "09:00",
                 title: "Café da Manhã (?)",
-                description: "Café da manhã antes de ir para Camden.",
+                description: "Local a definir em conjunto com a Gio.",
                 type: "refeicao",
                 icon: "fas fa-coffee"
             },
@@ -311,12 +311,12 @@ export const itineraryData = [
             {
                 time: "13:00",
                 title: "Almoço em Camden (?)",
-                description: "Aproveitar as diversas opções de comida de rua do mercado.",
+                description: "Local a definir em conjunto com a Gio, na região de Camden.",
                 type: "refeicao",
                 icon: "fas fa-utensils"
             },
             {
-                time: "15:00",
+                time: "14:30",
                 title: "Abbey Road",
                 description: "Pegar o ônibus nº 139 para visitar a icônica passadeira imortalizada pelos Beatles.",
                 type: "cultura",
@@ -324,33 +324,33 @@ export const itineraryData = [
             },
             {
                 time: "16:30",
-                title: "Passeio no Regent's Park",
-                description: "Caminhada relaxante por um dos mais belos Parques Reais de Londres.",
+                title: "Explorar Notting Hill",
+                description: "Passear pelas ruas charmosas com casas coloridas e sentir a atmosfera do bairro.",
                 type: "passeio",
-                icon: "fas fa-leaf"
+                icon: "fas fa-home"
             },
             {
-                time: "19:00",
-                title: "Jantar (?)",
-                description: "Jantar em um restaurante a ser definido.",
+                time: "19:30",
+                title: "Jantar em Notting Hill (?)",
+                description: "Local a definir em conjunto com a Gio, na região de Notting Hill.",
                 type: "refeicao",
                 icon: "fas fa-utensils"
             }
         ]
     },
-    // Dia 7: Ícones de Londres
+    // Dia 7: Ícones e Arte Urbana
     {
         day: 7,
         date: "29/Jan (Qui)",
-        title: "Ícones de Londres: Tower Bridge e História",
+        title: "Ícones Históricos e Arte Urbana",
         city: "Londres",
         countryFlag: "🇬🇧",
-        objective: "Um dia focado no marco mais reconhecível da cidade e no seu coração histórico.",
+        objective: "Um dia de contraste entre o marco mais reconhecível da cidade e a vibrante cena de arte de rua.",
         events: [
             {
                 time: "09:00",
                 title: "Café da Manhã (?)",
-                description: "Café da manhã antes de explorar a área da Torre.",
+                description: "Local a definir em conjunto com a Gio.",
                 type: "refeicao",
                 icon: "fas fa-coffee"
             },
@@ -364,7 +364,7 @@ export const itineraryData = [
             {
                 time: "13:00",
                 title: "Almoço na Margem Sul (?)",
-                description: "Almoçar na área perto da City Hall, com vistas da ponte.",
+                description: "Local a definir em conjunto com a Gio, na região da margem sul do Tâmisa.",
                 type: "refeicao",
                 icon: "fas fa-utensils"
             },
@@ -376,9 +376,16 @@ export const itineraryData = [
                 icon: "fas fa-church"
             },
             {
-                time: "19:00",
-                title: "Jantar de Despedida (?)",
-                description: "Último jantar em Londres.",
+                time: "17:00",
+                title: "Street Art em Shoreditch",
+                description: "Explorar a vibrante cena de arte de rua ao redor de Brick Lane, uma galeria a céu aberto.",
+                type: "passeio",
+                icon: "fas fa-spray-can"
+            },
+            {
+                time: "19:30",
+                title: "Jantar em Shoreditch (?)",
+                description: "Local a definir em conjunto com a Gio, na região de Shoreditch.",
                 type: "refeicao",
                 icon: "fas fa-utensils"
             }
@@ -396,7 +403,7 @@ export const itineraryData = [
             {
                 time: "09:00",
                 title: "Café da Manhã (?)",
-                description: "Último café da manhã em Londres.",
+                description: "Local a definir em conjunto com a Gio.",
                 type: "refeicao",
                 icon: "fas fa-coffee"
             },
@@ -410,7 +417,7 @@ export const itineraryData = [
             {
                 time: "12:00",
                 title: "Almoço (?)",
-                description: "Último almoço em Londres, próximo ao hotel.",
+                description: "Local a definir em conjunto com a Gio, na região de King's Cross.",
                 type: "refeicao",
                 icon: "fas fa-utensils"
             },
@@ -441,6 +448,13 @@ export const itineraryData = [
                 description: "Check-in e breve caminhada pela Praça do Rossio e Praça da Figueira.",
                 type: "hospedagem",
                 icon: "fas fa-bed"
+            },
+            {
+                time: "23:00",
+                title: "Jantar leve (?)",
+                description: "Local a definir em conjunto com a Gio, na região do Rossio.",
+                type: "refeicao",
+                icon: "fas fa-utensils"
             }
         ]
     },
@@ -469,13 +483,20 @@ export const itineraryData = [
             },
             {
                 time: "13:00",
-                title: "Almoço no Chiado (?)",
-                description: "Almoçar no boêmio bairro do Chiado.",
+                title: "Almoço no Time Out Market (?)",
+                description: "Local a definir em conjunto com a Gio, na região do Mercado da Ribeira.",
                 type: "refeicao",
                 icon: "fas fa-utensils"
             },
             {
                 time: "14:30",
+                title: "Passeio pela Pink Street",
+                description: "Passagem rápida pela famosa Rua Nova do Carvalho para fotos.",
+                type: "passeio",
+                icon: "fas fa-camera"
+            },
+            {
+                time: "15:30",
                 title: "Chiado e Convento do Carmo",
                 description: "Subir ao Chiado, visitar o Largo do Carmo e ver as ruínas do Convento (exterior gratuito).",
                 type: "cultura",
@@ -491,7 +512,7 @@ export const itineraryData = [
             {
                 time: "19:30",
                 title: "Jantar (?)",
-                description: "Jantar na região do Bairro Alto ou Chiado.",
+                description: "Local a definir em conjunto com a Gio, na região do Bairro Alto ou Chiado.",
                 type: "refeicao",
                 icon: "fas fa-utensils"
             }
@@ -501,10 +522,10 @@ export const itineraryData = [
     {
         day: 10,
         date: "01/Fev (Dom)",
-        title: "A Era dos Descobrimentos em Belém",
+        title: "A Era dos Descobrimentos e o Lado Moderno",
         city: "Lisboa",
         countryFlag: "🇵🇹",
-        objective: "Uma imersão na história marítima de Portugal, visitando os monumentos que celebram a Era dos Descobrimentos.",
+        objective: "Uma imersão na história marítima de Portugal, com um toque da Lisboa contemporânea.",
         events: [
             {
                 time: "09:00",
@@ -537,12 +558,19 @@ export const itineraryData = [
             {
                 time: "13:30",
                 title: "Almoço em Belém (?)",
-                description: "Almoçar na região.",
+                description: "Local a definir em conjunto com a Gio, na região de Belém.",
                 type: "refeicao",
                 icon: "fas fa-utensils"
             },
             {
-                time: "15:00",
+                time: "15:30",
+                title: "Visita à LX Factory",
+                description: "Explorar o complexo industrial revitalizado, com suas lojas de design, livrarias e arte urbana.",
+                type: "passeio",
+                icon: "fas fa-industry"
+            },
+            {
+                time: "17:30",
                 title: "Pastéis de Belém",
                 description: "Passar pela famosa pastelaria para ver onde a receita original foi criada.",
                 type: "refeicao",
@@ -551,7 +579,7 @@ export const itineraryData = [
             {
                 time: "19:30",
                 title: "Jantar (?)",
-                description: "Jantar em um restaurante a ser definido.",
+                description: "Local a definir em conjunto com a Gio.",
                 type: "refeicao",
                 icon: "fas fa-utensils"
             }
@@ -590,7 +618,7 @@ export const itineraryData = [
             {
                 time: "13:00",
                 title: "Almoço em Alfama (?)",
-                description: "Almoçar em um restaurante típico do bairro.",
+                description: "Local a definir em conjunto com a Gio, na região de Alfama.",
                 type: "refeicao",
                 icon: "fas fa-utensils"
             },
@@ -611,7 +639,7 @@ export const itineraryData = [
             {
                 time: "19:30",
                 title: "Jantar de Despedida (?)",
-                description: "Jantar especial para a última noite em Lisboa.",
+                description: "Local a definir em conjunto com a Gio",
                 type: "refeicao",
                 icon: "fas fa-utensils"
             }

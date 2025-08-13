@@ -41,7 +41,7 @@ try {
     });
 
     // --- Lógica de Caching e Ciclo de Vida ---
-    const CACHE_NAME = 'viagem-app-cache-v2.11'; 
+    const CACHE_NAME = 'viagem-app-cache-v2.13'; 
     const URLS_TO_CACHE = [
         '/',
         '/index.html',
@@ -56,6 +56,7 @@ try {
         '/js/modules/charts.js',
         '/js/modules/sabores.js',
         '/js/modules/map.js', 
+        '/js/modules/roteiro.js',
         // Arquivos de dados
         '/js/data/financial-data.js',
         '/js/data/podcast-data.js',
@@ -63,6 +64,7 @@ try {
         '/js/data/restaurants-oxford.js',
         '/js/data/restaurants-paris.js',
         '/js/data/restaurants-lisbon.js',
+        '/js/data/roteiro-data.js',
         // Páginas HTML
         '/pages/geral.html',
         '/pages/logistica.html',

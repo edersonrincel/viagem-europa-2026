@@ -10,158 +10,123 @@ export const itineraryData = [
     {
         day: 1,
         date: "23/Jan (Sex)",
-        title: "Chegada, Trânsito e Primeiras Impressões",
+        title: "Chegada a Londres e Primeiras Impressões",
         city: "Londres",
         countryFlag: "🇬🇧",
-        objective: "Garantir um translado do aeroporto para o hotel que seja tranquilo, econômico e com o mínimo de estresse após um voo longo.",
+        objective: "Garantir um translado tranquilo e econômico do aeroporto para o hotel, minimizando o estresse após um longo voo.",
         events: [
             {
                 time: "18:55",
-                title: "Aterrissagem em Heathrow (LHR)",
-                description: "Passar pela imigração e retirada de bagagens. O processo pode levar de 60 a 90 minutos.",
+                title: "Chegada em Heathrow (LHR)",
+                description: "Passar pela imigração e retirada de bagagens.",
                 type: "chegada",
                 icon: "fas fa-plane-arrival"
             },
             {
-                time: "20:30",
-                title: "Transporte para o Hotel",
-                description: "Pegar a Linha Piccadilly do Metrô (Tube) diretamente de Heathrow para a estação King's Cross St. Pancras. É a opção mais barata e direta.",
+                time: "20:00",
+                title: "Transporte para o Hotel via Metrô",
+                description: "Pegar a Piccadilly Line (direção Cockfosters) diretamente de Heathrow para a estação King's Cross St. Pancras.",
                 type: "transporte",
                 icon: "fas fa-subway"
             },
             {
-                time: "21:30",
+                time: "21:00",
                 title: "Check-in no Central Hotel",
-                description: "Check-in e acomodação no hotel, localizado na Argyle Street, a poucos passos da estação.",
+                description: "Check-in e acomodação no hotel. A saída correta da estação é a sinalizada como 'Euston Road'.",
                 type: "hospedagem",
                 icon: "fas fa-bed"
             },
             {
-                time: "22:00",
-                title: "Jantar Leve (?)",
-                description: "Jantar rápido nas proximidades do hotel para recarregar as energias.",
-                type: "refeicao",
-                icon: "fas fa-utensils"
+                time: "21:30",
+                title: "Caminhada Opcional",
+                description: "Breve caminhada pela Argyle Square para se familiarizar com o bairro.",
+                type: "passeio",
+                icon: "fas fa-walking"
             }
         ]
     },
-    // Dia 2: Poder Real e Político
+    // Dia 2: Londres Real
     {
         day: 2,
         date: "24/Jan (Sáb)",
-        title: "Um Passeio pelo Poder Real e Político",
+        title: "Um Passeio pela Londres Real",
         city: "Londres",
         countryFlag: "🇬🇧",
-        objective: "Uma imersão de dia inteiro nos marcos políticos e reais mais icônicos de Londres, otimizada para uma rota a pé lógica e de baixo custo.",
+        objective: "Testemunhar a pompa real e passear pelos mais famosos espaços verdes de Londres.",
         events: [
             {
-                time: "08:00",
-                title: "Café da Manhã (?)",
-                description: "Começar o dia com um café da manhã reforçado nas proximidades.",
-                type: "refeicao",
-                icon: "fas fa-coffee"
-            },
-            {
                 time: "09:00",
-                title: "Início em Westminster",
-                description: "Pegar o metrô em King's Cross para a estação de Westminster para vistas imediatas do Big Ben e das Casas do Parlamento.",
+                title: "Transporte para Green Park",
+                description: "De King's Cross, pegar a Victoria Line (sentido sul) por 3 paradas até a estação Green Park.",
                 type: "transporte",
                 icon: "fas fa-subway"
             },
             {
                 time: "09:30",
-                title: "Parliament Square e Abadia",
-                description: "Admirar a arquitetura da Abadia de Westminster pelo lado de fora.",
+                title: "Palácio de Buckingham (Exterior)",
+                description: "Caminhar pelo Green Park em direção ao palácio para a icônica fotografia.",
                 type: "passeio",
-                icon: "fas fa-gavel"
+                icon: "fas fa-camera-retro"
             },
             {
                 time: "11:00",
-                title: "Troca da Guarda da Vida do Rei",
-                description: "Assistir à cerimônia na Horse Guards Parade, uma alternativa impressionante e menos cheia que a do Palácio de Buckingham.",
+                title: "Troca da Guarda da Cavalaria Real",
+                description: "Assistir à cerimônia na Horse Guards Parade, uma alternativa menos lotada e igualmente impressionante.",
                 type: "cultura",
                 icon: "fas fa-chess-rook"
             },
             {
                 time: "12:00",
-                title: "St. James's Park e Palácio",
-                description: "Passeio cênico pelo parque até a fachada do Palácio de Buckingham para fotos.",
+                title: "Ícones de Westminster",
+                description: "Caminhar por Whitehall, passando por Downing Street, até a Parliament Square para ver o Big Ben e as Casas do Parlamento.",
                 type: "passeio",
-                icon: "fas fa-camera-retro"
+                icon: "fas fa-gavel"
             },
             {
-                time: "13:30",
-                title: "Almoço na região (?)",
-                description: "Pausa para o almoço nas proximidades de Trafalgar Square.",
-                type: "refeicao",
-                icon: "fas fa-utensils"
-            },
-            {
-                time: "14:30",
-                title: "Trafalgar Square e National Gallery",
-                description: "Caminhar até a Trafalgar Square. Visita gratuita à National Gallery para ver obras-primas de Van Gogh e Monet.",
+                time: "13:00",
+                title: "Abadia de Westminster e Ponte",
+                description: "Admirar a Abadia pelo lado de fora e atravessar a Ponte de Westminster para a clássica foto do Parlamento e da London Eye.",
                 type: "cultura",
-                icon: "fas fa-palette"
+                icon: "fas fa-church"
             },
             {
-                time: "19:00",
-                title: "Jantar (?)",
-                description: "Jantar em um restaurante a ser definido na volta para o hotel.",
+                time: "14:00",
+                title: "Almoço na Região",
+                description: "Pausa para o almoço na área de Westminster ou South Bank.",
                 type: "refeicao",
                 icon: "fas fa-utensils"
             }
         ]
     },
-    // Dia 3: Conhecimento e West End
+    // Dia 3: Tesouros Globais
     {
         day: 3,
         date: "25/Jan (Dom)",
-        title: "Um Mundo de Conhecimento e Maravilhas do West End",
+        title: "Tesouros Globais e Ruas Teatrais",
         city: "Londres",
         countryFlag: "🇬🇧",
-        objective: "Combinar uma visita a um museu de classe mundial com a energia vibrante do coração do entretenimento de Londres.",
+        objective: "Uma manhã de história mundial seguida pela energia vibrante do distrito dos teatros e mercados de Londres.",
         events: [
             {
-                time: "09:00",
-                title: "Café da Manhã (?)",
-                description: "Café da manhã antes de ir para o museu.",
-                type: "refeicao",
-                icon: "fas fa-coffee"
-            },
-            {
                 time: "10:00",
-                title: "British Museum (Grátis)",
-                description: "Caminhada de 15 minutos do hotel. Focar em tesouros como a Pedra de Roseta e as múmias egípcias (3-4 horas).",
+                title: "British Museum (Visita Curada)",
+                description: "Caminhada de 15-20 min do hotel. Focar em destaques: Pedra de Roseta, Esculturas do Partenon e a estátua da Ilha de Páscoa.",
                 type: "cultura",
                 icon: "fas fa-landmark"
             },
             {
-                time: "14:00",
-                title: "Almoço em Covent Garden (?)",
-                description: "Passeio para o sul até o bairro de Covent Garden para almoçar e explorar a área.",
+                time: "12:00",
+                title: "Almoço e Exploração de Covent Garden",
+                description: "Almoçar na região e explorar o mercado, assistindo aos artistas de rua gratuitos na praça.",
                 type: "refeicao",
                 icon: "fas fa-utensils"
             },
             {
-                time: "15:30",
-                title: "Covent Garden",
-                description: "Assistir aos artistas de rua e explorar o Apple Market.",
+                time: "15:00",
+                title: "Leicester Square e Chinatown",
+                description: "Passeio pelo coração do cinema londrino e pelos portões coloridos de Chinatown.",
                 type: "passeio",
-                icon: "fas fa-masks-theater"
-            },
-            {
-                time: "17:00",
-                title: "Leicester Square e Piccadilly Circus",
-                description: "Ao anoitecer, passear pela zona dos teatros e ver os famosos painéis digitais de Piccadilly Circus.",
-                type: "passeio",
-                icon: "fas fa-video"
-            },
-            {
-                time: "19:30",
-                title: "Jantar no Soho (?)",
-                description: "Explorar as diversas opções de restaurantes no Soho.",
-                type: "refeicao",
-                icon: "fas fa-utensils"
+                icon: "fas fa-film"
             }
         ]
     },
@@ -169,38 +134,38 @@ export const itineraryData = [
     {
         day: 4,
         date: "26/Jan (Seg)",
-        title: "Excursão Acadêmica a Oxford",
+        title: "Excursão à Cidade das Torres dos Sonhos: Oxford",
         city: "Oxford",
         countryFlag: "🇬🇧",
-        objective: "Uma viagem de um dia, eficiente e econômica, para vivenciar a atmosfera histórica e acadêmica de Oxford.",
+        objective: "Uma excursão de um dia inteiro à histórica cidade universitária.",
         events: [
-            {
-                time: "07:30",
-                title: "Café da Manhã (?)",
-                description: "Café da manhã rápido em Londres antes de pegar o trem.",
-                type: "refeicao",
-                icon: "fas fa-coffee"
-            },
             {
                 time: "08:30",
                 title: "Viagem de Trem para Oxford",
-                description: "Pegar o metrô para a Estação de Paddington e, de lá, o trem da GWR para Oxford (45-60 min). Reservar com antecedência!",
+                description: "Metrô para a Estação de Paddington e trem da GWR para Oxford (aprox. 1h). É crucial reservar os bilhetes com antecedência!",
                 type: "transporte",
                 icon: "fas fa-train"
             },
             {
                 time: "10:00",
-                title: "Passeio Autoguiado (Grátis)",
-                description: "Caminhada pelo centro histórico, focando no exterior de Christ Church, Radcliffe Camera, Biblioteca Bodleian e outros colleges.",
+                title: "Roteiro a Pé Autoguiado",
+                description: "Explorar o centro histórico, passando pela Radcliffe Camera, Biblioteca Bodleian e a Ponte dos Suspiros.",
                 type: "passeio",
                 icon: "fas fa-university"
             },
             {
                 time: "13:00",
-                title: "Almoço em Oxford (?)",
-                description: "Almoçar e explorar os pátios de colleges com entrada gratuita, como Keble ou St John's (verificar acesso online).",
+                title: "Almoço e Christ Church Meadow",
+                description: "Almoçar em Oxford e passear pelo Christ Church Meadow para vistas gratuitas do famoso college.",
                 type: "refeicao",
                 icon: "fas fa-utensils"
+            },
+            {
+                time: "15:00",
+                title: "Explorar o Covered Market",
+                description: "Visitar o vibrante mercado coberto para um vislumbre da vida local.",
+                type: "passeio",
+                icon: "fas fa-shopping-basket"
             },
             {
                 time: "18:00",
@@ -208,13 +173,6 @@ export const itineraryData = [
                 description: "Pegar o trem pré-reservado de volta para Londres Paddington.",
                 type: "transporte",
                 icon: "fas fa-train"
-            },
-            {
-                time: "19:30",
-                title: "Jantar (?)",
-                description: "Jantar próximo ao hotel em Londres após o retorno de Oxford.",
-                type: "refeicao",
-                icon: "fas fa-utensils"
             }
         ]
     },
@@ -222,165 +180,109 @@ export const itineraryData = [
     {
         day: 5,
         date: "27/Jan (Ter)",
-        title: "Cultura de South Bank e Pontes Icônicas",
+        title: "Obras-Primas Artísticas e um Passeio pela Margem Sul",
         city: "Londres",
         countryFlag: "🇬🇧",
-        objective: "Explorar a vibrante margem sul do Tâmisa, combinando gastronomia, cultura e vistas icônicas.",
+        objective: "Combinar arte de classe mundial com vistas icônicas do rio.",
         events: [
             {
-                time: "09:00",
-                title: "Café da Manhã (?)",
-                description: "Café da manhã antes de iniciar o dia na South Bank.",
-                type: "refeicao",
-                icon: "fas fa-coffee"
-            },
-            {
                 time: "10:00",
-                title: "Borough Market",
-                description: "Pegar o metrô para London Bridge e mergulhar em um dos mercados de alimentos mais antigos de Londres.",
-                type: "passeio",
-                icon: "fas fa-shopping-basket"
-            },
-            {
-                time: "12:00",
-                title: "Almoço no Borough Market (?)",
-                description: "Aproveitar as diversas opções de comida de rua para o almoço.",
-                type: "refeicao",
-                icon: "fas fa-utensils"
-            },
-            {
-                time: "13:00",
-                title: "Passeio pela South Bank",
-                description: "Caminhada cênica passando pelo Golden Hinde e pelo exterior do Shakespeare's Globe Theatre.",
-                type: "passeio",
-                icon: "fas fa-walking"
-            },
-            {
-                time: "14:00",
-                title: "Tate Modern (Grátis)",
-                description: "Visitar a coleção de arte moderna e contemporânea.",
+                title: "The National Gallery (Visita Curada)",
+                description: "Visita focada de 90 minutos para ver obras como 'Girassóis' de Van Gogh e 'O Retrato de Arnolfini' de Jan van Eyck.",
                 type: "cultura",
                 icon: "fas fa-palette"
             },
             {
-                time: "16:00",
-                title: "Millennium Bridge e St. Paul's",
-                description: "Atravessar a ponte para a vista perfeita da Catedral de St. Paul.",
+                time: "12:00",
+                title: "Passeio pela South Bank",
+                description: "Atravessar a Golden Jubilee Bridge e passear pela margem sul do Tâmisa.",
                 type: "passeio",
-                icon: "fas fa-church"
+                icon: "fas fa-walking"
             },
             {
-                time: "18:00",
-                title: "Vistas Noturnas",
-                description: "Caminhar para leste para vistas noturnas iluminadas da Tower Bridge e da Torre de Londres.",
-                type: "passeio",
-                icon: "fas fa-moon"
-            },
-            {
-                time: "19:30",
-                title: "Jantar (?)",
-                description: "Jantar em um restaurante na região da Tower Bridge.",
-                type: "refeicao",
-                icon: "fas fa-utensils"
-            }
-        ]
-    },
-    // Dia 6: Milha dos Museus
-    {
-        day: 6,
-        date: "28/Jan (Qua)",
-        title: "A Milha dos Museus de South Kensington",
-        city: "Londres",
-        countryFlag: "🇬🇧",
-        objective: "Um dia de imersão em conhecimento e natureza, com a flexibilidade de escolher entre museus de classe mundial.",
-        events: [
-            {
-                time: "09:00",
-                title: "Café da Manhã (?)",
-                description: "Café da manhã antes de visitar os museus.",
-                type: "refeicao",
-                icon: "fas fa-coffee"
-            },
-            {
-                time: "10:00",
-                title: "Viagem para South Kensington",
-                description: "Pegar a Linha Piccadilly diretamente de King's Cross para a 'Museum Row'.",
-                type: "transporte",
-                icon: "fas fa-subway"
-            },
-            {
-                time: "10:30",
-                title: "Escolha de Museu (Grátis)",
-                description: "Escolher um ou dois museus para explorar: Natural History Museum, Science Museum ou o V&A (arte e design).",
-                type: "cultura",
-                icon: "fas fa-university"
-            },
-            {
-                time: "14:00",
-                title: "Almoço em South Kensington (?)",
-                description: "Pausa para o almoço na região dos museus.",
+                time: "13:00",
+                title: "Almoço no Borough Market",
+                description: "Explorar a atmosfera e as cores do mercado. Almoço na região.",
                 type: "refeicao",
                 icon: "fas fa-utensils"
             },
             {
                 time: "15:00",
-                title: "Passeio no Hyde Park",
-                description: "Após os museus, uma caminhada relaxante pelo adjacente Hyde Park em direção ao lago Serpentine.",
-                type: "passeio",
-                icon: "fas fa-tree"
-            },
-            {
-                time: "19:00",
-                title: "Jantar (?)",
-                description: "Jantar em um restaurante a ser definido.",
-                type: "refeicao",
-                icon: "fas fa-utensils"
+                title: "Shakespeare's Globe e Tate Modern",
+                description: "Ver os famosos edifícios pelo lado de fora durante a caminhada.",
+                type: "cultura",
+                icon: "fas fa-theater-masks"
             }
         ]
     },
-    // Dia 7: Vistas e Explorações Finais
+    // Dia 6: Mercados e Música
     {
-        day: 7,
-        date: "29/Jan (Qui)",
-        title: "Vistas Contemporâneas e Explorações Finais",
+        day: 6,
+        date: "28/Jan (Qua)",
+        title: "Mercados, Música e Modernidade",
         city: "Londres",
         countryFlag: "🇬🇧",
-        objective: "Desfrutar de vistas panorâmicas da cidade e oferecer flexibilidade para explorar um bairro à escolha do grupo.",
+        objective: "Explorar o lado alternativo e criativo de Londres.",
         events: [
             {
-                time: "09:00",
-                title: "Café da Manhã (?)",
-                description: "Café da manhã antes de subir ao Sky Garden.",
-                type: "refeicao",
-                icon: "fas fa-coffee"
-            },
-            {
                 time: "10:00",
-                title: "Sky Garden (Grátis)",
-                description: "Visita ao jardim público mais alto de Londres para vistas de 360 graus. Requer reserva online com 3 semanas de antecedência!",
+                title: "Explorar Camden Town",
+                description: "Visitar o famoso Camden Market e caminhar ao longo do Regent's Canal.",
                 type: "passeio",
-                icon: "fas fa-seedling"
+                icon: "fas fa-guitar"
             },
             {
                 time: "13:00",
-                title: "Almoço (?)",
-                description: "Almoço na região da City of London.",
+                title: "Almoço em Camden",
+                description: "Aproveitar as diversas opções de comida de rua do mercado.",
+                type: "refeicao",
+                icon: "fas fa-utensils"
+            },
+            {
+                time: "15:00",
+                title: "Abbey Road",
+                description: "Pegar o ônibus nº 139 para visitar a icônica passadeira imortalizada pelos Beatles.",
+                type: "cultura",
+                icon: "fas fa-music"
+            },
+            {
+                time: "16:30",
+                title: "Passeio no Regent's Park",
+                description: "Caminhada relaxante por um dos mais belos Parques Reais de Londres.",
+                type: "passeio",
+                icon: "fas fa-leaf"
+            }
+        ]
+    },
+    // Dia 7: Ícones de Londres
+    {
+        day: 7,
+        date: "29/Jan (Qui)",
+        title: "Ícones de Londres: Tower Bridge e História",
+        city: "Londres",
+        countryFlag: "🇬🇧",
+        objective: "Um dia focado no marco mais reconhecível da cidade e no seu coração histórico.",
+        events: [
+            {
+                time: "10:00",
+                title: "Torre de Londres e Tower Bridge",
+                description: "Metrô até Tower Hill. Caminhar pelo perímetro da Torre e atravessar a pé a icônica Tower Bridge (gratuito).",
+                type: "passeio",
+                icon: "fas fa-chess"
+            },
+            {
+                time: "13:00",
+                title: "Almoço na Margem Sul",
+                description: "Almoçar na área perto da City Hall, com vistas da ponte.",
                 type: "refeicao",
                 icon: "fas fa-utensils"
             },
             {
                 time: "14:30",
-                title: "Tarde Flexível",
-                description: "Escolha do grupo: Opção A (charme de Notting Hill) ou Opção B (vibração eclética de Camden).",
-                type: "passeio",
-                icon: "fas fa-random"
-            },
-            {
-                time: "19:30",
-                title: "Jantar de Despedida (?)",
-                description: "Jantar especial para a última noite em Londres.",
-                type: "refeicao",
-                icon: "fas fa-utensils"
+                title: "Catedral de St. Paul's",
+                description: "Caminhar pela margem sul, atravessar a Millennium Bridge para a vista perfeita da Catedral de St. Paul.",
+                type: "cultura",
+                icon: "fas fa-church"
             }
         ]
     },
@@ -394,106 +296,71 @@ export const itineraryData = [
         objective: "Uma manhã final em Londres, seguida de um voo para Lisboa e uma primeira noite imersiva.",
         events: [
             {
-                time: "09:00",
-                title: "Café da Manhã (?)",
-                description: "Último café da manhã inglês antes do check-out.",
-                type: "refeicao",
-                icon: "fas fa-coffee"
-            },
-            {
-                time: "10:00",
+                time: "Manhã",
                 title: "Manhã Livre em King's Cross",
-                description: "Após o check-out, visitar a Plataforma 9 ¾ e a Galeria de Tesouros da British Library (grátis).",
-                type: "cultura",
-                icon: "fas fa-book-open"
+                description: "Visitar a Plataforma 9 ¾ na estação ou fazer uma última caminhada pelo Russell Square.",
+                type: "passeio",
+                icon: "fas fa-magic"
             },
             {
-                time: "12:00",
-                title: "Almoço de Despedida (?)",
-                description: "Último almoço em Londres, próximo ao hotel.",
-                type: "refeicao",
-                icon: "fas fa-utensils"
-            },
-            {
-                time: "14:30",
+                time: "15:00",
                 title: "Viagem para Heathrow (LHR)",
-                description: "Pegar a Linha Piccadilly em King's Cross para uma viagem direta de 1 hora até o aeroporto.",
+                description: "Pegar a Piccadilly Line em King's Cross para o aeroporto (aprox. 1h).",
                 type: "transporte",
                 icon: "fas fa-subway"
             },
             {
                 time: "18:30",
                 title: "Voo para Lisboa (LIS)",
-                description: "Partida do voo de Londres para Lisboa.",
+                description: "Partida do voo de Londres.",
                 type: "partida",
                 icon: "fas fa-plane-departure"
             },
             {
                 time: "21:15",
                 title: "Chegada e Transporte em Lisboa",
-                description: "Pegar o Metrô (Linha Vermelha > Linha Verde) para a estação Rossio. Comprar e carregar o cartão 'Navegante'.",
+                description: "Pegar o Metrô (Linha Vermelha > Linha Verde) para a estação Rossio. Comprar e carregar o cartão 'navegante ocasional' com Zapping.",
                 type: "transporte",
                 icon: "fas fa-subway"
             },
             {
-                time: "22:30",
-                title: "Check-in e Jantar no Rossio (?)",
-                description: "Check-in no Hotel Inn Rossio e um jantar tardio para absorver a atmosfera da praça.",
+                time: "22:15",
+                title: "Check-in no Hotel Inn Rossio",
+                description: "Check-in e breve caminhada pela Praça do Rossio e Praça da Figueira.",
                 type: "hospedagem",
                 icon: "fas fa-bed"
             }
         ]
     },
-    // Dia 9: Alfama
+    // Dia 9: Baixa-Chiado
     {
         day: 9,
         date: "31/Jan (Sáb)",
-        title: "A Alma de Alfama e Vistas Deslumbrantes",
+        title: "Coração de Lisboa: Baixa, Chiado e Vistas",
         city: "Lisboa",
         countryFlag: "🇵🇹",
-        objective: "Um dia dedicado a explorar o bairro mais antigo de Lisboa, culminando com um pôr do sol inesquecível.",
+        objective: "Explorar a pé a elegante baixa de Lisboa e subir às suas colinas para vistas deslumbrantes.",
         events: [
             {
-                time: "09:00",
-                title: "Café da Manhã no Hotel",
-                description: "Aproveitar o café da manhã incluso no hotel.",
-                type: "refeicao",
-                icon: "fas fa-coffee"
-            },
-            {
-                time: "10:00",
-                title: "Passeio por Alfama",
-                description: "Começar na Sé de Lisboa e subir pelas ruas labirínticas.",
+                time: "Manhã",
+                title: "Explorar a Baixa Pombalina",
+                description: "Caminhar pela Rua Augusta, passar sob o Arco e chegar à Praça do Comércio.",
                 type: "passeio",
-                icon: "fas fa-walking"
+                icon: "fas fa-archway"
             },
             {
-                time: "12:00",
-                title: "Miradouros de Alfama",
-                description: "Parada nos Miradouros de Santa Luzia e das Portas do Sol para as vistas mais icônicas sobre os telhados e o rio.",
+                time: "Tarde",
+                title: "Chiado e Convento do Carmo",
+                description: "Subir ao Chiado, visitar o Largo do Carmo e ver as ruínas do Convento (exterior gratuito).",
+                type: "cultura",
+                icon: "fas fa-landmark"
+            },
+            {
+                time: "Fim de Tarde",
+                title: "Miradouro de São Pedro de Alcântara",
+                description: "Desfrutar da vista panorâmica sobre a cidade, uma alternativa gratuita e mais ampla à vista do Elevador de Santa Justa.",
                 type: "passeio",
-                icon: "fas fa-camera"
-            },
-            {
-                time: "14:00",
-                title: "Almoço e Castelo (Exterior) (?)",
-                description: "Almoçar em Alfama e desfrutar das vistas das áreas públicas em redor do Castelo de São Jorge.",
-                type: "refeicao",
-                icon: "fas fa-utensils"
-            },
-            {
-                time: "17:00",
-                title: "Pôr do Sol no Miradouro",
-                description: "Dirigir-se ao Miradouro da Graça ou ao Miradouro da Senhora do Monte para vistas panorâmicas ao pôr do sol.",
-                type: "passeio",
-                icon: "fas fa-sun"
-            },
-            {
-                time: "19:30",
-                title: "Jantar em Alfama (?)",
-                description: "Jantar em um restaurante típico do bairro.",
-                type: "refeicao",
-                icon: "fas fa-utensils"
+                icon: "fas fa-image"
             }
         ]
     },
@@ -501,112 +368,77 @@ export const itineraryData = [
     {
         day: 10,
         date: "01/Fev (Dom)",
-        title: "A Era de Ouro dos Descobrimentos em Belém",
+        title: "A Era dos Descobrimentos em Belém",
         city: "Lisboa",
         countryFlag: "🇵🇹",
-        objective: "Uma viagem de meio dia ao monumental bairro ribeirinho de Belém, dedicado à Era dos Descobrimentos de Portugal.",
+        objective: "Uma imersão na história marítima de Portugal, visitando os monumentos que celebram a Era dos Descobrimentos.",
         events: [
             {
-                time: "08:30",
-                title: "Café da Manhã no Hotel",
-                description: "Começar o dia com o café da manhã do hotel antes de ir para Belém.",
-                type: "refeicao",
-                icon: "fas fa-coffee"
-            },
-            {
-                time: "09:30",
+                time: "Manhã",
                 title: "Viagem para Belém",
-                description: "Pegar o cênico Bonde 15E na Praça da Figueira ou na Praça do Comércio.",
+                description: "Pegar o cênico Bonde 15E na Praça da Figueira.",
                 type: "transporte",
                 icon: "fas fa-tram"
             },
             {
-                time: "10:30",
-                title: "Mosteiro dos Jerônimos",
-                description: "Visitar a igreja principal (gratuita) e admirar a arquitetura manuelina.",
+                time: "Manhã",
+                title: "Mosteiro dos Jerônimos (Igreja)",
+                description: "Visitar a igreja principal (entrada gratuita) e admirar a arquitetura manuelina.",
                 type: "cultura",
                 icon: "fas fa-church"
             },
             {
-                time: "12:00",
+                time: "Tarde",
                 title: "Padrão dos Descobrimentos e Torre de Belém",
                 description: "Caminhar ao longo do rio para ver os monumentos icônicos (exteriores).",
                 type: "passeio",
                 icon: "fas fa-monument"
             },
             {
-                time: "13:30",
-                title: "Almoço em Belém (?)",
-                description: "Almoçar na região e provar os famosos Pastéis de Belém.",
+                time: "Tarde",
+                title: "Pastéis de Belém",
+                description: "Passar pela famosa pastelaria para ver onde a receita original foi criada.",
                 type: "refeicao",
-                icon: "fas fa-utensils"
-            },
-            {
-                time: "15:00",
-                title: "Tarde Livre",
-                description: "Retornar ao centro e ter a tarde livre para revisitar um local ou explorar uma nova área.",
-                type: "passeio",
-                icon: "fas fa-compass"
-            },
-            {
-                time: "19:30",
-                title: "Jantar (?)",
-                description: "Jantar em um restaurante a ser definido.",
-                type: "refeicao",
-                icon: "fas fa-utensils"
+                icon: "fas fa-cookie-bite"
             }
         ]
     },
-    // Dia 11: Baixa-Chiado
+    // Dia 11: Alfama
     {
         day: 11,
         date: "02/Fev (Seg)",
-        title: "Grandeza da Baixa-Chiado e um Mirante Inteligente",
+        title: "As Colinas Históricas: Alfama e Graça",
         city: "Lisboa",
         countryFlag: "🇵🇹",
-        objective: "Explorar a baixa a pé e usar uma dica de especialista para obter vistas panorâmicas sem custo.",
+        objective: "Perder-se nas ruelas medievais do bairro mais antigo de Lisboa e descobrir os seus miradouros mais autênticos.",
         events: [
             {
-                time: "09:00",
-                title: "Café da Manhã no Hotel",
-                description: "Café da manhã no hotel para se preparar para o dia.",
-                type: "refeicao",
-                icon: "fas fa-coffee"
+                time: "Manhã",
+                title: "Passeio no Elétrico 28",
+                description: "Pegar o famoso bonde na Praça Martim Moniz para uma viagem cênica até a Graça.",
+                type: "transporte",
+                icon: "fas fa-tram"
             },
             {
-                time: "10:00",
-                title: "Explorar a Baixa",
-                description: "Caminhar pela Rua Augusta, passar sob o Arco e chegar à magnífica Praça do Comércio.",
+                time: "Manhã",
+                title: "Miradouros da Graça",
+                description: "Começar pelo ponto mais alto no Miradouro da Senhora do Monte e depois descer para o Miradouro da Graça.",
                 type: "passeio",
-                icon: "fas fa-archway"
+                icon: "fas fa-binoculars"
             },
             {
-                time: "13:00",
-                title: "Almoço no Chiado (?)",
-                description: "Almoçar no boêmio bairro do Chiado.",
-                type: "refeicao",
-                icon: "fas fa-utensils"
+                time: "Tarde",
+                title: "Explorar Alfama",
+                description: "Descer pelas ruelas, parando nos Miradouros das Portas do Sol e de Santa Luzia.",
+                type: "passeio",
+                icon: "fas fa-walking"
             },
             {
-                time: "14:30",
-                title: "Convento do Carmo e Elevador (Grátis)",
-                description: "Subir ao Chiado, visitar as ruínas do Convento do Carmo e usar a passagem pública para acessar a vista do Elevador de Santa Justa sem pagar.",
+                time: "Fim de Tarde",
+                title: "Sé de Lisboa",
+                description: "Visitar a imponente Catedral de Lisboa (entrada gratuita) antes de voltar para a Baixa.",
                 type: "cultura",
-                icon: "fas fa-landmark"
-            },
-            {
-                time: "17:00",
-                title: "Pôr do Sol no Miradouro de São Pedro de Alcântara",
-                description: "Desfrutar de uma vista clássica de cartão-postal da cidade enquanto o sol se põe.",
-                type: "passeio",
-                icon: "fas fa-sun"
-            },
-            {
-                time: "19:30",
-                title: "Jantar de Despedida (?)",
-                description: "Jantar especial para a última noite em Lisboa.",
-                type: "refeicao",
-                icon: "fas fa-utensils"
+                icon: "fas fa-cross"
             }
         ]
     },
@@ -614,22 +446,22 @@ export const itineraryData = [
     {
         day: 12,
         date: "03/Fev (Ter)",
-        title: "Despedida Final (Até a Próxima)",
+        title: "Feira da Ladra e Despedida de Lisboa",
         city: "Lisboa ✈️ Brasil",
         countryFlag: "🇵🇹✈️🇧🇷",
-        objective: "Uma manhã final tranquila antes de uma partida suave para o aeroporto.",
+        objective: "Uma manhã final para uma experiência cultural única antes de uma partida suave para o aeroporto.",
         events: [
             {
-                time: "08:30",
-                title: "Café da Manhã de Despedida",
-                description: "Último café da manhã no hotel e check-out.",
-                type: "refeicao",
-                icon: "fas fa-coffee"
+                time: "Manhã",
+                title: "Visita à Feira da Ladra",
+                description: "Explorar o famoso mercado de pulgas de Lisboa no Campo de Santa Clara (abre às terças e sábados).",
+                type: "cultura",
+                icon: "fas fa-shopping-bag"
             },
             {
-                time: "09:30",
-                title: "Transporte para o Aeroporto",
-                description: "Pegar o Metrô no Rossio (Linha Verde > Linha Vermelha) para o Aeroporto de Lisboa (LIS).",
+                time: "10:00",
+                title: "Check-out e Transporte para o Aeroporto",
+                description: "Retornar ao hotel, fazer o check-out e pegar o Metrô (Linha Verde > Linha Vermelha) para o Aeroporto de Lisboa (LIS).",
                 type: "transporte",
                 icon: "fas fa-subway"
             },

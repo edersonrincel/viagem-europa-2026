@@ -13,33 +13,33 @@ export const itineraryData = [
         title: "Chegada, Trânsito e Primeiras Impressões",
         city: "Londres",
         countryFlag: "🇬🇧",
-        objective: "Garantir um transfer do aeroporto para o hotel que seja suave, económico e com o mínimo de stress após um voo de longo curso.",
+        objective: "Garantir um translado do aeroporto para o hotel que seja tranquilo, econômico e com o mínimo de estresse após um voo longo.",
         events: [
             {
                 time: "18:55",
-                title: "Aterragem em Heathrow (LHR)",
-                description: "Passar pela imigração e recolha de bagagens. O processo pode levar de 60 a 90 minutos.",
+                title: "Aterrissagem em Heathrow (LHR)",
+                description: "Passar pela imigração e retirada de bagagens. O processo pode levar de 60 a 90 minutos.",
                 type: "chegada",
                 icon: "fas fa-plane-arrival"
             },
             {
                 time: "20:30",
                 title: "Transporte para o Hotel",
-                description: "Apanhar a Linha Piccadilly do Metro (Tube) diretamente de Heathrow para a estação King's Cross St. Pancras. É a opção mais barata e direta.",
+                description: "Pegar a Linha Piccadilly do Metrô (Tube) diretamente de Heathrow para a estação King's Cross St. Pancras. É a opção mais barata e direta.",
                 type: "transporte",
                 icon: "fas fa-subway"
             },
             {
                 time: "21:30",
                 title: "Check-in no Central Hotel",
-                description: "Check-in e acomodação no hotel, localizado em Argyle Street, a poucos passos da estação.",
+                description: "Check-in e acomodação no hotel, localizado na Argyle Street, a poucos passos da estação.",
                 type: "hospedagem",
                 icon: "fas fa-bed"
             },
             {
                 time: "22:00",
                 title: "Passeio Leve e Descanso",
-                description: "Uma curta caminhada pela área para ver a arquitetura da Estação de St. Pancras e as fontes iluminadas na Granary Square.",
+                description: "Uma breve caminhada pela área para ver a arquitetura da Estação de St. Pancras e as fontes iluminadas na Granary Square.",
                 type: "passeio",
                 icon: "fas fa-walking"
             }
@@ -52,40 +52,40 @@ export const itineraryData = [
         title: "Um Passeio pelo Poder Real e Político",
         city: "Londres",
         countryFlag: "🇬🇧",
-        objective: "Uma imersão de dia inteiro nos marcos políticos e reais mais icónicos de Londres, otimizada para uma rota a pé lógica e de baixo custo.",
+        objective: "Uma imersão de dia inteiro nos marcos políticos e reais mais icônicos de Londres, otimizada para uma rota a pé lógica e de baixo custo.",
         events: [
             {
                 time: "09:00",
                 title: "Início em Westminster",
-                description: "Apanhar o metro em King's Cross para a estação de Westminster para vistas imediatas do Big Ben e das Casas do Parlamento.",
+                description: "Pegar o metrô em King's Cross para a estação de Westminster para vistas imediatas do Big Ben e das Casas do Parlamento.",
                 type: "transporte",
                 icon: "fas fa-subway"
             },
             {
                 time: "09:30",
                 title: "Parliament Square e Abadia",
-                description: "Admirar a arquitetura da Abadia de Westminster pelo exterior.",
+                description: "Admirar a arquitetura da Abadia de Westminster pelo lado de fora.",
                 type: "passeio",
                 icon: "fas fa-gavel"
             },
             {
                 time: "11:00",
                 title: "Troca da Guarda da Vida do Rei",
-                description: "Assistir à cerimónia na Horse Guards Parade, uma alternativa impressionante e menos concorrida à do Palácio de Buckingham.",
+                description: "Assistir à cerimônia na Horse Guards Parade, uma alternativa impressionante e menos cheia que a do Palácio de Buckingham.",
                 type: "cultura",
                 icon: "fas fa-chess-rook"
             },
             {
                 time: "12:00",
                 title: "St. James's Park e Palácio",
-                description: "Passeio cénico pelo parque até à fachada do Palácio de Buckingham para fotografias.",
+                description: "Passeio cênico pelo parque até a fachada do Palácio de Buckingham para fotos.",
                 type: "passeio",
                 icon: "fas fa-camera-retro"
             },
             {
                 time: "14:00",
                 title: "Trafalgar Square e National Gallery",
-                description: "Caminhar até Trafalgar Square. Visita gratuita à National Gallery para ver obras-primas de Van Gogh e Monet.",
+                description: "Caminhar até a Trafalgar Square. Visita gratuita à National Gallery para ver obras-primas de Van Gogh e Monet.",
                 type: "cultura",
                 icon: "fas fa-palette"
             }
@@ -110,7 +110,7 @@ export const itineraryData = [
             {
                 time: "14:00",
                 title: "Covent Garden",
-                description: "Passeio para sul até ao bairro de Covent Garden para assistir aos artistas de rua e explorar o Apple Market.",
+                description: "Passeio para o sul até o bairro de Covent Garden para assistir aos artistas de rua e explorar o Apple Market.",
                 type: "passeio",
                 icon: "fas fa-masks-theater"
             },
@@ -127,15 +127,15 @@ export const itineraryData = [
     {
         day: 4,
         date: "26/Jan (Seg)",
-        title: "Excursão Académica a Oxford",
+        title: "Excursão Acadêmica a Oxford",
         city: "Oxford",
         countryFlag: "🇬🇧",
-        objective: "Uma viagem de um dia, eficiente e económica, para vivenciar a atmosfera histórica e académica de Oxford.",
+        objective: "Uma viagem de um dia, eficiente e econômica, para vivenciar a atmosfera histórica e acadêmica de Oxford.",
         events: [
             {
                 time: "08:30",
-                title: "Viagem de Comboio para Oxford",
-                description: "Apanhar o metro para a Estação de Paddington e, de lá, o comboio da GWR para Oxford (45-60 min). Reservar com antecedência!",
+                title: "Viagem de Trem para Oxford",
+                description: "Pegar o metrô para a Estação de Paddington e, de lá, o trem da GWR para Oxford (45-60 min). Reservar com antecedência!",
                 type: "transporte",
                 icon: "fas fa-train"
             },
@@ -156,7 +156,7 @@ export const itineraryData = [
             {
                 time: "18:00",
                 title: "Retorno a Londres",
-                description: "Apanhar o comboio pré-reservado de volta para Londres Paddington.",
+                description: "Pegar o trem pré-reservado de volta para Londres Paddington.",
                 type: "transporte",
                 icon: "fas fa-train"
             }
@@ -166,22 +166,22 @@ export const itineraryData = [
     {
         day: 5,
         date: "27/Jan (Ter)",
-        title: "Cultura de South Bank e Pontes Icónicas",
+        title: "Cultura de South Bank e Pontes Icônicas",
         city: "Londres",
         countryFlag: "🇬🇧",
-        objective: "Explorar a vibrante margem sul do Tamisa, combinando gastronomia, cultura e vistas icónicas.",
+        objective: "Explorar a vibrante margem sul do Tâmisa, combinando gastronomia, cultura e vistas icônicas.",
         events: [
             {
                 time: "10:00",
                 title: "Borough Market",
-                description: "Apanhar o metro para London Bridge e mergulhar num dos mercados alimentares mais antigos de Londres.",
+                description: "Pegar o metrô para London Bridge e mergulhar em um dos mercados de alimentos mais antigos de Londres.",
                 type: "refeicao",
                 icon: "fas fa-shopping-basket"
             },
             {
                 time: "12:00",
                 title: "Passeio pela South Bank",
-                description: "Caminhada cénica passando pelo Golden Hinde e pelo exterior do Shakespeare's Globe Theatre.",
+                description: "Caminhada cênica passando pelo Golden Hinde e pelo exterior do Shakespeare's Globe Theatre.",
                 type: "passeio",
                 icon: "fas fa-walking"
             },
@@ -220,7 +220,7 @@ export const itineraryData = [
             {
                 time: "10:00",
                 title: "Viagem para South Kensington",
-                description: "Apanhar a Linha Piccadilly diretamente de King's Cross para a 'Museum Row'.",
+                description: "Pegar a Linha Piccadilly diretamente de King's Cross para a 'Museum Row'.",
                 type: "transporte",
                 icon: "fas fa-subway"
             },
@@ -272,7 +272,7 @@ export const itineraryData = [
         title: "Despedida de Londres e Chegada a Lisboa",
         city: "Londres ✈️ Lisboa",
         countryFlag: "🇬🇧✈️🇵🇹",
-        objective: "Uma manhã final em Londres, seguida de um voo para Lisboa e uma primeira noite atmosférica.",
+        objective: "Uma manhã final em Londres, seguida de um voo para Lisboa e uma primeira noite imersiva.",
         events: [
             {
                 time: "10:00",
@@ -284,7 +284,7 @@ export const itineraryData = [
             {
                 time: "14:30",
                 title: "Viagem para Heathrow (LHR)",
-                description: "Apanhar a Linha Piccadilly em King's Cross para uma viagem direta de 1 hora até ao aeroporto.",
+                description: "Pegar a Linha Piccadilly em King's Cross para uma viagem direta de 1 hora até o aeroporto.",
                 type: "transporte",
                 icon: "fas fa-subway"
             },
@@ -298,7 +298,7 @@ export const itineraryData = [
             {
                 time: "21:15",
                 title: "Chegada e Transporte em Lisboa",
-                description: "Apanhar o Metro (Linha Vermelha > Linha Verde) para a estação Rossio. Comprar e carregar o cartão 'Navegante'.",
+                description: "Pegar o Metrô (Linha Vermelha > Linha Verde) para a estação Rossio. Comprar e carregar o cartão 'Navegante'.",
                 type: "transporte",
                 icon: "fas fa-subway"
             },
@@ -330,7 +330,7 @@ export const itineraryData = [
             {
                 time: "12:00",
                 title: "Miradouros de Alfama",
-                description: "Paragem nos Miradouros de Santa Luzia e das Portas do Sol para as vistas mais icónicas sobre os telhados e o rio.",
+                description: "Parada nos Miradouros de Santa Luzia e das Portas do Sol para as vistas mais icônicas sobre os telhados e o rio.",
                 type: "passeio",
                 icon: "fas fa-camera"
             },
@@ -354,7 +354,7 @@ export const itineraryData = [
     {
         day: 10,
         date: "01/Fev (Dom)",
-        title: "A Idade de Ouro dos Descobrimentos em Belém",
+        title: "A Era de Ouro dos Descobrimentos em Belém",
         city: "Lisboa",
         countryFlag: "🇵🇹",
         objective: "Uma viagem de meio dia ao monumental bairro ribeirinho de Belém, dedicado à Era dos Descobrimentos de Portugal.",
@@ -362,13 +362,13 @@ export const itineraryData = [
             {
                 time: "09:30",
                 title: "Viagem para Belém",
-                description: "Apanhar o cénico Elétrico 15E na Praça da Figueira ou na Praça do Comércio.",
+                description: "Pegar o cênico Bonde 15E na Praça da Figueira ou na Praça do Comércio.",
                 type: "transporte",
                 icon: "fas fa-tram"
             },
             {
                 time: "10:30",
-                title: "Mosteiro dos Jerónimos",
+                title: "Mosteiro dos Jerônimos",
                 description: "Visitar a igreja principal (gratuita) e admirar a arquitetura manuelina.",
                 type: "cultura",
                 icon: "fas fa-church"
@@ -376,14 +376,14 @@ export const itineraryData = [
             {
                 time: "12:00",
                 title: "Padrão dos Descobrimentos e Torre de Belém",
-                description: "Caminhar ao longo do rio para ver os monumentos icónicos (exteriores).",
+                description: "Caminhar ao longo do rio para ver os monumentos icônicos (exteriores).",
                 type: "passeio",
                 icon: "fas fa-monument"
             },
             {
                 time: "14:00",
                 title: "Tarde Livre",
-                description: "Regressar ao centro e ter a tarde livre para revisitar um local ou explorar uma nova área.",
+                description: "Retornar ao centro e ter a tarde livre para revisitar um local ou explorar uma nova área.",
                 type: "passeio",
                 icon: "fas fa-compass"
             }
@@ -393,7 +393,7 @@ export const itineraryData = [
     {
         day: 11,
         date: "02/Fev (Seg)",
-        title: "Grandeza da Baixa-Chiado e um Miradouro Inteligente",
+        title: "Grandeza da Baixa-Chiado e um Mirante Inteligente",
         city: "Lisboa",
         countryFlag: "🇵🇹",
         objective: "Explorar a baixa a pé e usar uma dica de especialista para obter vistas panorâmicas sem custo.",
@@ -408,14 +408,14 @@ export const itineraryData = [
             {
                 time: "13:00",
                 title: "Convento do Carmo e Elevador (Grátis)",
-                description: "Subir ao Chiado, visitar as ruínas do Convento do Carmo e usar a passagem pública para aceder à vista do Elevador de Santa Justa sem pagar.",
+                description: "Subir ao Chiado, visitar as ruínas do Convento do Carmo e usar a passagem pública para acessar a vista do Elevador de Santa Justa sem pagar.",
                 type: "cultura",
                 icon: "fas fa-landmark"
             },
             {
                 time: "17:00",
                 title: "Pôr do Sol no Miradouro de São Pedro de Alcântara",
-                description: "Desfrutar de uma vista clássica de postal da cidade enquanto o sol se põe.",
+                description: "Desfrutar de uma vista clássica de cartão-postal da cidade enquanto o sol se põe.",
                 type: "passeio",
                 icon: "fas fa-sun"
             }
@@ -428,25 +428,25 @@ export const itineraryData = [
         title: "Despedida Final (Até a Próxima)",
         city: "Lisboa ✈️ Brasil",
         countryFlag: "🇵🇹✈️🇧🇷",
-        objective: "Uma manhã final descontraída antes de uma partida suave para o aeroporto.",
+        objective: "Uma manhã final tranquila antes de uma partida suave para o aeroporto.",
         events: [
             {
                 time: "09:00",
                 title: "Manhã Livre",
-                description: "Último pequeno-almoço português ou compras de última hora na Rua Augusta.",
+                description: "Último café da manhã português ou compras de última hora na Rua Augusta.",
                 type: "passeio",
                 icon: "fas fa-shopping-bag"
             },
             {
                 time: "09:30",
                 title: "Transporte para o Aeroporto",
-                description: "Apanhar o Metro no Rossio (Linha Verde > Linha Vermelha) para o Aeroporto de Lisboa (LIS).",
+                description: "Pegar o Metrô no Rossio (Linha Verde > Linha Vermelha) para o Aeroporto de Lisboa (LIS).",
                 type: "transporte",
                 icon: "fas fa-subway"
             },
             {
                 time: "12:30",
-                title: "Voo de Regresso ao Brasil (GRU)",
+                title: "Voo de Retorno ao Brasil (GRU)",
                 description: "Embarque no voo de volta.",
                 type: "partida",
                 icon: "fas fa-plane-departure"

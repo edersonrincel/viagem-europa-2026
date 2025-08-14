@@ -1,10 +1,13 @@
 // js/modules/roteiro.js
 
 /**
- * @file Controla a renderização dinâmica do conteúdo da página do roteiro.
+ * @file Controla a renderização dinâmica do conteúdo da página do roteiro, incluindo os mapas interativos.
  */
 
-import { itineraryData } from '../data/roteiro-data.js';
+import { itineraryData, hotelCoords } from '../data/roteiro-data.js';
+
+// Armazena as instâncias dos mapas para evitar recriação
+const mapInstances = {};
 
 /**
  * Cria o HTML para um único evento dentro da linha do tempo de um dia.
@@ -22,7 +25,6 @@ function createEventElement(event) {
         'hospedagem': 'bg-indigo-500',
         'default': 'bg-slate-500'
     };
-
     const bgColor = typeClasses[event.type] || typeClasses['default'];
 
     return `
@@ -43,38 +45,143 @@ function createEventElement(event) {
 }
 
 /**
- * Gera e insere o conteúdo HTML para um dia específico do roteiro.
+ * Gera e insere o conteúdo da linha do tempo para um dia específico do roteiro.
  * @param {object} dayData - Os dados para um dia do roteiro.
  */
-function renderDayCard(dayData) {
-    const containerId = `content-roteiro-dia-${dayData.day}`;
+function renderDayTimeline(dayData) {
+    const containerId = `timeline-view-dia-${dayData.day}`;
     const container = document.getElementById(containerId);
 
     if (!container) {
-        console.warn(`Container para o dia ${dayData.day} não encontrado.`);
+        console.warn(`Container da timeline para o dia ${dayData.day} não encontrado.`);
         return;
     }
 
     const eventsHtml = dayData.events.map(createEventElement).join('');
-
     container.innerHTML = `
-        <div class="day-card-content">
-            <div class="day-summary">
-                <p class="text-sm font-semibold text-sky-700">Objetivo do Dia:</p>
-                <p class="text-sm text-slate-600">${dayData.objective}</p>
-            </div>
-            <div class="timeline-container-new">
-                ${eventsHtml}
-            </div>
+        <div class="day-summary">
+            <p class="text-sm font-semibold text-sky-700">Objetivo do Dia:</p>
+            <p class="text-sm text-slate-600">${dayData.objective}</p>
+        </div>
+        <div class="timeline-container-new">
+            ${eventsHtml}
         </div>
     `;
 }
 
 /**
- * Inicializa a página do roteiro, renderizando todos os cards de dia.
+ * Cria e inicializa um mapa para um dia específico do roteiro.
+ * @param {number} dayNumber - O número do dia.
+ * @param {object} dayData - Os dados do dia do roteiro.
+ */
+function initializeDayMap(dayNumber, dayData) {
+    const mapContainerId = `map-container-dia-${dayNumber}`;
+    const mapContainer = document.getElementById(mapContainerId);
+
+    // Se já houver um mapa, apenas garante que o tamanho está correto
+    if (mapInstances[dayNumber]) {
+        mapInstances[dayNumber].invalidateSize();
+        return;
+    }
+    
+    if (!mapContainer) return;
+
+    const map = L.map(mapContainer).setView([51.505, -0.09], 13);
+    mapInstances[dayNumber] = map; // Armazena a instância do mapa
+
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+        attribution: '© CartoDB'
+    }).addTo(map);
+
+    const points = [];
+    const markers = L.featureGroup();
+
+    // 1. Adiciona o ponto de partida (hotel)
+    const cityKey = dayData.city === 'Oxford' ? 'londres' : dayData.city.toLowerCase();
+    const startPoint = hotelCoords[cityKey];
+    if (startPoint) {
+        points.push([startPoint.lat, startPoint.lng]);
+        const hotelMarker = L.marker([startPoint.lat, startPoint.lng], {
+            icon: L.divIcon({ className: 'custom-hotel-icon', html: '<i class="fas fa-bed"></i>' })
+        }).bindPopup("<b>Ponto de Partida:</b><br>Hotel");
+        markers.addLayer(hotelMarker);
+    }
+
+    // 2. Adiciona os marcadores para cada evento com coordenadas
+    let eventCounter = 0;
+    dayData.events.forEach((event) => {
+        if (event.coords) {
+            eventCounter++;
+            points.push([event.coords.lat, event.coords.lng]);
+            const marker = L.marker([event.coords.lat, event.coords.lng], {
+                icon: L.divIcon({ className: 'custom-event-icon', html: `<span class="font-bold">${eventCounter}</span>` })
+            }).bindPopup(`<b>${eventCounter}. ${event.title}</b><br>${event.time}`);
+            markers.addLayer(marker);
+        }
+    });
+
+    // 3. Adiciona os marcadores e a linha do percurso ao mapa
+    map.addLayer(markers);
+    if (points.length > 1) {
+        const polyline = L.polyline(points, { color: '#F97316', weight: 3 }).addTo(map);
+        map.fitBounds(polyline.getBounds(), { padding: [40, 40] });
+    } else if (points.length === 1) {
+        map.setView(points[0], 15);
+    } else {
+        // Se não houver pontos, centraliza no hotel
+        if(startPoint) map.setView([startPoint.lat, startPoint.lng], 15);
+    }
+}
+
+/**
+ * Alterna a visualização entre linha do tempo e mapa para um dia específico.
+ * @param {number} dayNumber - O número do dia.
+ * @param {'timeline' | 'map'} viewToShow - A visualização a ser exibida.
+ */
+function switchDayView(dayNumber, viewToShow) {
+    const timelineView = document.getElementById(`timeline-view-dia-${dayNumber}`);
+    const mapView = document.getElementById(`map-view-dia-${dayNumber}`);
+    const allTogglesForDay = document.querySelectorAll(`.day-view-toggle[data-day='${dayNumber}']`);
+    
+    allTogglesForDay.forEach(toggle => {
+        const isCurrent = toggle.dataset.view === viewToShow;
+        toggle.classList.toggle('bg-white', isCurrent);
+        toggle.classList.toggle('text-sky-600', isCurrent);
+        toggle.classList.toggle('shadow', isCurrent);
+        toggle.classList.toggle('text-slate-600', !isCurrent);
+    });
+
+    if (viewToShow === 'timeline') {
+        timelineView.style.display = 'block';
+        mapView.style.display = 'none';
+    } else {
+        timelineView.style.display = 'none';
+        mapView.style.display = 'block';
+        // Encontra os dados do dia para passar para a função do mapa
+        const dayData = itineraryData.find(d => d.day === dayNumber);
+        if (dayData) {
+            // A inicialização do mapa é chamada aqui para garantir que o contêiner está visível
+            initializeDayMap(dayNumber, dayData);
+        }
+    }
+}
+
+/**
+ * Inicializa a página do roteiro, renderizando todos os cards e configurando os seletores de visualização.
  */
 export function initializeRoteiroPage() {
     itineraryData.forEach(dayData => {
-        renderDayCard(dayData);
+        // Renderiza a linha do tempo (que fica pronta mas escondida até ser mostrada)
+        renderDayTimeline(dayData);
+    });
+
+    // Configura os listeners para TODOS os botões de toggle
+    const allToggles = document.querySelectorAll('.day-view-toggle');
+    allToggles.forEach(toggle => {
+        toggle.addEventListener('click', () => {
+            const day = parseInt(toggle.dataset.day, 10);
+            const view = toggle.dataset.view;
+            switchDayView(day, view);
+        });
     });
 }

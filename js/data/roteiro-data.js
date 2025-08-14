@@ -2,8 +2,14 @@
 
 /**
  * @file Contém os dados estruturados para o roteiro da viagem, dia a dia.
- * Cada objeto representa um dia e contém uma lista de eventos programados.
+ * Cada objeto representa um dia e contém uma lista de eventos programados com coordenadas.
  */
+
+// Coordenadas dos hotéis para servirem como ponto de partida nos mapas
+export const hotelCoords = {
+    londres: { lat: 51.5298, lng: -0.1251 }, // Central Hotel, Argyle St
+    lisboa: { lat: 38.7141, lng: -9.1395 }   // Hotel Inn Rossio
+};
 
 export const itineraryData = [
     // Dia 1: Chegada em Londres
@@ -20,7 +26,8 @@ export const itineraryData = [
                 title: "Chegada em Heathrow (LHR)",
                 description: "Passar pela imigração e retirada de bagagens.",
                 type: "chegada",
-                icon: "fas fa-plane-arrival"
+                icon: "fas fa-plane-arrival",
+                coords: { lat: 51.4700, lng: -0.4543 }
             },
             {
                 time: "20:00",
@@ -34,7 +41,8 @@ export const itineraryData = [
                 title: "Check-in no Central Hotel",
                 description: "Acomodação no hotel. A saída correta da estação é a sinalizada como 'Euston Road'. O hotel fica na Argyle Street.",
                 type: "hospedagem",
-                icon: "fas fa-bed"
+                icon: "fas fa-bed",
+                coords: { lat: 51.5298, lng: -0.1251 }
             },
             {
                 time: "21:30",
@@ -80,21 +88,24 @@ export const itineraryData = [
                 title: "Palácio de Buckingham (Exterior)",
                 description: "Caminhar pelo Green Park em direção ao palácio para a icônica fotografia na fachada.",
                 type: "passeio",
-                icon: "fas fa-camera-retro"
+                icon: "fas fa-camera-retro",
+                coords: { lat: 51.5014, lng: -0.1419 }
             },
             {
                 time: "11:00",
                 title: "Troca da Guarda da Cavalaria Real",
                 description: "Assistir à cerimônia diária na Horse Guards Parade, uma alternativa menos lotada e igualmente impressionante.",
                 type: "cultura",
-                icon: "fas fa-chess-rook"
+                icon: "fas fa-chess-rook",
+                coords: { lat: 51.5045, lng: -0.1275 }
             },
             {
                 time: "12:00",
                 title: "Ícones de Westminster",
                 description: "Caminhar por Whitehall, passando por Downing Street, até a Parliament Square para ver o Big Ben e as Casas do Parlamento.",
                 type: "passeio",
-                icon: "fas fa-gavel"
+                icon: "fas fa-gavel",
+                coords: { lat: 51.5007, lng: -0.1246 }
             },
             {
                 time: "13:30",
@@ -108,7 +119,8 @@ export const itineraryData = [
                 title: "Abadia de Westminster e Ponte",
                 description: "Admirar a Abadia pelo lado de fora e atravessar a Ponte de Westminster para a clássica foto do Parlamento e da London Eye.",
                 type: "cultura",
-                icon: "fas fa-church"
+                icon: "fas fa-church",
+                coords: { lat: 51.4994, lng: -0.1273 }
             },
             {
                 time: "19:00",
@@ -140,28 +152,32 @@ export const itineraryData = [
                 title: "British Museum (Visita Curada)",
                 description: "Caminhada de 15-20 min do hotel. Focar em destaques: Pedra de Roseta, Esculturas do Partenon e a estátua da Ilha de Páscoa.",
                 type: "cultura",
-                icon: "fas fa-landmark"
+                icon: "fas fa-landmark",
+                coords: { lat: 51.5194, lng: -0.1270 }
             },
             {
                 time: "12:00",
                 title: "Almoço em Covent Garden (?)",
                 description: "Local a definir em conjunto com a Gio, na região de Covent Garden.",
                 type: "refeicao",
-                icon: "fas fa-utensils"
+                icon: "fas fa-utensils",
+                coords: { lat: 51.5117, lng: -0.1242 }
             },
             {
                 time: "13:30",
                 title: "Explorar Covent Garden",
                 description: "Explorar o mercado e assistir aos artistas de rua gratuitos na praça.",
                 type: "passeio",
-                icon: "fas fa-masks-theater"
+                icon: "fas fa-masks-theater",
+                coords: { lat: 51.5117, lng: -0.1242 }
             },
             {
                 time: "15:00",
                 title: "Leicester Square e Chinatown",
                 description: "Passeio pelo coração do cinema londrino e pelos portões coloridos de Chinatown.",
                 type: "passeio",
-                icon: "fas fa-film"
+                icon: "fas fa-film",
+                coords: { lat: 51.5113, lng: -0.1300 }
             },
             {
                 time: "19:00",
@@ -200,7 +216,8 @@ export const itineraryData = [
                 title: "Roteiro a Pé Autoguiado",
                 description: "Explorar o centro histórico, passando pela Radcliffe Camera, Biblioteca Bodleian e a Ponte dos Suspiros.",
                 type: "passeio",
-                icon: "fas fa-university"
+                icon: "fas fa-university",
+                coords: { lat: 51.7538, lng: -1.2544 }
             },
             {
                 time: "13:00",
@@ -214,7 +231,8 @@ export const itineraryData = [
                 title: "Christ Church Meadow e Covered Market",
                 description: "Passear pelo Christ Church Meadow para vistas gratuitas do famoso college e explorar o vibrante mercado coberto.",
                 type: "passeio",
-                icon: "fas fa-shopping-basket"
+                icon: "fas fa-shopping-basket",
+                coords: { lat: 51.7500, lng: -1.2550 }
             },
             {
                 time: "18:00",
@@ -253,7 +271,8 @@ export const itineraryData = [
                 title: "The National Gallery (Visita Curada)",
                 description: "Visita focada de 90 minutos para ver obras como 'Girassóis' de Van Gogh e 'O Retrato de Arnolfini' de Jan van Eyck.",
                 type: "cultura",
-                icon: "fas fa-palette"
+                icon: "fas fa-palette",
+                coords: { lat: 51.5089, lng: -0.1283 }
             },
             {
                 time: "12:00",
@@ -267,14 +286,16 @@ export const itineraryData = [
                 title: "Almoço no Borough Market (?)",
                 description: "Local a definir em conjunto com a Gio, na região do Borough Market.",
                 type: "refeicao",
-                icon: "fas fa-utensils"
+                icon: "fas fa-utensils",
+                coords: { lat: 51.5055, lng: -0.0912 }
             },
             {
                 time: "15:00",
                 title: "Shakespeare's Globe e Tate Modern",
                 description: "Ver os famosos edifícios pelo lado de fora durante a caminhada.",
                 type: "cultura",
-                icon: "fas fa-theater-masks"
+                icon: "fas fa-theater-masks",
+                coords: { lat: 51.5081, lng: -0.0972 }
             },
             {
                 time: "19:00",
@@ -306,7 +327,8 @@ export const itineraryData = [
                 title: "Explorar Camden Town",
                 description: "Visitar o famoso Camden Market e caminhar ao longo do Regent's Canal.",
                 type: "passeio",
-                icon: "fas fa-guitar"
+                icon: "fas fa-guitar",
+                coords: { lat: 51.5415, lng: -0.1466 }
             },
             {
                 time: "13:00",
@@ -320,14 +342,16 @@ export const itineraryData = [
                 title: "Abbey Road",
                 description: "Pegar o ônibus nº 139 para visitar a icônica passadeira imortalizada pelos Beatles.",
                 type: "cultura",
-                icon: "fas fa-music"
+                icon: "fas fa-music",
+                coords: { lat: 51.5321, lng: -0.1774 }
             },
             {
                 time: "16:30",
                 title: "Explorar Notting Hill",
                 description: "Passear pelas ruas charmosas com casas coloridas e sentir a atmosfera do bairro.",
                 type: "passeio",
-                icon: "fas fa-home"
+                icon: "fas fa-home",
+                coords: { lat: 51.5098, lng: -0.2040 }
             },
             {
                 time: "19:30",
@@ -359,7 +383,8 @@ export const itineraryData = [
                 title: "Torre de Londres e Tower Bridge",
                 description: "Metrô até Tower Hill. Caminhar pelo perímetro da Torre e atravessar a pé a icônica Tower Bridge (gratuito).",
                 type: "passeio",
-                icon: "fas fa-chess"
+                icon: "fas fa-chess",
+                coords: { lat: 51.5055, lng: -0.0754 }
             },
             {
                 time: "13:00",
@@ -373,14 +398,16 @@ export const itineraryData = [
                 title: "Catedral de St. Paul's",
                 description: "Caminhar pela margem sul, atravessar a Millennium Bridge para a vista perfeita da Catedral de St. Paul.",
                 type: "cultura",
-                icon: "fas fa-church"
+                icon: "fas fa-church",
+                coords: { lat: 51.5138, lng: -0.0984 }
             },
             {
                 time: "17:00",
                 title: "Street Art em Shoreditch",
                 description: "Explorar a vibrante cena de arte de rua ao redor de Brick Lane, uma galeria a céu aberto.",
                 type: "passeio",
-                icon: "fas fa-spray-can"
+                icon: "fas fa-spray-can",
+                coords: { lat: 51.5220, lng: -0.0715 }
             },
             {
                 time: "19:30",
@@ -396,7 +423,7 @@ export const itineraryData = [
         day: 8,
         date: "30/Jan (Sex)",
         title: "Despedida de Londres e Chegada a Lisboa",
-        city: "Londres ✈️ Lisboa",
+        city: "Lisboa",
         countryFlag: "🇬🇧✈️🇵🇹",
         objective: "Uma manhã final em Londres, seguida de um voo para Lisboa e uma primeira noite imersiva.",
         events: [
@@ -412,7 +439,8 @@ export const itineraryData = [
                 title: "Manhã Livre em King's Cross",
                 description: "Visitar a Plataforma 9 ¾ na estação ou fazer uma última caminhada pelo Russell Square.",
                 type: "passeio",
-                icon: "fas fa-magic"
+                icon: "fas fa-magic",
+                coords: { lat: 51.5308, lng: -0.1234 }
             },
             {
                 time: "12:00",
@@ -440,14 +468,16 @@ export const itineraryData = [
                 title: "Chegada e Transporte em Lisboa",
                 description: "Pegar o Metrô (Linha Vermelha > Linha Verde) para a estação Rossio. Comprar e carregar o cartão 'navegante ocasional' com Zapping.",
                 type: "transporte",
-                icon: "fas fa-subway"
+                icon: "fas fa-subway",
+                coords: { lat: 38.7742, lng: -9.1342 }
             },
             {
                 time: "22:15",
                 title: "Check-in no Hotel Inn Rossio",
                 description: "Check-in e breve caminhada pela Praça do Rossio e Praça da Figueira.",
                 type: "hospedagem",
-                icon: "fas fa-bed"
+                icon: "fas fa-bed",
+                coords: { lat: 38.7141, lng: -9.1395 }
             },
             {
                 time: "23:00",
@@ -479,14 +509,16 @@ export const itineraryData = [
                 title: "Explorar a Baixa Pombalina",
                 description: "Caminhar pela Rua Augusta, passar sob o Arco e chegar à Praça do Comércio.",
                 type: "passeio",
-                icon: "fas fa-archway"
+                icon: "fas fa-archway",
+                coords: { lat: 38.7078, lng: -9.1365 }
             },
             {
                 time: "13:00",
                 title: "Almoço no Time Out Market (?)",
                 description: "Local a definir em conjunto com a Gio, na região do Mercado da Ribeira.",
                 type: "refeicao",
-                icon: "fas fa-utensils"
+                icon: "fas fa-utensils",
+                coords: { lat: 38.7068, lng: -9.1460 }
             },
             {
                 time: "14:30",
@@ -500,14 +532,16 @@ export const itineraryData = [
                 title: "Chiado e Convento do Carmo",
                 description: "Subir ao Chiado, visitar o Largo do Carmo e ver as ruínas do Convento (exterior gratuito).",
                 type: "cultura",
-                icon: "fas fa-landmark"
+                icon: "fas fa-landmark",
+                coords: { lat: 38.7121, lng: -9.1411 }
             },
             {
                 time: "17:00",
                 title: "Miradouro de São Pedro de Alcântara",
                 description: "Desfrutar da vista panorâmica sobre a cidade, uma alternativa gratuita e mais ampla à vista do Elevador de Santa Justa.",
                 type: "passeio",
-                icon: "fas fa-image"
+                icon: "fas fa-image",
+                coords: { lat: 38.7149, lng: -9.1444 }
             },
             {
                 time: "19:30",
@@ -546,14 +580,16 @@ export const itineraryData = [
                 title: "Mosteiro dos Jerônimos (Igreja)",
                 description: "Visitar a igreja principal (entrada gratuita) e admirar a arquitetura manuelina.",
                 type: "cultura",
-                icon: "fas fa-church"
+                icon: "fas fa-church",
+                coords: { lat: 38.6978, lng: -9.2064 }
             },
             {
                 time: "12:00",
                 title: "Padrão dos Descobrimentos e Torre de Belém",
                 description: "Caminhar ao longo do rio para ver os monumentos icônicos (exteriores).",
                 type: "passeio",
-                icon: "fas fa-monument"
+                icon: "fas fa-monument",
+                coords: { lat: 38.6936, lng: -9.2059 }
             },
             {
                 time: "13:30",
@@ -567,14 +603,16 @@ export const itineraryData = [
                 title: "Visita à LX Factory",
                 description: "Explorar o complexo industrial revitalizado, com suas lojas de design, livrarias e arte urbana.",
                 type: "passeio",
-                icon: "fas fa-industry"
+                icon: "fas fa-industry",
+                coords: { lat: 38.7034, lng: -9.1783 }
             },
             {
                 time: "17:30",
                 title: "Pastéis de Belém",
                 description: "Passar pela famosa pastelaria para ver onde a receita original foi criada.",
                 type: "refeicao",
-                icon: "fas fa-cookie-bite"
+                icon: "fas fa-cookie-bite",
+                coords: { lat: 38.6975, lng: -9.2033 }
             },
             {
                 time: "19:30",
@@ -613,7 +651,8 @@ export const itineraryData = [
                 title: "Miradouros da Graça",
                 description: "Começar pelo ponto mais alto no Miradouro da Senhora do Monte e depois descer para o Miradouro da Graça.",
                 type: "passeio",
-                icon: "fas fa-binoculars"
+                icon: "fas fa-binoculars",
+                coords: { lat: 38.7193, lng: -9.1336 }
             },
             {
                 time: "13:00",
@@ -627,14 +666,16 @@ export const itineraryData = [
                 title: "Explorar Alfama",
                 description: "Descer pelas ruelas, parando nos Miradouros das Portas do Sol e de Santa Luzia.",
                 type: "passeio",
-                icon: "fas fa-walking"
+                icon: "fas fa-walking",
+                coords: { lat: 38.7124, lng: -9.1306 }
             },
             {
                 time: "16:30",
                 title: "Sé de Lisboa",
                 description: "Visitar a imponente Catedral de Lisboa (entrada gratuita) antes de voltar para a Baixa.",
                 type: "cultura",
-                icon: "fas fa-cross"
+                icon: "fas fa-cross",
+                coords: { lat: 38.7099, lng: -9.1328 }
             },
             {
                 time: "19:30",
@@ -650,7 +691,7 @@ export const itineraryData = [
         day: 12,
         date: "03/Fev (Ter)",
         title: "Feira da Ladra e Despedida de Lisboa",
-        city: "Lisboa ✈️ Brasil",
+        city: "Lisboa",
         countryFlag: "🇵🇹✈️🇧🇷",
         objective: "Uma manhã final para uma experiência cultural única antes de uma partida suave para o aeroporto.",
         events: [
@@ -666,7 +707,8 @@ export const itineraryData = [
                 title: "Visita à Feira da Ladra",
                 description: "Explorar o famoso mercado de pulgas de Lisboa no Campo de Santa Clara (abre às terças e sábados).",
                 type: "cultura",
-                icon: "fas fa-shopping-bag"
+                icon: "fas fa-shopping-bag",
+                coords: { lat: 38.7157, lng: -9.1258 }
             },
             {
                 time: "10:00",
@@ -680,7 +722,8 @@ export const itineraryData = [
                 title: "Voo de Retorno ao Brasil (GRU)",
                 description: "Embarque no voo de volta.",
                 type: "partida",
-                icon: "fas fa-plane-departure"
+                icon: "fas fa-plane-departure",
+                coords: { lat: 38.7742, lng: -9.1342 }
             }
         ]
     }

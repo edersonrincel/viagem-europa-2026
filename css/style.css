@@ -823,3 +823,41 @@ body {
     font-size: 0.875rem;
     color: #475569;
 }
+
+/* Contêineres de visualização dentro de cada card de dia */
+.day-timeline-view {
+    display: block; /* Começa visível */
+}
+
+.day-map-view {
+    display: none; /* Começa escondido */
+}
+
+/* Ícones personalizados para os marcadores do mapa */
+.custom-hotel-icon, .custom-event-icon {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    border-radius: 50%;
+    text-align: center;
+    font-size: 12px;
+    width: 28px;
+    height: 28px;
+    border: 2px solid white;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.4);
+}
+
+.custom-hotel-icon {
+    background-color: #1e293b; /* Cor escura para o hotel */
+    font-size: 14px;
+}
+
+.custom-event-icon {
+    background-color: #0ea5e9; /* Cor azul para os eventos */
+}
+
+/* Garante que o mapa dentro do contêiner oculto seja renderizado corretamente */
+.leaflet-container {
+    background: #f0f4f8; /* Cor de fundo enquanto o mapa carrega */
+}

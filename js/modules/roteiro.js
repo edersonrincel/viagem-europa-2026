@@ -7,7 +7,8 @@
 import { itineraryData, hotelCoords } from '../data/roteiro-data.js';
 
 // Armazena as instâncias dos mapas para evitar recriação
-const mapInstances = {};
+// ALTERADO: de 'const' para 'let' para permitir o reset
+let mapInstances = {};
 
 /**
  * Cria o HTML para um único evento dentro da linha do tempo de um dia.
@@ -102,7 +103,6 @@ function initializeDayMap(dayNumber, dayData) {
     if (startPoint) {
         points.push([startPoint.lat, startPoint.lng]);
         const hotelMarker = L.marker([startPoint.lat, startPoint.lng], {
-            // AJUSTE: Adicionado iconSize e iconAnchor para o marcador do hotel
             icon: L.divIcon({ 
                 className: 'custom-hotel-icon', 
                 html: '<i class="fas fa-bed"></i>',
@@ -120,7 +120,6 @@ function initializeDayMap(dayNumber, dayData) {
             eventCounter++;
             points.push([event.coords.lat, event.coords.lng]);
             const marker = L.marker([event.coords.lat, event.coords.lng], {
-                 // AJUSTE: Adicionado iconSize e iconAnchor para os marcadores de eventos
                 icon: L.divIcon({ 
                     className: 'custom-event-icon', 
                     html: `<span class="font-bold">${eventCounter}</span>`,
@@ -182,6 +181,16 @@ function switchDayView(dayNumber, viewToShow) {
  * Inicializa a página do roteiro, renderizando todos os cards e configurando os seletores de visualização.
  */
 export function initializeRoteiroPage() {
+    // *** CORREÇÃO ADICIONADA AQUI ***
+    // Reseta as instâncias de mapa sempre que a página do roteiro é inicializada.
+    // Isso garante que os mapas sejam recriados quando o usuário navega de volta para a página.
+    for (const key in mapInstances) {
+        if (mapInstances[key]) {
+            mapInstances[key].remove(); // Remove o mapa antigo da memória
+        }
+    }
+    mapInstances = {}; // Limpa o objeto de rastreamento
+
     itineraryData.forEach(dayData => {
         // Renderiza a linha do tempo (que fica pronta mas escondida até ser mostrada)
         renderDayTimeline(dayData);

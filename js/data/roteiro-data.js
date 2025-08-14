@@ -7,8 +7,8 @@
 
 // Coordenadas dos hotéis para servirem como ponto de partida nos mapas
 export const hotelCoords = {
-    londres: { lat: 51.5298, lng: -0.1251 }, // Central Hotel, Argyle St
-    lisboa: { lat: 38.7141, lng: -9.1395 }   // Hotel Inn Rossio
+    londres: { lat: 51.5291767, lng: -0.1264817 }, // Central Hotel, Argyle St
+    lisboa: { lat: 38.7137357, lng: -9.142892 }   // Hotel Inn Rossio
 };
 
 export const itineraryData = [
@@ -34,7 +34,8 @@ export const itineraryData = [
                 title: "Transporte para o Hotel via Metrô",
                 description: "Pegar a Piccadilly Line (direção Cockfosters) diretamente de Heathrow para a estação King's Cross St. Pancras. Usar cartão por aproximação.",
                 type: "transporte",
-                icon: "fas fa-subway"
+                icon: "fas fa-subway",
+                coords: { lat: 51.530294, lng: -0.123547 } // King's Cross St. Pancras
             },
             {
                 time: "21:00",
@@ -42,7 +43,7 @@ export const itineraryData = [
                 description: "Acomodação no hotel. A saída correta da estação é a sinalizada como 'Euston Road'. O hotel fica na Argyle Street.",
                 type: "hospedagem",
                 icon: "fas fa-bed",
-                coords: { lat: 51.5298, lng: -0.1251 }
+                coords: { lat: 51.5291767, lng: -0.1264817 }
             },
             {
                 time: "21:30",
@@ -81,7 +82,8 @@ export const itineraryData = [
                 title: "Transporte para Green Park",
                 description: "De King's Cross, pegar a Victoria Line (sentido sul) por 3 paradas até a estação Green Park.",
                 type: "transporte",
-                icon: "fas fa-subway"
+                icon: "fas fa-subway",
+                coords: { lat: 51.5069327, lng: -0.1428838 } // Green Park station
             },
             {
                 time: "10:00",
@@ -160,8 +162,7 @@ export const itineraryData = [
                 title: "Almoço em Covent Garden (?)",
                 description: "Local a definir em conjunto com a Gio, na região de Covent Garden.",
                 type: "refeicao",
-                icon: "fas fa-utensils",
-                coords: { lat: 51.5117, lng: -0.1242 }
+                icon: "fas fa-utensils"
             },
             {
                 time: "13:30",
@@ -209,7 +210,8 @@ export const itineraryData = [
                 title: "Viagem de Trem para Oxford",
                 description: "Metrô para a Estação de Paddington e trem da GWR para Oxford (aprox. 1h). É crucial reservar os bilhetes com antecedência!",
                 type: "transporte",
-                icon: "fas fa-train"
+                icon: "fas fa-train",
+                coords: { lat: 51.5162982, lng: -0.1791603 } // Paddington Station
             },
             {
                 time: "10:00",
@@ -239,7 +241,8 @@ export const itineraryData = [
                 title: "Retorno a Londres",
                 description: "Pegar o trem pré-reservado de volta para Londres Paddington.",
                 type: "transporte",
-                icon: "fas fa-train"
+                icon: "fas fa-train",
+                coords: { lat: 51.5162982, lng: -0.1791603 } // Paddington Station
             },
             {
                 time: "19:30",
@@ -279,7 +282,8 @@ export const itineraryData = [
                 title: "Passeio pela South Bank",
                 description: "Atravessar a Golden Jubilee Bridge e passear pela margem sul do Tâmisa.",
                 type: "passeio",
-                icon: "fas fa-walking"
+                icon: "fas fa-walking",
+                coords: { lat: 51.507486, lng: -0.115143 }
             },
             {
                 time: "13:00",
@@ -287,7 +291,7 @@ export const itineraryData = [
                 description: "Local a definir em conjunto com a Gio, na região do Borough Market.",
                 type: "refeicao",
                 icon: "fas fa-utensils",
-                coords: { lat: 51.5055, lng: -0.0912 }
+                coords: { lat: 51.5055826, lng: -0.0930557 }
             },
             {
                 time: "15:00",
@@ -454,7 +458,8 @@ export const itineraryData = [
                 title: "Viagem para Heathrow (LHR)",
                 description: "Pegar a Piccadilly Line em King's Cross para o aeroporto (aprox. 1h).",
                 type: "transporte",
-                icon: "fas fa-subway"
+                icon: "fas fa-subway",
+                coords: { lat: 51.4700, lng: -0.4543 } // Heathrow
             },
             {
                 time: "18:30",
@@ -477,7 +482,7 @@ export const itineraryData = [
                 description: "Check-in e breve caminhada pela Praça do Rossio e Praça da Figueira.",
                 type: "hospedagem",
                 icon: "fas fa-bed",
-                coords: { lat: 38.7141, lng: -9.1395 }
+                coords: { lat: 38.7137357, lng: -9.142892 } 
             },
             {
                 time: "23:00",
@@ -525,7 +530,8 @@ export const itineraryData = [
                 title: "Passeio pela Pink Street",
                 description: "Passagem rápida pela famosa Rua Nova do Carvalho para fotos.",
                 type: "passeio",
-                icon: "fas fa-camera"
+                icon: "fas fa-camera",
+                coords: { lat: 38.7071048, lng: -9.146839 }
             },
             {
                 time: "15:30",
@@ -573,7 +579,8 @@ export const itineraryData = [
                 title: "Viagem para Belém",
                 description: "Pegar o cênico Bonde 15E na Praça da Figueira.",
                 type: "transporte",
-                icon: "fas fa-tram"
+                icon: "fas fa-tram",
+                coords: { lat: 38.7134813, lng: -9.1430104 } // Praça da Figueira
             },
             {
                 time: "10:30",
@@ -644,7 +651,8 @@ export const itineraryData = [
                 title: "Passeio no Elétrico 28",
                 description: "Pegar o famoso bonde na Praça Martim Moniz para uma viagem cênica até a Graça.",
                 type: "transporte",
-                icon: "fas fa-tram"
+                icon: "fas fa-tram",
+                coords: { lat: 38.7160206, lng: -9.139342 } // Praça Martim Moniz
             },
             {
                 time: "11:00",
@@ -715,7 +723,8 @@ export const itineraryData = [
                 title: "Check-out e Transporte para o Aeroporto",
                 description: "Retornar ao hotel, fazer o check-out e pegar o Metrô (Linha Verde > Linha Vermelha) para o Aeroporto de Lisboa (LIS).",
                 type: "transporte",
-                icon: "fas fa-subway"
+                icon: "fas fa-subway",
+                coords: { lat: 38.7137357, lng: -9.142892 } 
             },
             {
                 time: "12:30",

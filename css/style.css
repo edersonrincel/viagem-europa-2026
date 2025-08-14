@@ -841,9 +841,9 @@ body {
     color: white;
     border-radius: 50%;
     text-align: center;
-    font-size: 12px;
-    width: 28px;
-    height: 28px;
+    font-size: 14px; /* Aumentado */
+    width: 32px;     /* Aumentado */
+    height: 32px;    /* Aumentado */
     border: 2px solid white;
     box-shadow: 0 1px 4px rgba(0,0,0,0.4);
 }

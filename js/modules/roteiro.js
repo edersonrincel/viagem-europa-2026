@@ -102,7 +102,13 @@ function initializeDayMap(dayNumber, dayData) {
     if (startPoint) {
         points.push([startPoint.lat, startPoint.lng]);
         const hotelMarker = L.marker([startPoint.lat, startPoint.lng], {
-            icon: L.divIcon({ className: 'custom-hotel-icon', html: '<i class="fas fa-bed"></i>' })
+            // AJUSTE: Adicionado iconSize e iconAnchor para o marcador do hotel
+            icon: L.divIcon({ 
+                className: 'custom-hotel-icon', 
+                html: '<i class="fas fa-bed"></i>',
+                iconSize: [32, 32],
+                iconAnchor: [16, 32]
+            })
         }).bindPopup("<b>Ponto de Partida:</b><br>Hotel");
         markers.addLayer(hotelMarker);
     }
@@ -114,7 +120,13 @@ function initializeDayMap(dayNumber, dayData) {
             eventCounter++;
             points.push([event.coords.lat, event.coords.lng]);
             const marker = L.marker([event.coords.lat, event.coords.lng], {
-                icon: L.divIcon({ className: 'custom-event-icon', html: `<span class="font-bold">${eventCounter}</span>` })
+                 // AJUSTE: Adicionado iconSize e iconAnchor para os marcadores de eventos
+                icon: L.divIcon({ 
+                    className: 'custom-event-icon', 
+                    html: `<span class="font-bold">${eventCounter}</span>`,
+                    iconSize: [32, 32],
+                    iconAnchor: [16, 32]
+                })
             }).bindPopup(`<b>${eventCounter}. ${event.title}</b><br>${event.time}`);
             markers.addLayer(marker);
         }

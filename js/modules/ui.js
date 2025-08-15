@@ -116,6 +116,11 @@ function startCountdown() {
     const timerDiv = document.getElementById("countdown-timer-new");
     if (!timerDiv) return;
 
+    // Evita criar múltiplos intervalos se a função for chamada novamente
+    if (timerDiv.dataset.intervalId) {
+        clearInterval(timerDiv.dataset.intervalId);
+    }
+
     const interval = setInterval(() => {
         const distance = countDownDate - new Date().getTime();
         
@@ -139,6 +144,7 @@ function startCountdown() {
         if(elements.minutes) minutes.innerText = String(Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60))).padStart(2, '0');
         if(elements.seconds) seconds.innerText = String(Math.floor((distance % (1000 * 60)) / 1000)).padStart(2, '0');
     }, 1000);
+    timerDiv.dataset.intervalId = interval;
 }
 
 function setupToastInteractions() {
@@ -268,12 +274,16 @@ function setupTravelerInfoInteraction() {
 function initializeGeralPage() {
     const preTravelView = document.getElementById('pre-travel-view');
     const travelModeView = document.getElementById('travel-mode-view');
-    if (!preTravelView || !travelModeView) return;
+    const viewToggleContainer = document.getElementById('view-toggle-container');
+    const viewToggleButton = document.getElementById('view-toggle-button');
+
+    if (!preTravelView || !travelModeView || !viewToggleContainer || !viewToggleButton) return;
 
     const tripStartDate = new Date(2026, 0, 23);
-    const tripEndDate = new Date(2026, 1, 4);
+    const tripEndDate = new Date(2026, 1, 3);
     
-    //const currentDate = new Date(2026, 1, 2); 
+    // Para testar o modo viagem, descomente a linha abaixo:
+    //const currentDate = new Date(2026, 0, 27); 
     const currentDate = new Date();
 
     currentDate.setHours(0, 0, 0, 0);
@@ -282,10 +292,16 @@ function initializeGeralPage() {
     
     const isDuringTrip = currentDate >= tripStartDate && currentDate < tripEndDate;
 
-    preTravelView.classList.toggle('hidden', isDuringTrip);
-    travelModeView.classList.toggle('hidden', !isDuringTrip);
+    // Função para configurar a visualização pré-viagem
+    const setupPreTravelView = () => {
+        startCountdown();
+        generateEpisodeList();
+        checkAndShowNewEpisodeToast();
+        setupTravelerInfoInteraction();
+    };
 
-    if (isDuringTrip) {
+    // Função para configurar a visualização do modo viagem
+    const setupTravelModeView = () => {
         const monthAbbr = ["Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Out", "Nov", "Dez"];
         const dateStringPattern = `${String(currentDate.getDate()).padStart(2, '0')}/${monthAbbr[currentDate.getMonth()]}`;
         const todayItinerary = itineraryData.find(day => day.date.startsWith(dateStringPattern));
@@ -295,11 +311,43 @@ function initializeGeralPage() {
         } else {
             travelModeView.innerHTML = `<div class="card p-6 text-center"><p>Não há roteiro planejado para hoje.</p></div>`;
         }
+    };
+
+    // Lógica principal
+    if (isDuringTrip) {
+        // Estado inicial durante a viagem
+        preTravelView.classList.add('hidden');
+        travelModeView.classList.remove('hidden');
+        viewToggleContainer.classList.remove('hidden');
+        viewToggleButton.innerHTML = `<i class="fas fa-history mr-2"></i>Ver pré-viagem`;
+        
+        setupTravelModeView(); // Configura o painel do dia
+
+        // Configura o listener do botão de toggle
+        // Usamos .onclick para garantir que o listener seja reatribuído corretamente
+        viewToggleButton.onclick = () => {
+            const isPreTravelVisible = !preTravelView.classList.contains('hidden');
+            
+            preTravelView.classList.toggle('hidden');
+            travelModeView.classList.toggle('hidden');
+
+            if (isPreTravelVisible) {
+                // Estava mostrando pré-viagem, agora vai mostrar modo viagem
+                viewToggleButton.innerHTML = `<i class="fas fa-history mr-2"></i>Ver pré-viagem`;
+            } else {
+                // Estava mostrando modo viagem, agora vai mostrar pré-viagem
+                // Garante que os componentes da pré-viagem sejam inicializados
+                setupPreTravelView();
+                viewToggleButton.innerHTML = `<i class="fas fa-map-signs mr-2"></i>Ver painel do dia`;
+            }
+        };
+
     } else {
-        startCountdown();
-        generateEpisodeList();
-        checkAndShowNewEpisodeToast();
-        setupTravelerInfoInteraction(); // <<< AJUSTE APLICADO AQUI
+        // Estado inicial antes da viagem
+        preTravelView.classList.remove('hidden');
+        travelModeView.classList.add('hidden');
+        viewToggleContainer.classList.add('hidden'); // Botão fica escondido
+        setupPreTravelView();
     }
 }
 

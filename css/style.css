@@ -863,3 +863,92 @@ body {
 .leaflet-container {
     background: #f0f4f8; /* Cor de fundo enquanto o mapa carrega */
 }
+
+/* --- Estilos para a Seção de Viajantes Interativa --- */
+.traveler-faces {
+    display: flex;
+    align-items: center;
+    padding-left: 1rem; /* Espaço para a sobreposição */
+}
+
+.traveler-face-container {
+    position: relative; /* Necessário para posicionar o nome */
+    display: inline-block;
+}
+
+.traveler-face {
+    width: 56px;  /* Tamanho da imagem */
+    height: 56px;
+    border-radius: 50%; /* Deixa a imagem redonda */
+    border: 3px solid white; /* Borda branca para destacar */
+    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+    cursor: pointer;
+    background-color: #e2e8f0; /* Cor de fundo caso a imagem demore a carregar */
+}
+
+.traveler-name {
+    position: absolute;
+    bottom: 105%; /* Posiciona o nome acima da imagem */
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #1e293b; /* Cor de fundo do tooltip */
+    color: white;
+    padding: 0.25rem 0.6rem;
+    border-radius: 0.375rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    white-space: nowrap;
+    opacity: 0; /* Começa invisível */
+    visibility: hidden;
+    transition: opacity 0.2s ease-in-out, visibility 0.2s ease-in-out;
+    pointer-events: none; /* Para não interferir no hover da imagem */
+}
+
+/* Efeito de hover/tap */
+.traveler-face-container:hover .traveler-face {
+    transform: scale(1.1) translateY(-2px); /* Aumenta e levanta um pouco a imagem */
+    box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+    z-index: 10;
+}
+
+.traveler-face-container:hover .traveler-name {
+    opacity: 1; /* Mostra o nome */
+    visibility: visible;
+}
+
+/* --- NOVOS Estilos para a Caixa de Informações do Viajante --- */
+#traveler-info-box {
+    position: absolute; /* Será posicionado via JS */
+    background-color: #1e293b;
+    color: white;
+    padding: 0.75rem 1rem;
+    border-radius: 0.5rem;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    width: 220px; /* Largura fixa para o balão */
+    font-size: 0.8rem;
+    line-height: 1.5;
+    z-index: 20;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    transform: translateY(10px); /* Começa um pouco abaixo */
+    opacity: 0;
+    pointer-events: none; /* Não interfere com cliques */
+}
+
+#traveler-info-box.show {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto; /* Permite interação se necessário */
+}
+
+/* Pequena seta para o balão (apontando para baixo) */
+#traveler-info-box::before {
+    content: '';
+    position: absolute;
+    top: -6px; /* Posiciona a seta acima da caixa */
+    left: 50%;
+    transform: translateX(-50%);
+    border-width: 6px;
+    border-style: solid;
+    border-color: transparent transparent #1e293b transparent;
+}

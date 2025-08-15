@@ -43,16 +43,38 @@
                         </div>
                         <div>
                             <h4 class="font-semibold text-lg text-orange-500">Período da Viagem</h4>
-                            <p class="text-slate-600">22/Jan a 04/Fev (14 dias)</p>
+                            <p class="text-slate-600">23/Jan a 03/Fev (12 dias)</p>
                         </div>
                     </div>
+                    <!-- Seção de Viajantes Atualizada com Descrições -->
                     <div class="flex items-start space-x-4">
                         <div class="flex-shrink-0 w-12 h-12 bg-emerald-500 text-white rounded-lg flex items-center justify-center shadow">
                             <i class="fas fa-users fa-lg"></i>
                         </div>
                         <div>
                             <h4 class="font-semibold text-lg text-emerald-700">Viajantes</h4>
-                            <p class="text-slate-600">Bruna, Diego, Eder & Gio</p>
+                            <div class="traveler-faces flex -space-x-4 mt-2">
+                                <div class="traveler-face-container" data-info="A Farmacêutica: Leva absolutamente tudo para imprevistos, de remédios a utilidades. Se precisar de algo, a Bruna tem!">
+                                    <img src="images/outras/rosto-bruna.png" alt="Rosto da Bruna" class="traveler-face">
+                                    <span class="traveler-name">Bruna</span>
+                                </div>
+                                <div class="traveler-face-container" data-info="O Contador: Cuida da contabilidade da viagem, monitorando os custos e garantindo que ninguém gaste demais. O guardião das finanças!">
+                                    <img src="images/outras/rosto-diego.png" alt="Rosto do Diego" class="traveler-face">
+                                    <span class="traveler-name">Diego</span>
+                                </div>
+                                <div class="traveler-face-container" data-info="O Navegador: A pessoa do mapa, que tem o roteiro em mãos e guia o grupo. Se estamos perdidos, a culpa é dele!">
+                                    <img src="images/outras/rosto-eder.png" alt="Rosto do Eder" class="traveler-face">
+                                    <span class="traveler-name">Eder</span>
+                                </div>
+                                <div class="traveler-face-container" data-info="A Atleta: Responsável pelos passeios esportivos da viagem, para onde dedica seu orçamento inteiro.">
+                                    <img src="images/outras/rosto-giovana.png" alt="Rosto da Giovana" class="traveler-face">
+                                    <span class="traveler-name">Gio</span>
+                                </div>
+                            </div>
+                            <!-- Caixa de Informações (será preenchida via JS) -->
+                            <div id="traveler-info-box" class="hidden">
+                                <p id="traveler-info-text"></p>
+                            </div>
                         </div>
                     </div>
                 </div>

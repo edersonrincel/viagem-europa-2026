@@ -212,6 +212,59 @@ function buildTravelModeDashboard(dayData) {
         </div>`;
 }
 
+// NOVA FUNÇÃO para a interação do balão de informações dos viajantes
+function setupTravelerInfoInteraction() {
+    const facesContainer = document.querySelector('.traveler-faces');
+    const infoBox = document.getElementById('traveler-info-box');
+    const infoText = document.getElementById('traveler-info-text');
+    let activeContainer = null;
+
+    if (!facesContainer || !infoBox || !infoText) return;
+
+    const travelerContainers = facesContainer.querySelectorAll('.traveler-face-container');
+
+    travelerContainers.forEach(container => {
+        container.addEventListener('click', (e) => {
+            e.stopPropagation(); // Impede que o clique no documento feche a caixa imediatamente
+
+            // Se a mesma pessoa for clicada, esconde a caixa
+            if (activeContainer === container) {
+                infoBox.classList.remove('show');
+                activeContainer = null;
+                return;
+            }
+            
+            activeContainer = container;
+
+            // Pega a informação e o posicionamento
+            const info = container.dataset.info;
+            const rect = container.getBoundingClientRect();
+            const scrollLeft = window.pageXOffset || document.documentElement.scrollLeft;
+            const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+
+            // Atualiza o texto e mostra a caixa
+            infoText.textContent = info;
+            infoBox.classList.remove('hidden'); // Garante que não está com display none
+            infoBox.classList.add('show');
+
+            // Posiciona a caixa abaixo da imagem clicada
+            // O cálculo considera o centro da imagem para alinhar a seta
+            const infoBoxWidth = infoBox.offsetWidth;
+            infoBox.style.left = `${rect.left + scrollLeft + (rect.width / 2) - (infoBoxWidth / 2)}px`;
+            infoBox.style.top = `${rect.bottom + scrollTop + 12}px`; // 12px de espaço
+        });
+    });
+
+    // Fecha a caixa se clicar em qualquer outro lugar do documento
+    document.addEventListener('click', () => {
+        if (activeContainer) {
+            infoBox.classList.remove('show');
+            activeContainer = null;
+        }
+    });
+}
+
+
 function initializeGeralPage() {
     const preTravelView = document.getElementById('pre-travel-view');
     const travelModeView = document.getElementById('travel-mode-view');
@@ -246,6 +299,7 @@ function initializeGeralPage() {
         startCountdown();
         generateEpisodeList();
         checkAndShowNewEpisodeToast();
+        setupTravelerInfoInteraction(); // <<< AJUSTE APLICADO AQUI
     }
 }
 
@@ -260,7 +314,7 @@ export function initializeUI() {
     // Configura os toasts de notificação
     setupToastInteractions();
 
-    // CORREÇÃO: Adiciona um único listener de eventos no container principal
+    // Adiciona um único listener de eventos no container principal
     // para gerenciar todos os cliques em componentes dinâmicos.
     mainContent.addEventListener('click', (event) => {
         const collapsibleTrigger = event.target.closest('.collapsible-trigger');

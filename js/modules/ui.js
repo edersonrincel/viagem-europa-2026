@@ -7,8 +7,9 @@
 
 import { generateEpisodeList, checkAndShowNewEpisodeToast, dismissToast } from './podcast.js';
 import * as charts from './charts.js';
-import { initializeSaboresPage } from './sabores.js';
-import { initializeRoteiroPage } from './roteiro.js'; // Importa a nova função
+import { initializeSaboresPage, navigateToRestaurant, showMapAndFindLocation } from './sabores.js';
+import { initializeRoteiroPage } from './roteiro.js';
+import { itineraryData } from '../data/roteiro-data.js';
 
 // --- SELETORES DE ELEMENTOS DOM ---
 const mainContent = document.getElementById('main-content');
@@ -16,11 +17,6 @@ const navItems = document.querySelectorAll('.nav-item');
 
 // --- LÓGICA DE DEEPLINK ---
 
-/**
- * Lida com deeplinks baseados no hash da URL.
- * Procura por um hash como #pagina?expand=id_do_elemento
- * @returns {boolean} - Retorna true se um deeplink foi processado.
- */
 function handleDeepLink() {
     const hash = window.location.hash.substring(1);
     if (!hash) return false;
@@ -33,32 +29,17 @@ function handleDeepLink() {
         const onPageLoad = () => {
             if (elementToExpandId) {
                 const trigger = document.querySelector(`[aria-controls='${elementToExpandId}']`);
-                const element = document.getElementById(elementToExpandId);
-
-                if (trigger && element) {
+                if (trigger) {
                     if (trigger.getAttribute('aria-expanded') === 'false') {
                         trigger.click();
                     }
-
-                    // --- NOVA LÓGICA DE SCROLL MANUAL ---
-                    // Aguarda um momento para a animação de expansão terminar
-                    // antes de calcular a posição e rolar a tela.
                     setTimeout(() => {
                         const topNav = document.querySelector('.top-nav');
                         const navHeight = topNav ? topNav.offsetHeight : 0;
-                        
-                        // Calcula a posição exata do topo do botão em relação ao documento
                         const elementPosition = trigger.getBoundingClientRect().top + window.scrollY;
-                        
-                        // Define a posição final da rolagem, subtraindo a altura do menu e adicionando uma pequena margem
-                        const offsetPosition = elementPosition - navHeight - 16; // 16px = 1rem de margem extra
-
-                        // Executa a rolagem manualmente
-                        window.scrollTo({
-                            top: offsetPosition,
-                            behavior: 'smooth'
-                        });
-                    }, 400); // Aumentamos o tempo para 400ms para garantir que a animação CSS conclua.
+                        const offsetPosition = elementPosition - navHeight - 16; 
+                        window.scrollTo({ top: offsetPosition, behavior: 'smooth' });
+                    }, 400); 
                 }
             }
         };
@@ -69,7 +50,6 @@ function handleDeepLink() {
     return true;
 }
 
-
 // --- FUNÇÕES DE NAVEGAÇÃO E CARREGAMENTO ---
 
 async function loadPage(pageName, onPageLoadCallback = null) {
@@ -77,25 +57,18 @@ async function loadPage(pageName, onPageLoadCallback = null) {
     
     try {
         const response = await fetch(`pages/${pageName}.html`);
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        const content = await response.text();
-        mainContent.innerHTML = content;
+        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+        
+        mainContent.innerHTML = await response.text();
         
         const newSection = mainContent.querySelector('.page-section');
         if (newSection) {
-             setTimeout(() => {
-                newSection.classList.add('active');
-            }, 10);
+             setTimeout(() => newSection.classList.add('active'), 10);
         }
 
         initializePageComponents(pageName);
         
-        // Executa o callback se ele foi fornecido (usado pelo deeplink)
-        if (onPageLoadCallback) {
-            onPageLoadCallback();
-        }
+        if (onPageLoadCallback) onPageLoadCallback();
 
     } catch (error) {
         console.error(`Erro ao carregar a página ${pageName}:`, error);
@@ -110,78 +83,32 @@ export function switchPage(pageId, callback = null) {
     
     loadPage(pageId, callback);
     
-    // Rola para o topo, exceto quando for um deeplink
-    if (!callback) {
-        window.scrollTo(0, 0);
-    }
+    if (!callback) window.scrollTo(0, 0);
 }
 
 // --- INICIALIZAÇÃO DE COMPONENTES DE PÁGINA ---
 
 function initializePageComponents(pageName) {
-    setupCollapsibleSections(); 
-
-    if (pageName === 'geral') {
-        startCountdown();
-        generateEpisodeList();
-        checkAndShowNewEpisodeToast();
-    }
-    
-    if (pageName === 'roteiro') { // Adiciona a inicialização da página de roteiro
-        initializeRoteiroPage();
-    }
+    // A funcionalidade de collapsible agora é gerenciada por um único listener em initializeUI()
+    if (pageName === 'geral') initializeGeralPage();
+    if (pageName === 'roteiro') initializeRoteiroPage();
+    if (pageName === 'sabores') initializeSaboresPage();
 
     if (pageName === 'custos') {
         const btnPorPessoa = document.getElementById('btnPorPessoa');
         const btnPeloGrupo = document.getElementById('btnPeloGrupo');
 
         if (btnPorPessoa && btnPeloGrupo) {
-            btnPorPessoa.addEventListener('click', () => {
-                btnPorPessoa.classList.add('active');
-                btnPeloGrupo.classList.remove('active');
-                charts.updateCustoTotalChartVisibility(true);
-                charts.updateCustoCategoriaChartVisibility(true);
-            });
-
-            btnPeloGrupo.addEventListener('click', () => {
-                btnPeloGrupo.classList.add('active');
-                btnPorPessoa.classList.remove('active');
-                charts.updateCustoTotalChartVisibility(false);
-                charts.updateCustoCategoriaChartVisibility(false);
-            });
+            const toggleHandler = (showPessoa) => {
+                btnPorPessoa.classList.toggle('active', showPessoa);
+                btnPeloGrupo.classList.toggle('active', !showPessoa);
+                charts.updateCustoTotalChartVisibility(showPessoa);
+                charts.updateCustoCategoriaChartVisibility(showPessoa);
+            };
+            btnPorPessoa.addEventListener('click', () => toggleHandler(true));
+            btnPeloGrupo.addEventListener('click', () => toggleHandler(false));
         }
     }
-
-    if (pageName === 'sabores') {
-        initializeSaboresPage();
-    }
-}
-
-function setupCollapsibleSections() {
-    const triggers = document.querySelectorAll('.collapsible-trigger');
-    triggers.forEach(trigger => {
-        const contentId = trigger.getAttribute('aria-controls');
-        const content = document.getElementById(contentId);
-        const icon = trigger.querySelector('.collapsible-icon');
-
-        trigger.addEventListener('click', () => {
-            const isExpanded = trigger.getAttribute('aria-expanded') === 'true';
-            trigger.setAttribute('aria-expanded', !isExpanded);
-            content.classList.toggle('hidden');
-            icon.classList.toggle('rotate-180');
-
-            // Lógica para carregar gráficos apenas quando a seção se torna visível
-            if (!isExpanded && (contentId === 'content-financeiro-graficos' || contentId === 'content-financeiro-parcelas')) {
-                setTimeout(() => {
-                    if (contentId === 'content-financeiro-graficos') {
-                        charts.createCostCharts();
-                    } else if (contentId === 'content-financeiro-parcelas') {
-                        charts.createPagamentoMensalChart();
-                    }
-                }, 50);
-            }
-        });
-    });
 }
 
 function startCountdown() {
@@ -190,25 +117,27 @@ function startCountdown() {
     if (!timerDiv) return;
 
     const interval = setInterval(() => {
-        const now = new Date().getTime();
-        const distance = countDownDate - now;
-
-        const daysEl = document.getElementById("days");
-        const hoursEl = document.getElementById("hours");
-        const minutesEl = document.getElementById("minutes");
-        const secondsEl = document.getElementById("seconds");
-
-        if(daysEl) daysEl.innerText = Math.floor(distance / (1000 * 60 * 60 * 24));
-        if(hoursEl) hoursEl.innerText = String(Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))).padStart(2, '0');
-        if(minutesEl) minutesEl.innerText = String(Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60))).padStart(2, '0');
-        if(secondsEl) secondsEl.innerText = String(Math.floor((distance % (1000 * 60)) / 1000)).padStart(2, '0');
+        const distance = countDownDate - new Date().getTime();
+        
+        const elements = {
+            days: document.getElementById("days"),
+            hours: document.getElementById("hours"),
+            minutes: document.getElementById("minutes"),
+            seconds: document.getElementById("seconds")
+        };
 
         if (distance < 0) {
             clearInterval(interval);
             timerDiv.innerHTML = "<p class='text-green-500 font-bold py-2 text-xl'>A VIAGEM COMEÇOU!</p>";
             const titleElement = document.getElementById("countdown-container-new")?.querySelector("h3");
             if (titleElement) titleElement.style.display = 'none';
+            return;
         }
+
+        if(elements.days) elements.days.innerText = Math.floor(distance / (1000 * 60 * 60 * 24));
+        if(elements.hours) elements.hours.innerText = String(Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))).padStart(2, '0');
+        if(elements.minutes) minutes.innerText = String(Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60))).padStart(2, '0');
+        if(elements.seconds) seconds.innerText = String(Math.floor((distance % (1000 * 60)) / 1000)).padStart(2, '0');
     }, 1000);
 }
 
@@ -216,38 +145,169 @@ function setupToastInteractions() {
     const closeToastBtn = document.getElementById('close-toast');
     const toastButton = document.getElementById('toast-button');
     
-    if (closeToastBtn) {
-        closeToastBtn.addEventListener('click', dismissToast);
-    }
+    if (closeToastBtn) closeToastBtn.addEventListener('click', dismissToast);
 
     if (toastButton) {
         toastButton.addEventListener('click', () => {
             switchPage('geral');
             setTimeout(() => {
-                const podcastCard = document.getElementById('podcast-card');
-                if (podcastCard) podcastCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                document.getElementById('podcast-card')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
             }, 200);
             dismissToast();
         });
     }
 }
 
+// --- LÓGICA DO "MODO VIAGEM" ---
 
-// --- FUNÇÃO DE INICIALIZAÇÃO EXPORTADA ---
+function buildTravelModeDashboard(dayData) {
+    const container = document.getElementById('travel-mode-view');
+    if (!container) return;
+
+    const now = new Date();
+    const currentTime = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
+    
+    const nextEvent = dayData.events.find(event => event.time > currentTime) || dayData.events[dayData.events.length - 1];
+
+    const eventsHtml = dayData.events.map(event => `
+        <li class="flex items-start py-2 border-b border-slate-200 last:border-b-0">
+            <span class="font-semibold text-sky-600 w-16">${event.time}</span>
+            <div class="flex-1">
+                <p class="font-medium text-slate-800">${event.title}</p>
+                <p class="text-xs text-slate-500">${event.description}</p>
+            </div>
+        </li>`).join('');
+
+    const cityKey = dayData.city.toLowerCase() === 'oxford' ? 'londres' : dayData.city.toLowerCase();
+
+    container.innerHTML = `
+        <div class="card p-4 md:p-6">
+            <h2 class="text-2xl font-bold text-sky-700 text-center mb-1">Painel do Dia</h2>
+            <p class="text-center text-slate-500 font-semibold mb-6">${dayData.date} - ${dayData.city} ${dayData.countryFlag}</p>
+            <div class="card bg-sky-50 border-sky-200 p-4 mb-6">
+                <h3 class="font-bold text-sky-800 mb-2"><i class="fas fa-stopwatch mr-2"></i>Próximo Evento:</h3>
+                <div class="flex items-start">
+                    <span class="font-bold text-orange-500 text-lg w-16">${nextEvent.time}</span>
+                    <div class="flex-1">
+                        <p class="font-semibold text-slate-800">${nextEvent.title}</p>
+                        <p class="text-sm text-slate-600">${nextEvent.description}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="card bg-slate-50 border-slate-200 p-4 mb-6">
+                <h3 class="font-bold text-slate-800 mb-3"><i class="fas fa-route mr-2"></i>Roteiro de Hoje:</h3>
+                <ul>${eventsHtml}</ul>
+            </div>
+            <div class="card bg-slate-50 border-slate-200 p-4">
+                <h3 class="font-bold text-slate-800 mb-3"><i class="fas fa-bolt mr-2"></i>Links Rápidos:</h3>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <button id="find-nearby-gf-btn" data-city="${cityKey}" class="action-button bg-emerald-500 hover:bg-emerald-600 flex-1 justify-center py-3 text-sm">
+                        <i class="fas fa-map-marker-alt mr-2"></i>Restaurantes Perto (GF)
+                    </button>
+                    <a href="#logistica?expand=content-mapas-transporte" class="action-button bg-violet-500 hover:bg-violet-600 flex-1 justify-center py-3 text-sm">
+                        <i class="fas fa-subway mr-2"></i>Mapas de Transporte
+                    </a>
+                </div>
+            </div>
+        </div>`;
+}
+
+function initializeGeralPage() {
+    const preTravelView = document.getElementById('pre-travel-view');
+    const travelModeView = document.getElementById('travel-mode-view');
+    if (!preTravelView || !travelModeView) return;
+
+    const tripStartDate = new Date(2026, 0, 23);
+    const tripEndDate = new Date(2026, 1, 4);
+    
+    //const currentDate = new Date(2026, 1, 2); 
+    const currentDate = new Date();
+
+    currentDate.setHours(0, 0, 0, 0);
+    tripStartDate.setHours(0, 0, 0, 0);
+    tripEndDate.setHours(0, 0, 0, 0);
+    
+    const isDuringTrip = currentDate >= tripStartDate && currentDate < tripEndDate;
+
+    preTravelView.classList.toggle('hidden', isDuringTrip);
+    travelModeView.classList.toggle('hidden', !isDuringTrip);
+
+    if (isDuringTrip) {
+        const monthAbbr = ["Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Out", "Nov", "Dez"];
+        const dateStringPattern = `${String(currentDate.getDate()).padStart(2, '0')}/${monthAbbr[currentDate.getMonth()]}`;
+        const todayItinerary = itineraryData.find(day => day.date.startsWith(dateStringPattern));
+
+        if (todayItinerary) {
+            buildTravelModeDashboard(todayItinerary);
+        } else {
+            travelModeView.innerHTML = `<div class="card p-6 text-center"><p>Não há roteiro planejado para hoje.</p></div>`;
+        }
+    } else {
+        startCountdown();
+        generateEpisodeList();
+        checkAndShowNewEpisodeToast();
+    }
+}
+
+// --- FUNÇÃO DE INICIALIZAÇÃO PRINCIPAL ---
 
 export function initializeUI() {
+    // Listener de navegação principal
     navItems.forEach(item => {
         item.addEventListener('click', () => switchPage(item.dataset.page));
     });
     
+    // Configura os toasts de notificação
     setupToastInteractions();
+
+    // CORREÇÃO: Adiciona um único listener de eventos no container principal
+    // para gerenciar todos os cliques em componentes dinâmicos.
+    mainContent.addEventListener('click', (event) => {
+        const collapsibleTrigger = event.target.closest('.collapsible-trigger');
+        const findNearbyBtn = event.target.closest('#find-nearby-gf-btn');
+
+        // Lógica para os Collapsibles
+        if (collapsibleTrigger) {
+            const contentId = collapsibleTrigger.getAttribute('aria-controls');
+            const content = document.getElementById(contentId);
+            const icon = collapsibleTrigger.querySelector('.collapsible-icon');
+            if (!content || !icon) return;
+
+            const isExpanded = collapsibleTrigger.getAttribute('aria-expanded') === 'true';
+            collapsibleTrigger.setAttribute('aria-expanded', !isExpanded);
+            content.classList.toggle('hidden');
+            icon.classList.toggle('rotate-180');
+
+            if (!isExpanded && (contentId === 'content-financeiro-graficos' || contentId === 'content-financeiro-parcelas')) {
+                setTimeout(() => {
+                    if (contentId === 'content-financeiro-graficos') charts.createCostCharts();
+                    if (contentId === 'content-financeiro-parcelas') charts.createPagamentoMensalChart();
+                }, 50);
+            }
+        }
+
+        // Lógica para o botão "Restaurantes Perto"
+        if (findNearbyBtn) {
+            const city = findNearbyBtn.dataset.city;
+            switchPage('sabores', () => {
+                showMapAndFindLocation(city);
+            });
+        }
+    });
+
+    // Listener global para botões dentro de popups do mapa (que estão fora do mainContent)
+    document.addEventListener('click', (event) => {
+        const detailButton = event.target.closest('.popup-button-details');
+        if (detailButton && detailButton.dataset.restaurantSlug) {
+            event.preventDefault();
+            navigateToRestaurant(detailButton.dataset.restaurantSlug);
+        }
+    });
     
-    // Tenta processar um deeplink. Se não houver um, carrega a página inicial.
-    const wasDeepLinked = handleDeepLink();
-    if (!wasDeepLinked) {
+    // Carregamento inicial
+    if (!handleDeepLink()) {
         switchPage('geral');
     }
 
-    // Adiciona um listener para o caso de o hash mudar enquanto o app está aberto
     window.addEventListener('hashchange', handleDeepLink);
 }

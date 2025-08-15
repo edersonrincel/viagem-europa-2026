@@ -34,7 +34,7 @@ function createEventElement(event) {
             <div class="timeline-marker-container">
                 <div class="timeline-marker-line"></div>
                 <div class="timeline-marker-dot ${bgColor}">
-                    <i class="${event.icon} text-white text-xs"></i>
+                    <i class="${event.icon} text-white text-sm"></i>
                 </div>
             </div>
             <div class="timeline-content-new">

@@ -139,26 +139,27 @@ body {
     font-size: 0.75rem;
     font-weight: 600;
     color: #475569; /* slate-600 */
+    padding-top: 0.5rem; /* Adicionado para alinhar verticalmente */
 }
 .timeline-marker-container {
     position: relative;
-    width: 20px;
+    width: 32px; /* Aumentado */
     display: flex;
     justify-content: center;
     flex-shrink: 0;
 }
 .timeline-marker-line {
     position: absolute;
-    top: 10px;
-    bottom: -10px;
+    top: 16px;    /* Ajustado para o novo tamanho */
+    bottom: -16px;/* Ajustado para o novo tamanho */
     left: 50%;
     transform: translateX(-50%);
     width: 2px;
     background-color: #e2e8f0; /* slate-200 */
 }
 .timeline-marker-dot {
-    width: 20px;
-    height: 20px;
+    width: 32px;  /* Aumentado de 20px */
+    height: 32px; /* Aumentado de 20px */
     border-radius: 50%;
     border: 3px solid white;
     box-shadow: 0 0 0 2px #e2e8f0; /* slate-200 */
@@ -170,6 +171,7 @@ body {
 .timeline-content-new {
     padding-left: 1rem;
     flex-grow: 1;
+    padding-top: 0.4rem; /* Adicionado para alinhar verticalmente */
 }
 
 

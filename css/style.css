@@ -535,11 +535,7 @@ body {
     padding-bottom: 1rem; 
 }
 
-/* --- UPDATED: Podcast Card Styles --- */
-#podcast-card {
-    border-left: 4px solid #F97316; /* Orange accent border */
-}
-
+/* --- Podcast Card Styles --- */
 #episode-list {
     max-height: 250px;
     overflow-y: auto;

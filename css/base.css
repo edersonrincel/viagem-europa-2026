@@ -1,0 +1,44 @@
+/* --- Estilos Globais e Fundamentais --- */
+
+/* Estilos gerais do corpo e da fonte */
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: #f0f4f8; /* Azul acinzentado claro */
+    color: #1e293b; /* Azul ardósia escuro */
+    overscroll-behavior-y: none;
+}
+
+/* Animação de fade-in para seções de página */
+.page-section {
+    display: none; 
+}
+.page-section.active {
+    display: block;
+    animation: fadeIn 0.5s ease-out; 
+}
+@keyframes fadeIn { 
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Estilos da barra de rolagem customizada */
+::-webkit-scrollbar {
+    width: 6px; 
+    height: 6px;
+}
+::-webkit-scrollbar-track {
+    background: #f0f4f8; 
+    border-radius: 10px;
+}
+::-webkit-scrollbar-thumb {
+    background: #94a3b8;
+    border-radius: 10px;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: #64748b;
+}
+
+/* Classe para garantir que o scroll para âncoras não fique sob o menu */
+.scroll-target {
+    scroll-margin-top: 5rem; /* Aprox. 80px */
+}

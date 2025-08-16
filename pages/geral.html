@@ -3,100 +3,110 @@
     
     <!-- Container for Pre-Travel View (Countdown, etc.) -->
     <div id="pre-travel-view">
-        <div class="card p-6">
-            <div id="countdown-container-new" class="mb-8">
-                <h3 class="text-xl font-semibold text-sky-700 mb-3 text-center">Contagem Regressiva!</h3>
-                <div id="countdown-timer-new" class="bg-gradient-to-br from-sky-100 to-sky-200 text-sky-800 p-1 rounded-xl shadow-lg flex flex-wrap justify-around items-center text-center font-semibold md:max-w-lg lg:max-w-xl mx-auto">
-                    <div>
-                        <span class="time-value-new font-bold text-sky-700 block" id="days">0</span>
-                        <span class="label-new text-sky-600 uppercase tracking-wider">Dias</span>
-                    </div>
-                    <div>
-                        <span class="time-value-new font-bold text-sky-700 block" id="hours">0</span>
-                        <span class="label-new text-sky-600 uppercase tracking-wider">Horas</span>
-                    </div>
-                    <div>
-                        <span class="time-value-new font-bold text-sky-700 block" id="minutes">0</span>
-                        <span class="label-new text-sky-600 uppercase tracking-wider">Min</span>
-                    </div>
-                    <div>
-                        <span class="time-value-new font-bold text-sky-700 block" id="seconds">0</span>
-                        <span class="label-new text-sky-600 uppercase tracking-wider">Seg</span>
-                    </div>
-                </div>
-            </div>
 
-            <div class="md:flex md:space-x-6 items-start">
-                <div class="bg-white p-4 rounded-xl shadow-lg mb-8 md:mb-0 space-y-6 border border-sky-100 md:w-1/2">
-                    <div class="flex items-start space-x-4">
-                        <div class="flex-shrink-0 w-12 h-12 bg-sky-500 text-white rounded-lg flex items-center justify-center shadow">
-                            <i class="fas fa-globe-europe fa-lg"></i>
+        <!-- Hero Section -->
+        <div id="hero-section" class="relative rounded-xl overflow-hidden mb-6 shadow-lg text-center">
+            <div class="absolute inset-0 bg-black bg-opacity-40"></div> <!-- Overlay -->
+            <div class="relative z-10 p-4 sm:p-6 md:p-8 flex flex-col justify-center items-center h-full">
+                <h2 class="text-2xl sm:text-3xl font-bold text-white text-shadow mb-2">Europa 2026</h2>
+                <p class="text-sm sm:text-base text-slate-200 text-shadow mb-4 max-w-md">A nossa aventura por Londres e Lisboa está cada vez mais perto!</p>
+                <div id="countdown-container-new" class="w-full max-w-lg">
+                    <!-- O título foi removido daqui e colocado acima -->
+                    <div id="countdown-timer-new" class="flex flex-wrap justify-around items-center text-center font-semibold">
+                        <div>
+                            <span class="time-value-new font-bold block" id="days">0</span>
+                            <span class="label-new uppercase tracking-wider">Dias</span>
                         </div>
                         <div>
-                            <h4 class="font-semibold text-lg text-sky-700">Destinos Principais</h4>
-                            <p class="text-slate-600">🇬🇧 Londres & 🇵🇹 Lisboa</p>
-                        </div>
-                    </div>
-                    <div class="flex items-start space-x-4">
-                        <div class="flex-shrink-0 w-12 h-12 bg-orange-500 text-white rounded-lg flex items-center justify-center shadow">
-                            <i class="fas fa-calendar-alt fa-lg"></i>
+                            <span class="time-value-new font-bold block" id="hours">0</span>
+                            <span class="label-new uppercase tracking-wider">Horas</span>
                         </div>
                         <div>
-                            <h4 class="font-semibold text-lg text-orange-500">Período da Viagem</h4>
-                            <p class="text-slate-600">23/Jan a 03/Fev (12 dias)</p>
-                        </div>
-                    </div>
-                    <!-- Seção de Viajantes Atualizada com Descrições -->
-                    <div class="flex items-start space-x-4">
-                        <div class="flex-shrink-0 w-12 h-12 bg-emerald-500 text-white rounded-lg flex items-center justify-center shadow">
-                            <i class="fas fa-users fa-lg"></i>
+                            <span class="time-value-new font-bold block" id="minutes">0</span>
+                            <span class="label-new uppercase tracking-wider">Min</span>
                         </div>
                         <div>
-                            <h4 class="font-semibold text-lg text-emerald-700">Viajantes</h4>
-                            <div class="traveler-faces flex -space-x-4 mt-2">
-                                <div class="traveler-face-container" data-info="A Farmacêutica: Leva absolutamente tudo para imprevistos, de remédios a utilidades. Se precisar de algo, a Bruna tem!">
-                                    <img src="images/outras/rosto-bruna.png" alt="Rosto da Bruna" class="traveler-face">
-                                    <span class="traveler-name">Bruna</span>
-                                </div>
-                                <div class="traveler-face-container" data-info="O Contador: Cuida da contabilidade da viagem, monitorando os custos e garantindo que ninguém gaste demais. O guardião das finanças!">
-                                    <img src="images/outras/rosto-diego.png" alt="Rosto do Diego" class="traveler-face">
-                                    <span class="traveler-name">Diego</span>
-                                </div>
-                                <div class="traveler-face-container" data-info="O Navegador: A pessoa do mapa, que tem o roteiro em mãos e guia o grupo. Se estamos perdidos, a culpa é dele!">
-                                    <img src="images/outras/rosto-eder.png" alt="Rosto do Eder" class="traveler-face">
-                                    <span class="traveler-name">Eder</span>
-                                </div>
-                                <div class="traveler-face-container" data-info="A Atleta: Responsável pelos passeios esportivos da viagem, aos quais dedica seu orçamento inteiro. O estádio mais top da cidade? Ela sabe qual é!">
-                                    <img src="images/outras/rosto-giovana.png" alt="Rosto da Giovana" class="traveler-face">
-                                    <span class="traveler-name">Gio</span>
-                                </div>
-                            </div>
-                            <!-- Caixa de Informações (será preenchida via JS) -->
-                            <div id="traveler-info-box" class="hidden">
-                                <p id="traveler-info-text"></p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div id="podcast-card" class="p-4 bg-white rounded-xl shadow-lg border border-sky-100 md:w-1/2">
-                    <h3 class="text-xl font-bold text-center text-sky-600 mb-2">
-                        <i class="fas fa-headphones-alt mr-2 text-orange-500"></i>Ouça nosso Podcast!
-                    </h3>
-                    <p class="text-sm text-center text-slate-500 mb-6">
-                        Um bate-papo sobre os preparativos e expectativas.
-                    </p>
-                    <div class="audio-player-container">
-                    <iframe id="podcast-player-iframe" width="100%" height="166" scrolling="no" frameborder="no" allow="autoplay" src=""></iframe>
-                    </div>
-                    <div id="episode-list-container">
-                        <div id="episode-list">
-                            <!-- Episodes will be inserted here by JavaScript -->
+                            <span class="time-value-new font-bold block" id="seconds">0</span>
+                            <span class="label-new uppercase tracking-wider">Seg</span>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+
+        <!-- Grid for Info Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+            <!-- Info Card: Destinos -->
+            <div class="info-card">
+                <div class="info-card-icon bg-sky-500">
+                    <i class="fas fa-globe-europe fa-lg"></i>
+                </div>
+                <div>
+                    <h4 class="font-semibold text-slate-700">Destinos Principais</h4>
+                    <p class="text-sm text-slate-600">🇬🇧 Londres & 🇵🇹 Lisboa</p>
+                </div>
+            </div>
+            <!-- Info Card: Período -->
+            <div class="info-card">
+                <div class="info-card-icon bg-orange-500">
+                    <i class="fas fa-calendar-alt fa-lg"></i>
+                </div>
+                <div>
+                    <h4 class="font-semibold text-slate-700">Período da Viagem</h4>
+                    <p class="text-sm text-slate-600">23/Jan a 03/Fev (12 dias)</p>
+                </div>
+            </div>
+            <!-- Info Card: Viajantes -->
+            <div class="info-card">
+                <div class="info-card-icon bg-emerald-500">
+                    <i class="fas fa-users fa-lg"></i>
+                </div>
+                <div>
+                    <h4 class="font-semibold text-slate-700 mb-2">Viajantes</h4>
+                    <div class="traveler-faces flex -space-x-3">
+                        <div class="traveler-face-container" data-info="A Farmacêutica: Leva absolutamente tudo para imprevistos, de remédios a utilidades. Se precisar de algo, a Bruna tem!">
+                            <img src="images/outras/rosto-bruna.png" alt="Rosto da Bruna" class="traveler-face">
+                            <span class="traveler-name">Bruna</span>
+                        </div>
+                        <div class="traveler-face-container" data-info="O Contador: Cuida da contabilidade da viagem, monitorando os custos e garantindo que ninguém gaste demais. O guardião das finanças!">
+                            <img src="images/outras/rosto-diego.png" alt="Rosto do Diego" class="traveler-face">
+                            <span class="traveler-name">Diego</span>
+                        </div>
+                        <div class="traveler-face-container" data-info="O Navegador: A pessoa do mapa, que tem o roteiro em mãos e guia o grupo. Se estamos perdidos, a culpa é dele!">
+                            <img src="images/outras/rosto-eder.png" alt="Rosto do Eder" class="traveler-face">
+                            <span class="traveler-name">Eder</span>
+                        </div>
+                        <div class="traveler-face-container" data-info="A Atleta: Responsável pelos passeios esportivos da viagem, aos quais dedica seu orçamento inteiro. O estádio mais top da cidade? Ela sabe qual é!">
+                            <img src="images/outras/rosto-giovana.png" alt="Rosto da Giovana" class="traveler-face">
+                            <span class="traveler-name">Gio</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Caixa de Informações dos Viajantes (será preenchida via JS) -->
+        <div id="traveler-info-box" class="hidden">
+            <p id="traveler-info-text"></p>
+        </div>
+
+        <!-- Podcast Card -->
+        <div id="podcast-card" class="card p-4 sm:p-6">
+            <h3 class="text-xl font-bold text-center text-sky-600 mb-2">
+                <i class="fas fa-headphones-alt mr-2 text-orange-500"></i>Ouça nosso Podcast!
+            </h3>
+            <p class="text-sm text-center text-slate-500 mb-6">
+                Um bate-papo sobre os preparativos e expectativas.
+            </p>
+            <div class="audio-player-container">
+            <iframe id="podcast-player-iframe" width="100%" height="166" scrolling="no" frameborder="no" allow="autoplay" src=""></iframe>
+            </div>
+            <div id="episode-list-container">
+                <div id="episode-list">
+                    <!-- Episodes will be inserted here by JavaScript -->
+                </div>
+            </div>
+        </div>
+
     </div>
 
     <!-- Container for Travel Mode View (Painel do Dia) -->

@@ -57,6 +57,34 @@
     text-shadow: 0 1px 2px rgba(0,0,0,0.5);
 }
 
+/* Card de Previsão do Tempo (Modo Viagem) - REVISADO */
+.weather-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid #e2e8f0; /* slate-200 */
+}
+.weather-forecast-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+    margin-top: 1rem;
+}
+.weather-loading, .weather-error {
+    text-align: center;
+    padding: 1.5rem;
+    font-size: 0.875rem;
+    color: #475569; /* slate-600 */
+}
+.weather-error {
+    background-color: #fef2f2; /* red-50 */
+    color: #b91c1c; /* red-700 */
+    border: 1px solid #fecaca; /* red-200 */
+    border-radius: 0.5rem;
+}
+
+
 /* --- Página Roteiro --- */
 
 /* Resumo do Dia */

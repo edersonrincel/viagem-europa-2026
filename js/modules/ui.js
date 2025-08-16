@@ -10,6 +10,7 @@ import * as charts from './charts.js';
 import { initializeSaboresPage, navigateToRestaurant, showMapAndFindLocation } from './sabores.js';
 import { initializeRoteiroPage } from './roteiro.js';
 import { itineraryData } from '../data/roteiro-data.js';
+import { getWeather } from './weather.js'; // Importa a nova função de clima
 
 // --- SELETORES DE ELEMENTOS DOM ---
 const mainContent = document.getElementById('main-content');
@@ -197,7 +198,7 @@ function setupToastInteractions() {
 
 // --- LÓGICA DO "MODO VIAGEM" ---
 
-function buildTravelModeDashboard(dayData) {
+function buildTravelModeDashboard(dayData, weatherHtml = '') {
     const container = document.getElementById('travel-mode-view');
     if (!container) return;
 
@@ -218,6 +219,7 @@ function buildTravelModeDashboard(dayData) {
     const cityKey = dayData.city.toLowerCase() === 'oxford' ? 'londres' : dayData.city.toLowerCase();
 
     container.innerHTML = `
+        ${weatherHtml}
         <div class="card p-4 md:p-6">
             <h2 class="text-2xl font-bold text-sky-700 text-center mb-1">Painel do Dia</h2>
             <p class="text-center text-slate-500 font-semibold mb-6">${dayData.date} - ${dayData.city} ${dayData.countryFlag}</p>
@@ -280,11 +282,14 @@ function initializeGeralPage() {
         const dateStringPattern = `${String(currentDate.getDate()).padStart(2, '0')}/${monthAbbr[currentDate.getMonth()]}`;
         const todayItinerary = itineraryData.find(day => day.date.startsWith(dateStringPattern));
 
-        if (todayItinerary) {
-            buildTravelModeDashboard(todayItinerary);
-        } else {
-            travelModeView.innerHTML = `<div class="card p-6 text-center"><p>Não há roteiro planejado para hoje.</p></div>`;
-        }
+        // Chama a função de clima e, no callback, constrói o painel
+        getWeather((weatherHtml) => {
+            if (todayItinerary) {
+                buildTravelModeDashboard(todayItinerary, weatherHtml);
+            } else {
+                travelModeView.innerHTML = `${weatherHtml}<div class="card p-6 text-center"><p>Não há roteiro planejado para hoje.</p></div>`;
+            }
+        });
     };
 
     if (isDuringTrip) {

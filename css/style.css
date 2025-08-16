@@ -56,7 +56,7 @@ body {
 #hero-section {
     background-image: url('../images/icons/icon-grupo-512x512.png');
     background-size: cover;
-    background-position: center 30%; /* Foca mais nos rostos */
+    background-position: center bottom; /* AJUSTADO: Foca na parte inferior da imagem */
     min-height: 280px;
     display: flex;
     align-items: center;

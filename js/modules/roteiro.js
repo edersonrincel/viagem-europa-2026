@@ -94,14 +94,21 @@ function initializeDayMap(dayNumber, dayData) {
         attribution: '© CartoDB'
     }).addTo(map);
 
-    const points = [];
+    const routePoints = []; // Pontos para a linha do percurso
     const markers = L.featureGroup();
+    const markerDataByCoords = {}; // Objeto para agrupar marcadores com as mesmas coordenadas
 
-    // 1. Adiciona o ponto de partida (hotel)
-    const cityKey = dayData.city === 'Oxford' ? 'londres' : dayData.city.toLowerCase();
-    const startPoint = hotelCoords[cityKey];
+    // 1. Adiciona o hotel como marcador e, se aplicável, como ponto de partida da rota.
+    let startPoint;
+    const cityKey = dayData.city.toLowerCase();
+    
+    if (dayData.day === 8) { // Dia da viagem Londres -> Lisboa
+        startPoint = hotelCoords['londres'];
+    } else {
+        startPoint = hotelCoords[cityKey === 'oxford' ? 'londres' : cityKey];
+    }
+
     if (startPoint) {
-        points.push([startPoint.lat, startPoint.lng]);
         const hotelMarker = L.marker([startPoint.lat, startPoint.lng], {
             icon: L.divIcon({ 
                 className: 'custom-hotel-icon', 
@@ -109,40 +116,74 @@ function initializeDayMap(dayNumber, dayData) {
                 iconSize: [32, 32],
                 iconAnchor: [16, 32]
             })
-        }).bindPopup("<b>Ponto de Partida:</b><br>Hotel");
+        }).bindPopup("<b>Hotel</b>");
         markers.addLayer(hotelMarker);
+
+        // Adiciona o hotel como ponto de partida da linha, EXCETO no dia 1 (23/Jan).
+        if (dayData.day !== 1) {
+            routePoints.push([startPoint.lat, startPoint.lng]);
+        }
     }
 
-    // 2. Adiciona os marcadores para cada evento com coordenadas
+    // 2. Adiciona os marcadores para cada evento com coordenadas, agrupando os que estão no mesmo local.
     let eventCounter = 0;
     dayData.events.forEach((event) => {
         if (event.coords) {
             eventCounter++;
-            points.push([event.coords.lat, event.coords.lng]);
-            const marker = L.marker([event.coords.lat, event.coords.lng], {
-                icon: L.divIcon({ 
-                    className: 'custom-event-icon', 
-                    html: `<span class="font-bold">${eventCounter}</span>`,
+            routePoints.push([event.coords.lat, event.coords.lng]); // Adiciona ao percurso na ordem cronológica
+
+            const coordString = `${event.coords.lat},${event.coords.lng}`;
+
+            if (markerDataByCoords[coordString]) {
+                // Se já existe um marcador para esta coordenada, atualiza-o
+                const data = markerDataByCoords[coordString];
+                data.labels.push(eventCounter);
+                data.popupContent += `<hr class="my-1 border-slate-200"><b>${eventCounter}. ${event.title}</b><br>${event.time}`;
+                
+                const existingMarker = data.marker;
+                existingMarker.setIcon(L.divIcon({
+                    className: 'custom-event-icon',
+                    html: `<span class="font-bold text-xs">${data.labels.join('/')}</span>`, // Exibe "1/4"
                     iconSize: [32, 32],
                     iconAnchor: [16, 32]
-                })
-            }).bindPopup(`<b>${eventCounter}. ${event.title}</b><br>${event.time}`);
-            markers.addLayer(marker);
+                }));
+                existingMarker.setPopupContent(data.popupContent);
+
+            } else {
+                // Se não existe, cria um novo marcador
+                const initialPopupContent = `<b>${eventCounter}. ${event.title}</b><br>${event.time}`;
+                const marker = L.marker([event.coords.lat, event.coords.lng], {
+                    icon: L.divIcon({ 
+                        className: 'custom-event-icon', 
+                        html: `<span class="font-bold">${eventCounter}</span>`,
+                        iconSize: [32, 32],
+                        iconAnchor: [16, 32]
+                    })
+                }).bindPopup(initialPopupContent);
+                
+                markers.addLayer(marker);
+
+                // Armazena os dados do novo marcador
+                markerDataByCoords[coordString] = {
+                    marker: marker,
+                    labels: [eventCounter],
+                    popupContent: initialPopupContent
+                };
+            }
         }
     });
 
     // 3. Adiciona os marcadores e a linha do percurso ao mapa
     map.addLayer(markers);
-    if (points.length > 1) {
-        const polyline = L.polyline(points, { color: '#F97316', weight: 3 }).addTo(map);
-        map.fitBounds(polyline.getBounds(), { padding: [40, 40] });
-    } else if (points.length === 1) {
-        map.setView(points[0], 15);
-    } else {
-        // Se não houver pontos, centraliza no hotel
-        if(startPoint) map.setView([startPoint.lat, startPoint.lng], 15);
+    if (routePoints.length > 1) {
+        // A linha do percurso conecta os pontos na ordem correta.
+        const polyline = L.polyline(routePoints, { color: '#F97316', weight: 3 }).addTo(map);
+        map.fitBounds(markers.getBounds(), { padding: [40, 40] }); // Ajusta o zoom para todos os marcadores (incluindo hotel)
+    } else if (markers.getLayers().length > 0) {
+        map.fitBounds(markers.getBounds(), { padding: [40, 40], maxZoom: 15 });
     }
 }
+
 
 /**
  * Alterna a visualização entre linha do tempo e mapa para um dia específico.

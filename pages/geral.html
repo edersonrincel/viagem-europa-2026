@@ -6,12 +6,11 @@
 
         <!-- Hero Section -->
         <div id="hero-section" class="relative rounded-xl overflow-hidden mb-6 shadow-lg text-center">
-            <div class="absolute inset-0 bg-black bg-opacity-50"></div> <!-- Overlay -->
+            <!-- The gradient overlay is now applied via CSS for a smoother effect -->
             <div class="relative z-10 p-4 sm:p-6 md:p-8 flex flex-col justify-center items-center h-full">
                 <h2 class="text-2xl sm:text-3xl font-bold text-white text-shadow mb-2">Europa 2026</h2>
                 <p class="text-sm sm:text-base text-slate-200 text-shadow mb-4 max-w-md">A nossa aventura por Londres e Lisboa está cada vez mais perto!</p>
                 <div id="countdown-container-new" class="w-full max-w-lg">
-                    <!-- O título foi removido daqui e colocado acima -->
                     <div id="countdown-timer-new" class="flex flex-wrap justify-around items-center text-center font-semibold">
                         <div>
                             <span class="time-value-new font-bold block" id="days">0</span>
@@ -35,7 +34,7 @@
         </div>
 
         <!-- Grid for Info Cards -->
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
             <!-- Info Card: Destinos -->
             <div class="info-card">
                 <div class="info-card-icon bg-sky-500">
@@ -56,37 +55,47 @@
                     <p class="text-sm text-slate-600">23/Jan a 03/Fev (12 dias)</p>
                 </div>
             </div>
-            <!-- Info Card: Viajantes -->
-            <div class="info-card">
-                <div class="info-card-icon bg-emerald-500">
-                    <i class="fas fa-users fa-lg"></i>
+        </div>
+
+        <!-- Travelers Card (New Full-Width Card) -->
+        <div class="card p-4 sm:p-6 mb-6">
+            <h3 class="text-xl font-bold text-center text-sky-600 mb-6">
+                <i class="fas fa-users mr-2 text-emerald-500"></i>Os Viajantes
+            </h3>
+            <div class="traveler-list space-y-6">
+                <!-- Bruna -->
+                <div class="traveler-list-item">
+                    <img src="images/outras/rosto-bruna.png" alt="Rosto da Bruna" class="traveler-face-new">
+                    <div class="traveler-info-new">
+                        <h5 class="font-bold text-slate-800">Bruna - A Farmacêutica</h5>
+                        <p class="text-sm text-slate-600">Leva absolutamente tudo para imprevistos, de remédios a utilidades. Se precisar de algo, a Bruna tem!</p>
+                    </div>
                 </div>
-                <div>
-                    <h4 class="font-semibold text-slate-700 mb-2">Viajantes</h4>
-                    <div class="traveler-faces flex -space-x-3">
-                        <div class="traveler-face-container" data-info="A Farmacêutica: Leva absolutamente tudo para imprevistos, de remédios a utilidades. Se precisar de algo, a Bruna tem!">
-                            <img src="images/outras/rosto-bruna.png" alt="Rosto da Bruna" class="traveler-face">
-                            <span class="traveler-name">Bruna</span>
-                        </div>
-                        <div class="traveler-face-container" data-info="O Contador: Cuida da contabilidade da viagem, monitorando os custos e garantindo que ninguém gaste demais. O guardião das finanças!">
-                            <img src="images/outras/rosto-diego.png" alt="Rosto do Diego" class="traveler-face">
-                            <span class="traveler-name">Diego</span>
-                        </div>
-                        <div class="traveler-face-container" data-info="O Navegador: A pessoa do mapa, que tem o roteiro em mãos e guia o grupo. Se estamos perdidos, a culpa é dele!">
-                            <img src="images/outras/rosto-eder.png" alt="Rosto do Eder" class="traveler-face">
-                            <span class="traveler-name">Eder</span>
-                        </div>
-                        <div class="traveler-face-container" data-info="A Atleta: Responsável pelos passeios esportivos da viagem, aos quais dedica seu orçamento inteiro. O estádio mais top da cidade? Ela sabe qual é!">
-                            <img src="images/outras/rosto-giovana.png" alt="Rosto da Giovana" class="traveler-face">
-                            <span class="traveler-name">Gio</span>
-                        </div>
+                <!-- Diego -->
+                <div class="traveler-list-item">
+                    <img src="images/outras/rosto-diego.png" alt="Rosto do Diego" class="traveler-face-new">
+                    <div class="traveler-info-new">
+                        <h5 class="font-bold text-slate-800">Diego - O Contador</h5>
+                        <p class="text-sm text-slate-600">Cuida da contabilidade da viagem, monitorando os custos e garantindo que ninguém gaste demais. O guardião das finanças!</p>
+                    </div>
+                </div>
+                <!-- Eder -->
+                <div class="traveler-list-item">
+                    <img src="images/outras/rosto-eder.png" alt="Rosto do Eder" class="traveler-face-new">
+                    <div class="traveler-info-new">
+                        <h5 class="font-bold text-slate-800">Eder - O Navegador</h5>
+                        <p class="text-sm text-slate-600">A pessoa do mapa, que tem o roteiro em mãos e guia o grupo. Se estamos perdidos, a culpa é dele!</p>
+                    </div>
+                </div>
+                <!-- Giovana -->
+                <div class="traveler-list-item">
+                    <img src="images/outras/rosto-giovana.png" alt="Rosto da Giovana" class="traveler-face-new">
+                    <div class="traveler-info-new">
+                        <h5 class="font-bold text-slate-800">Giovana - A Atleta</h5>
+                        <p class="text-sm text-slate-600">Responsável pelos passeios esportivos da viagem, aos quais dedica seu orçamento inteiro. O estádio mais top da cidade? Ela sabe qual é!</p>
                     </div>
                 </div>
             </div>
-        </div>
-        <!-- Caixa de Informações dos Viajantes (será preenchida via JS) -->
-        <div id="traveler-info-box" class="hidden">
-            <p id="traveler-info-text"></p>
         </div>
 
         <!-- Podcast Card -->

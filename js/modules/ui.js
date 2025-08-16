@@ -15,37 +15,67 @@ import { itineraryData } from '../data/roteiro-data.js';
 const mainContent = document.getElementById('main-content');
 const navItems = document.querySelectorAll('.nav-item');
 
-// --- LÓGICA DE DEEPLINK ---
+// --- LÓGICA DE ROLAGEM E DEEPLINK ---
 
+/**
+ * Rola a página suavemente até um elemento específico, considerando o deslocamento da barra de navegação.
+ * Também abre seções retráteis, se necessário.
+ * @param {string} elementId O ID do elemento de destino ou do conteúdo retrátil.
+ */
+function scrollToElement(elementId) {
+    if (!elementId) return;
+
+    // Tenta encontrar um gatilho de collapsible que controla o ID do conteúdo
+    const trigger = document.querySelector(`[aria-controls='${elementId}']`);
+    let targetElement; // O elemento final para o qual a tela irá rolar
+
+    if (trigger) {
+        // Caso 1: O ID corresponde a um conteúdo retrátil.
+        // O alvo da rolagem é o próprio botão que aciona o conteúdo.
+        targetElement = trigger;
+        // Abre o conteúdo se ele estiver fechado
+        if (trigger.getAttribute('aria-expanded') === 'false') {
+            trigger.click();
+        }
+    } else {
+        // Caso 2: O ID é de um elemento visível (ex: card do podcast).
+        targetElement = document.getElementById(elementId);
+    }
+
+    // Se um alvo foi encontrado, executa a rolagem
+    if (targetElement) {
+        setTimeout(() => {
+            const topNav = document.querySelector('.top-nav');
+            const navHeight = topNav ? topNav.offsetHeight : 0;
+            const elementPosition = targetElement.getBoundingClientRect().top + window.scrollY;
+            const offsetPosition = elementPosition - navHeight - 16; // 16px de margem
+            window.scrollTo({ top: offsetPosition, behavior: 'smooth' });
+        }, 400); // Atraso para garantir que o conteúdo (especialmente o retrátil) esteja visível
+    }
+}
+
+/**
+ * Lida com deeplinks vindos do hash da URL.
+ */
 function handleDeepLink() {
     const hash = window.location.hash.substring(1);
     if (!hash) return false;
 
     const [pageName, paramsString] = hash.split('?');
     const params = new URLSearchParams(paramsString);
-    const elementToExpandId = params.get('expand');
+    const elementIdToScroll = params.get('expand');
 
     if (pageName) {
+        // Define uma função de callback para ser executada após o carregamento da página
         const onPageLoad = () => {
-            if (elementToExpandId) {
-                const trigger = document.querySelector(`[aria-controls='${elementToExpandId}']`);
-                if (trigger) {
-                    if (trigger.getAttribute('aria-expanded') === 'false') {
-                        trigger.click();
-                    }
-                    setTimeout(() => {
-                        const topNav = document.querySelector('.top-nav');
-                        const navHeight = topNav ? topNav.offsetHeight : 0;
-                        const elementPosition = trigger.getBoundingClientRect().top + window.scrollY;
-                        const offsetPosition = elementPosition - navHeight - 16; 
-                        window.scrollTo({ top: offsetPosition, behavior: 'smooth' });
-                    }, 400); 
-                }
+            if (elementIdToScroll) {
+                scrollToElement(elementIdToScroll); // Usa a nova função centralizada
             }
         };
         switchPage(pageName, onPageLoad);
     }
 
+    // Limpa o hash da URL para uma experiência de navegação mais limpa
     history.pushState("", document.title, window.location.pathname + window.location.search);
     return true;
 }
@@ -89,7 +119,6 @@ export function switchPage(pageId, callback = null) {
 // --- INICIALIZAÇÃO DE COMPONENTES DE PÁGINA ---
 
 function initializePageComponents(pageName) {
-    // A funcionalidade de collapsible agora é gerenciada por um único listener em initializeUI()
     if (pageName === 'geral') initializeGeralPage();
     if (pageName === 'roteiro') initializeRoteiroPage();
     if (pageName === 'sabores') initializeSaboresPage();
@@ -116,7 +145,6 @@ function startCountdown() {
     const timerDiv = document.getElementById("countdown-timer-new");
     if (!timerDiv) return;
 
-    // Evita criar múltiplos intervalos se a função for chamada novamente
     if (timerDiv.dataset.intervalId) {
         clearInterval(timerDiv.dataset.intervalId);
     }
@@ -134,8 +162,6 @@ function startCountdown() {
         if (distance < 0) {
             clearInterval(interval);
             timerDiv.innerHTML = "<p class='text-green-500 font-bold py-2 text-xl'>A VIAGEM COMEÇOU!</p>";
-            const titleElement = document.getElementById("countdown-container-new")?.querySelector("h3");
-            if (titleElement) titleElement.style.display = 'none';
             return;
         }
 
@@ -155,10 +181,15 @@ function setupToastInteractions() {
 
     if (toastButton) {
         toastButton.addEventListener('click', () => {
-            switchPage('geral');
-            setTimeout(() => {
-                document.getElementById('podcast-card')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-            }, 200);
+            const currentPage = document.querySelector('.nav-item.active')?.dataset.page;
+            // Se já estiver na página 'geral', apenas rola. Senão, troca de página e depois rola.
+            if (currentPage === 'geral') {
+                scrollToElement('podcast-card');
+            } else {
+                switchPage('geral', () => {
+                    scrollToElement('podcast-card');
+                });
+            }
             dismissToast();
         });
     }
@@ -229,8 +260,6 @@ function initializeGeralPage() {
     const tripStartDate = new Date(2026, 0, 23);
     const tripEndDate = new Date(2026, 1, 3);
     
-    // Para testar o modo viagem, descomente a linha abaixo:
-    //const currentDate = new Date(2026, 0, 27); 
     const currentDate = new Date();
 
     currentDate.setHours(0, 0, 0, 0);
@@ -239,14 +268,12 @@ function initializeGeralPage() {
     
     const isDuringTrip = currentDate >= tripStartDate && currentDate < tripEndDate;
 
-    // Função para configurar a visualização pré-viagem
     const setupPreTravelView = () => {
         startCountdown();
         generateEpisodeList();
         checkAndShowNewEpisodeToast();
     };
 
-    // Função para configurar a visualização do modo viagem
     const setupTravelModeView = () => {
         const monthAbbr = ["Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Out", "Nov", "Dez"];
         const dateStringPattern = `${String(currentDate.getDate()).padStart(2, '0')}/${monthAbbr[currentDate.getMonth()]}`;
@@ -259,18 +286,14 @@ function initializeGeralPage() {
         }
     };
 
-    // Lógica principal
     if (isDuringTrip) {
-        // Estado inicial durante a viagem
         preTravelView.classList.add('hidden');
         travelModeView.classList.remove('hidden');
         viewToggleContainer.classList.remove('hidden');
         viewToggleButton.innerHTML = `<i class="fas fa-history mr-2"></i>Ver pré-viagem`;
         
-        setupTravelModeView(); // Configura o painel do dia
+        setupTravelModeView();
 
-        // Configura o listener do botão de toggle
-        // Usamos .onclick para garantir que o listener seja reatribuído corretamente
         viewToggleButton.onclick = () => {
             const isPreTravelVisible = !preTravelView.classList.contains('hidden');
             
@@ -278,21 +301,17 @@ function initializeGeralPage() {
             travelModeView.classList.toggle('hidden');
 
             if (isPreTravelVisible) {
-                // Estava mostrando pré-viagem, agora vai mostrar modo viagem
                 viewToggleButton.innerHTML = `<i class="fas fa-history mr-2"></i>Ver pré-viagem`;
             } else {
-                // Estava mostrando modo viagem, agora vai mostrar pré-viagem
-                // Garante que os componentes da pré-viagem sejam inicializados
                 setupPreTravelView();
                 viewToggleButton.innerHTML = `<i class="fas fa-map-signs mr-2"></i>Ver painel do dia`;
             }
         };
 
     } else {
-        // Estado inicial antes da viagem
         preTravelView.classList.remove('hidden');
         travelModeView.classList.add('hidden');
-        viewToggleContainer.classList.add('hidden'); // Botão fica escondido
+        viewToggleContainer.classList.add('hidden');
         setupPreTravelView();
     }
 }
@@ -300,21 +319,16 @@ function initializeGeralPage() {
 // --- FUNÇÃO DE INICIALIZAÇÃO PRINCIPAL ---
 
 export function initializeUI() {
-    // Listener de navegação principal
     navItems.forEach(item => {
         item.addEventListener('click', () => switchPage(item.dataset.page));
     });
     
-    // Configura os toasts de notificação
     setupToastInteractions();
 
-    // Adiciona um único listener de eventos no container principal
-    // para gerenciar todos os cliques em componentes dinâmicos.
     mainContent.addEventListener('click', (event) => {
         const collapsibleTrigger = event.target.closest('.collapsible-trigger');
         const findNearbyBtn = event.target.closest('#find-nearby-gf-btn');
 
-        // Lógica para os Collapsibles
         if (collapsibleTrigger) {
             const contentId = collapsibleTrigger.getAttribute('aria-controls');
             const content = document.getElementById(contentId);
@@ -334,7 +348,6 @@ export function initializeUI() {
             }
         }
 
-        // Lógica para o botão "Restaurantes Perto"
         if (findNearbyBtn) {
             const city = findNearbyBtn.dataset.city;
             switchPage('sabores', () => {
@@ -343,7 +356,6 @@ export function initializeUI() {
         }
     });
 
-    // Listener global para botões dentro de popups do mapa (que estão fora do mainContent)
     document.addEventListener('click', (event) => {
         const detailButton = event.target.closest('.popup-button-details');
         if (detailButton && detailButton.dataset.restaurantSlug) {
@@ -352,7 +364,6 @@ export function initializeUI() {
         }
     });
     
-    // Carregamento inicial
     if (!handleDeepLink()) {
         switchPage('geral');
     }

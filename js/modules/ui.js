@@ -260,6 +260,7 @@ function initializeGeralPage() {
     const tripStartDate = new Date(2026, 0, 23);
     const tripEndDate = new Date(2026, 1, 3);
     
+    //const currentDate = new Date(2026, 0, 25); // Data fixa para testes
     const currentDate = new Date();
 
     currentDate.setHours(0, 0, 0, 0);
